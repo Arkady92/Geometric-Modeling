@@ -16,11 +16,16 @@ namespace Geometric_Modeling
         private bool _operationInProgress;
         private int _mousePositionX;
         private int _mousePositionY;
-        private Matrix _currentMatrix;
+        private Matrix _currentOperationsMatrix;
+        private Matrix _currnetProjectionMatix;
+        private const double MaximumScale = 20;
+        private const double MinimumScale = 0.05;
+        private double _actualScale;
 
         public MainWindow()
         {
             InitializeComponent();
+            SetStyle(ControlStyles.AllPaintingInWmPaint | ControlStyles.UserPaint | ControlStyles.DoubleBuffer, true);
             InitializeMembers();
         }
 
@@ -28,6 +33,8 @@ namespace Geometric_Modeling
         {
             GridResolutionXBox.Text = Parameters.GridResolutionX.ToString(CultureInfo.InvariantCulture);
             GridResolutionYBox.Text = Parameters.GridResolutionY.ToString(CultureInfo.InvariantCulture);
+            Parameters.WorldPanelWidth = WorldPanel.Width;
+            Parameters.WorldPanelHeight = WorldPanel.Height;
             _models = new List<GeometricModel>();
             _operationsButtons = new Dictionary<Operation, Button>
             {
@@ -40,7 +47,9 @@ namespace Geometric_Modeling
                 {Operation.Scale, ScaleButton}
             };
             _currentOperation = Operation.None;
-            _currentMatrix = OperationsMatrices.Projection(5) * OperationsMatrices.Identity();
+            _currentOperationsMatrix = OperationsMatrices.Identity();
+            _currnetProjectionMatix = OperationsMatrices.Projection(5);
+            _actualScale = 1;
         }
 
         void SwitchOperation(Operation operation)
@@ -67,7 +76,7 @@ namespace Geometric_Modeling
             graphics.TranslateTransform((float)(WorldPanel.Size.Width * 0.5), (float)(WorldPanel.Size.Height * 0.5));
             foreach (var geometricModel in _models)
             {
-                geometricModel.Draw(graphics, _currentMatrix);
+                geometricModel.Draw(graphics, _currnetProjectionMatix * _currentOperationsMatrix);
             }
         }
 
@@ -92,45 +101,54 @@ namespace Geometric_Modeling
         private void WorldPanel_MouseMove(object sender, MouseEventArgs e)
         {
             if (!_operationInProgress) return;
-            var delta = e.Y - _mousePositionY;
-            const double positiveScale = 1.1;
+            var deltaX = e.X - _mousePositionX;
+            var deltaY = e.Y - _mousePositionY;
+            const double positiveScale = 1.11;
             const double negativeScale = 0.91;
-            const double factor = 0.005;
+            const double factor = 0.03;
 
             switch (_currentOperation)
             {
                 case Operation.TranslationX:
-                    _currentMatrix = OperationsMatrices.Translation(delta * factor, 0, 0) * _currentMatrix;
+                    _currentOperationsMatrix = OperationsMatrices.Translation(deltaX * factor, 0, 0) * _currentOperationsMatrix;
                     DrawWorld();
                     break;
                 case Operation.TranslationY:
-                    _currentMatrix = OperationsMatrices.Translation(0, delta * factor, 0) * _currentMatrix;
+                    _currentOperationsMatrix = OperationsMatrices.Translation(0, deltaY * factor, 0) * _currentOperationsMatrix;
                     DrawWorld();
                     break;
                 case Operation.TranslationZ:
-                    _currentMatrix = OperationsMatrices.Translation(0, 0, delta * factor) * _currentMatrix;
+                    _currentOperationsMatrix = OperationsMatrices.Translation(0, 0, deltaY * factor) * _currentOperationsMatrix;
                     DrawWorld();
                     break;
                 case Operation.RotationX:
-                    _currentMatrix = OperationsMatrices.RotationX(delta * factor) * _currentMatrix;
+                    _currentOperationsMatrix = OperationsMatrices.RotationX(deltaY * factor) * _currentOperationsMatrix;
                     DrawWorld();
                     break;
                 case Operation.RotationY:
-                    _currentMatrix = OperationsMatrices.RotationY(delta * factor) * _currentMatrix;
+                    _currentOperationsMatrix = OperationsMatrices.RotationY(deltaX * factor) * _currentOperationsMatrix;
                     DrawWorld();
                     break;
                 case Operation.RotationZ:
-                    _currentMatrix = OperationsMatrices.RotationZ(delta * factor) * _currentMatrix;
+                    _currentOperationsMatrix = OperationsMatrices.RotationZ(deltaX * factor) * _currentOperationsMatrix;
                     DrawWorld();
                     break;
                 case Operation.Scale:
-                    if (delta < 0)
-                        _currentMatrix = OperationsMatrices.Scale(positiveScale) * _currentMatrix;
-                    if (delta > 0)
-                        _currentMatrix = OperationsMatrices.Scale(negativeScale) * _currentMatrix;
+                    if (deltaY < 0 && _actualScale < MaximumScale)
+                    {
+                        _currentOperationsMatrix = OperationsMatrices.Scale(positiveScale)*_currentOperationsMatrix;
+                        _actualScale *= positiveScale;
+                    }
+                    if (deltaY > 0 && _actualScale > MinimumScale)
+                    {
+                        _currentOperationsMatrix = OperationsMatrices.Scale(negativeScale)*_currentOperationsMatrix;
+                        _actualScale *= negativeScale;
+                    }
                     DrawWorld();
                     break;
             }
+            _mousePositionX = e.X;
+            _mousePositionY = e.Y;
         }
 
         private void WorldPanel_MouseUp(object sender, MouseEventArgs e)

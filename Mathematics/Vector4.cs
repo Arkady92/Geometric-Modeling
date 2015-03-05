@@ -50,17 +50,18 @@ namespace Mathematics
             var result = new Vector4();
             for (int i = 0; i < 4; i++)
             {
-                result.X += matrix[i, 0] * vector.PointsArray[i];
-                result.Y += matrix[i, 1] * vector.PointsArray[i];
-                result.Z += matrix[i, 2] * vector.PointsArray[i];
-                result.W += matrix[i, 3] * vector.PointsArray[i];
+                result.X += matrix[0, i] * vector.PointsArray[i];
+                result.Y += matrix[1, i] * vector.PointsArray[i];
+                result.Z += matrix[2, i] * vector.PointsArray[i];
+                result.W += matrix[3, i] * vector.PointsArray[i];
             }
-            result.Normalize();
+            //result.Normalize();
             return result;
         }
 
         private void Normalize()
         {
+
             for (int i = 0; i < 4; i++)
             {
                 PointsArray[i] /= W;

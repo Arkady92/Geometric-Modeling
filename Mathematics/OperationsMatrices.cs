@@ -77,5 +77,16 @@ namespace Mathematics
             matrix[3, 3] = 1;
             return matrix;
         }
+
+        public static Matrix Projection(double f, double n)
+        {
+            var matrix = new Matrix(4, 4);
+            matrix[0, 0] = 1;
+            matrix[1, 1] = 1;
+            matrix[2, 2] = -(f + n)/(f - n);
+            matrix[2, 3] = -2*f*n/(f - n);
+            matrix[3, 2] = -1;
+            return matrix;
+        }
     }
 }

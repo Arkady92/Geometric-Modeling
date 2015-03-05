@@ -36,7 +36,6 @@
             this.GridResolutionYBox = new System.Windows.Forms.TextBox();
             this.GridResolutionXLabel = new System.Windows.Forms.Label();
             this.GridResolutionXBox = new System.Windows.Forms.TextBox();
-            this.WorldPanel = new System.Windows.Forms.Panel();
             this.TranslationXButton = new System.Windows.Forms.Button();
             this.OperationsPanel = new System.Windows.Forms.Panel();
             this.ScaleButton = new System.Windows.Forms.Button();
@@ -49,9 +48,11 @@
             this.OperationsLabel = new System.Windows.Forms.Label();
             this.SettingsLabel = new System.Windows.Forms.Label();
             this.ObjectsListLabel = new System.Windows.Forms.Label();
+            this.WorldPanel = new System.Windows.Forms.PictureBox();
             this.ObjectsPanel.SuspendLayout();
             this.OptionsPanel.SuspendLayout();
             this.OperationsPanel.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.WorldPanel)).BeginInit();
             this.SuspendLayout();
             // 
             // ObjectsList
@@ -134,21 +135,6 @@
             this.GridResolutionXBox.TabIndex = 0;
             this.GridResolutionXBox.Tag = "X";
             this.GridResolutionXBox.TextChanged += new System.EventHandler(this.GridResolutionXBox_TextChanged);
-            // 
-            // WorldPanel
-            // 
-            this.WorldPanel.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.WorldPanel.BackColor = System.Drawing.Color.White;
-            this.WorldPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.WorldPanel.Location = new System.Drawing.Point(12, 103);
-            this.WorldPanel.Name = "WorldPanel";
-            this.WorldPanel.Size = new System.Drawing.Size(591, 447);
-            this.WorldPanel.TabIndex = 3;
-            this.WorldPanel.MouseDown += new System.Windows.Forms.MouseEventHandler(this.WorldPanel_MouseDown);
-            this.WorldPanel.MouseMove += new System.Windows.Forms.MouseEventHandler(this.WorldPanel_MouseMove);
-            this.WorldPanel.MouseUp += new System.Windows.Forms.MouseEventHandler(this.WorldPanel_MouseUp);
             // 
             // TranslationXButton
             // 
@@ -278,17 +264,33 @@
             this.ObjectsListLabel.TabIndex = 8;
             this.ObjectsListLabel.Text = "Objects List";
             // 
+            // WorldPanel
+            // 
+            this.WorldPanel.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.WorldPanel.BackColor = System.Drawing.Color.White;
+            this.WorldPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.WorldPanel.Location = new System.Drawing.Point(12, 103);
+            this.WorldPanel.Name = "WorldPanel";
+            this.WorldPanel.Size = new System.Drawing.Size(591, 442);
+            this.WorldPanel.TabIndex = 9;
+            this.WorldPanel.TabStop = false;
+            this.WorldPanel.MouseDown += new System.Windows.Forms.MouseEventHandler(this.WorldPanel_MouseDown);
+            this.WorldPanel.MouseMove += new System.Windows.Forms.MouseEventHandler(this.WorldPanel_MouseMove);
+            this.WorldPanel.MouseUp += new System.Windows.Forms.MouseEventHandler(this.WorldPanel_MouseUp);
+            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(784, 562);
+            this.Controls.Add(this.WorldPanel);
             this.Controls.Add(this.ObjectsListLabel);
             this.Controls.Add(this.SettingsLabel);
             this.Controls.Add(this.OperationsLabel);
             this.Controls.Add(this.ObjectsLabel);
             this.Controls.Add(this.OperationsPanel);
-            this.Controls.Add(this.WorldPanel);
             this.Controls.Add(this.OptionsPanel);
             this.Controls.Add(this.ObjectsPanel);
             this.Controls.Add(this.ObjectsList);
@@ -302,6 +304,7 @@
             this.OptionsPanel.ResumeLayout(false);
             this.OptionsPanel.PerformLayout();
             this.OperationsPanel.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.WorldPanel)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -315,7 +318,6 @@
         private System.Windows.Forms.Panel OptionsPanel;
         private System.Windows.Forms.Label GridResolutionXLabel;
         private System.Windows.Forms.TextBox GridResolutionXBox;
-        private System.Windows.Forms.Panel WorldPanel;
         private System.Windows.Forms.Button TranslationXButton;
         private System.Windows.Forms.Panel OperationsPanel;
         private System.Windows.Forms.Button ScaleButton;
@@ -330,6 +332,7 @@
         private System.Windows.Forms.Button TranslationZButton;
         private System.Windows.Forms.Button RotationZButton;
         private System.Windows.Forms.Button RotationYButton;
+        private System.Windows.Forms.PictureBox WorldPanel;
     }
 }
 

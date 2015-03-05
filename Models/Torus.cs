@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using Mathematics;
@@ -11,7 +10,7 @@ namespace Models
         public double BigRadius;
         public double SmallRadius;
 
-        public Torus(double bigRadius = 50, double smallRadius = 30)
+        public Torus(double bigRadius = 1, double smallRadius = 0.5)
             : base(ModelType.Torus)
         {
             BigRadius = bigRadius;
@@ -39,9 +38,9 @@ namespace Models
             var alphaStep = 2 * Math.PI / Parameters.GridResolutionY;
             var betaStep = 2 * Math.PI / Parameters.GridResolutionX;
 
-            for (double alpha = alphaStep; alpha < 2 * Math.PI + alphaStep/2 ; alpha += alphaStep)
+            for (double alpha = alphaStep; alpha < 2 * Math.PI + alphaStep / 2; alpha += alphaStep)
             {
-                for (double beta = betaStep; beta < 2 * Math.PI + betaStep/2; beta += betaStep)
+                for (double beta = betaStep; beta < 2 * Math.PI + betaStep / 2; beta += betaStep)
                 {
                     Vertices.Add(ParametricEquation(alpha, beta));
                 }
@@ -57,10 +56,15 @@ namespace Models
         public override void Draw(Graphics graphics, Matrix currentMatrix)
         {
             var vertices = Vertices.Select(vertex => currentMatrix * vertex).ToList();
+            float factor = (Parameters.WorldPanelWidth < Parameters.WorldPanelHeight) ?
+                Parameters.WorldPanelWidth * 0.25f : Parameters.WorldPanelHeight * 0.25f;
             foreach (var edge in Edges)
             {
-                graphics.DrawLine(Pens.Black, (float)vertices[edge.StartVertex].X, (float)vertices[edge.StartVertex].Y,
-                    (float)vertices[edge.EndVertex].X, (float)vertices[edge.EndVertex].Y);
+                graphics.DrawLine(Pens.Black,
+                    (float)vertices[edge.StartVertex].X * factor,
+                    (float)vertices[edge.StartVertex].Y * factor,
+                    (float)vertices[edge.EndVertex].X * factor,
+                    (float)vertices[edge.EndVertex].Y * factor);
             }
         }
 
