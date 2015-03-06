@@ -1,6 +1,4 @@
-﻿using System.Security.Policy;
-
-namespace Mathematics
+﻿namespace Mathematics
 {
     public class Vector4
     {
@@ -30,6 +28,15 @@ namespace Mathematics
 
         public double[] PointsArray;
 
+        private void Normalize()
+        {
+
+            for (int i = 0; i < 4; i++)
+            {
+                PointsArray[i] /= W;
+            }
+        }
+
         public Vector4()
         {
             PointsArray = new double[4];
@@ -55,17 +62,7 @@ namespace Mathematics
                 result.Z += matrix[2, i] * vector.PointsArray[i];
                 result.W += matrix[3, i] * vector.PointsArray[i];
             }
-            //result.Normalize();
             return result;
-        }
-
-        private void Normalize()
-        {
-
-            for (int i = 0; i < 4; i++)
-            {
-                PointsArray[i] /= W;
-            }
         }
     }
 }

@@ -18,8 +18,8 @@ namespace Geometric_Modeling
         private int _mousePositionY;
         private Matrix _currentOperationsMatrix;
         private Matrix _currnetProjectionMatix;
-        private const double MaximumScale = 20;
-        private const double MinimumScale = 0.05;
+        private const double MaximumScale = 40;
+        private const double MinimumScale = 0.025;
         private double _actualScale;
 
         public MainWindow()
@@ -48,7 +48,7 @@ namespace Geometric_Modeling
             };
             _currentOperation = Operation.None;
             _currentOperationsMatrix = OperationsMatrices.Identity();
-            _currnetProjectionMatix = OperationsMatrices.Projection(5);
+            _currnetProjectionMatix = OperationsMatrices.Projection(50);
             _actualScale = 1;
         }
 
@@ -209,6 +209,7 @@ namespace Geometric_Modeling
                 _models.Remove(item as GeometricModel);
                 ObjectsList.Items.Remove(ObjectsList.SelectedItem);
             }
+            _currentOperationsMatrix = OperationsMatrices.Identity();
             DrawWorld();
         }
         #endregion
