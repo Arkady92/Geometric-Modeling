@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Drawing;
+﻿using System.Drawing;
 using Mathematics;
 
 namespace Models
@@ -8,19 +7,16 @@ namespace Models
     {
         public ModelType Type;
 
-        protected List<Vector4> Vertices;
-
-        protected List<Edge> Edges; 
+        public Matrix CurrentOperationsMatrix;
 
         protected GeometricModel(ModelType type)
         {
             Type = type;
-            Vertices = new List<Vector4>();
-            Edges = new List<Edge>();
+            CurrentOperationsMatrix = OperationsMatrices.Identity();
         }
 
-        public abstract void Draw(Graphics graphics, Mathematics.Matrix currentMatrix);
+        public abstract void Draw(Graphics graphics, /*Matrix currentOperationsMatrix,*/ Matrix currentProjectionMatrix);
 
-        public abstract void UpdateMesh();
+        public abstract void UpdateModel();
     }
 }

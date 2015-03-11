@@ -2,6 +2,7 @@
 {
     public enum ModelType
     {
-        Torus
+        Torus,
+        Ellipsoid
     }
 }

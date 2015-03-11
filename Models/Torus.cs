@@ -1,39 +1,58 @@
 ﻿using System;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.Linq;
 using Mathematics;
+using Matrix = Mathematics.Matrix;
 
 namespace Models
 {
-    public class Torus : GeometricModel
+    public class Torus : ParametricGeometricModel
     {
-        public double BigRadius;
-        public double SmallRadius;
+        public double BigRadius { get; private set; }
+        public double SmallRadius { get; private set; }
 
         public Torus(double bigRadius = 1, double smallRadius = 0.5)
             : base(ModelType.Torus)
         {
             BigRadius = bigRadius;
             SmallRadius = smallRadius;
-            CreatePoints();
+            CreateVertices();
             CreateEdges();
         }
 
-        private void CreateEdges()
+        protected override void CreateEdges()
         {
             var verticesCount = Parameters.GridResolutionX * Parameters.GridResolutionY;
-            for (int i = 0; i < Parameters.GridResolutionY; i++)
+            if (verticesCount > Parameters.GridResolutionX)
             {
-                var shift = i * Parameters.GridResolutionX;
-                for (int j = 0; j < Parameters.GridResolutionX; j++)
+                Edges.Add(new Edge(0, Parameters.GridResolutionX));
+                for (int i = 1; i < Parameters.GridResolutionY; i++)
                 {
-                    Edges.Add(new Edge(shift + j, shift + (j + 1) % Parameters.GridResolutionX));
-                    Edges.Add(new Edge(shift + j, (shift + Parameters.GridResolutionX + j) % verticesCount));
+                    var shift = i*Parameters.GridResolutionX;
+                    for (int j = 0; j < Parameters.GridResolutionX; j++)
+                    {
+                        Edges.Add(new Edge(shift + j, shift + (j + 1)%Parameters.GridResolutionX));
+                    }
+                    Edges.Add(new Edge(shift, (shift + Parameters.GridResolutionX)%verticesCount));
+                }
+            }
+            if (verticesCount > 1)
+            {
+                Edges.Add(new Edge(0, 1));
+                for (int i = 1; i < Parameters.GridResolutionX; i++)
+                {
+                    for (int j = 0; j < Parameters.GridResolutionY; j++)
+                    {
+                        var shift = j*Parameters.GridResolutionX;
+                        Edges.Add(new Edge(shift + i, (shift + Parameters.GridResolutionX + i)%verticesCount));
+                    }
+                    Edges.Add(new Edge(i, (i + 1)%Parameters.GridResolutionX));
                 }
             }
         }
 
-        private void CreatePoints()
+        protected override void CreateVertices()
         {
             var alphaStep = 2 * Math.PI / Parameters.GridResolutionY;
             var betaStep = 2 * Math.PI / Parameters.GridResolutionX;
@@ -53,27 +72,22 @@ namespace Models
                 (BigRadius + SmallRadius * Math.Cos(alpha)) * Math.Sin(beta), SmallRadius * Math.Sin(alpha));
         }
 
-        public override void Draw(Graphics graphics, Matrix currentMatrix)
+        public override void Draw(Graphics graphics, /*Matrix currentOperationsMatrix,*/ Matrix currentProjectionMatrix)
         {
+            var currentMatrix = currentProjectionMatrix*CurrentOperationsMatrix;
             var vertices = Vertices.Select(vertex => currentMatrix * vertex).ToList();
             float factor = (Parameters.WorldPanelWidth < Parameters.WorldPanelHeight) ?
                 Parameters.WorldPanelWidth * 0.25f : Parameters.WorldPanelHeight * 0.25f;
+            var graphicsPath = new GraphicsPath();
             foreach (var edge in Edges)
             {
-                graphics.DrawLine(Pens.Black,
+                graphicsPath.AddLine(
                     (float)vertices[edge.StartVertex].X * factor,
                     (float)vertices[edge.StartVertex].Y * factor,
                     (float)vertices[edge.EndVertex].X * factor,
                     (float)vertices[edge.EndVertex].Y * factor);
             }
-        }
-
-        public override void UpdateMesh()
-        {
-            Vertices.Clear();
-            Edges.Clear();
-            CreatePoints();
-            CreateEdges();
+            graphics.DrawPath(Pens.Black, graphicsPath);
         }
     }
 }

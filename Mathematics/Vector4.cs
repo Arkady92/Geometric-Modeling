@@ -28,7 +28,7 @@
 
         public double[] PointsArray;
 
-        private void Normalize()
+        public void Normalize()
         {
 
             for (int i = 0; i < 4; i++)
@@ -62,6 +62,27 @@
                 result.Z += matrix[2, i] * vector.PointsArray[i];
                 result.W += matrix[3, i] * vector.PointsArray[i];
             }
+            return result;
+        }
+
+        public static Vector4 operator *(Vector4 vector, Matrix matrix)
+        {
+            var result = new Vector4();
+            for (int i = 0; i < 4; i++)
+            {
+                result.X += matrix[i, 0] * vector.PointsArray[i];
+                result.Y += matrix[i, 1] * vector.PointsArray[i];
+                result.Z += matrix[i, 2] * vector.PointsArray[i];
+                result.W += matrix[i, 3] * vector.PointsArray[i];
+            }
+            return result;
+        }
+
+        public static double operator *(Vector4 vector1, Vector4 vector2)
+        {
+            double result = 0;
+            for (int i = 0; i < 4; i++)
+                result += vector1.PointsArray[i] * vector2.PointsArray[i];
             return result;
         }
     }

@@ -40,8 +40,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Ellipsoid.cs" />
     <Compile Include="GeometricModel.cs" />
+    <Compile Include="ImplicitGeometricModel.cs" />
     <Compile Include="ModelType.cs" />
+    <Compile Include="ParametricGeometricModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Torus.cs" />
   </ItemGroup>

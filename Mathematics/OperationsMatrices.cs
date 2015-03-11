@@ -55,7 +55,7 @@ namespace Mathematics
             matrix[2, 2] = 1;
             matrix[2, 3] = z;
             matrix[3, 3] = 1;
-            return matrix;   
+            return matrix;
         }
 
         public static Matrix Scale(double s)
@@ -83,9 +83,19 @@ namespace Mathematics
             var matrix = new Matrix(4, 4);
             matrix[0, 0] = 1;
             matrix[1, 1] = 1;
-            matrix[2, 2] = -(f + n)/(f - n);
-            matrix[2, 3] = -2*f*n/(f - n);
+            matrix[2, 2] = -(f + n) / (f - n);
+            matrix[2, 3] = -2 * f * n / (f - n);
             matrix[3, 2] = -1;
+            return matrix;
+        }
+
+        public static Matrix Diagonal(double a, double b, double c, double d)
+        {
+            var matrix = new Matrix(4, 4);
+            matrix[0, 0] = 1 / (a * a);
+            matrix[1, 1] = 1 / (b * b);
+            matrix[2, 2] = 1 / (c * c);
+            matrix[3, 3] = d;
             return matrix;
         }
     }
