@@ -72,7 +72,7 @@ namespace Geometric_Modeling
             };
             _currentOperation = Operation.None;
             //_currentOperationsMatrix = OperationsMatrices.Identity();
-            _currentProjectionMatrix = OperationsMatrices.Projection(50);
+            _currentProjectionMatrix = OperationsMatrices.Projection(100);
             _actualScale = 1;
         }
 
@@ -135,6 +135,7 @@ namespace Geometric_Modeling
         private void WorldPanel_MouseDown(object sender, MouseEventArgs e)
         {
             _operationInProgress = true;
+            _enableAnimations = false;
             _mousePositionX = e.X;
             _mousePositionY = e.Y;
         }
@@ -144,78 +145,94 @@ namespace Geometric_Modeling
             if (!_operationInProgress) return;
             var deltaX = e.X - _mousePositionX;
             var deltaY = e.Y - _mousePositionY;
-            const double positiveScale = 1.11;
-            const double negativeScale = 0.91;
-            const double factor = 0.03;
-            var matrix = OperationsMatrices.Identity();
             switch (_currentOperation)
             {
                 case Operation.TranslationX:
-                    matrix = OperationsMatrices.Translation(deltaX * factor, 0, 0);
+                    if (ObjectsList.SelectedItem == null)
+                        foreach (var geometricModel in _models)
+                            geometricModel.Translate(deltaX, 0, 0);
+                    else
+                    {
+                        var model = ObjectsList.SelectedItem as GeometricModel;
+                        if (model != null) model.Translate(deltaX, 0, 0);
+                    }
+                    DrawWorld();
                     break;
                 case Operation.TranslationY:
-                    matrix = OperationsMatrices.Translation(0, deltaY * factor, 0);
+                    if (ObjectsList.SelectedItem == null)
+                        foreach (var geometricModel in _models)
+                            geometricModel.Translate(0, deltaY, 0);
+                    else
+                    {
+                        var model = ObjectsList.SelectedItem as GeometricModel;
+                        if (model != null) model.Translate(0, deltaY, 0);
+                    }
+                    DrawWorld();
                     break;
                 case Operation.TranslationZ:
-                    matrix = OperationsMatrices.Translation(0, 0, deltaY * factor);
+                    if (ObjectsList.SelectedItem == null)
+                        foreach (var geometricModel in _models)
+                            geometricModel.Translate(0, 0, deltaY);
+                    else
+                    {
+                        var model = ObjectsList.SelectedItem as GeometricModel;
+                        if (model != null) model.Translate(0, 0, deltaY);
+                    }
+                    DrawWorld();
                     break;
                 case Operation.RotationX:
-                    matrix = OperationsMatrices.RotationX(deltaY * factor);
+                    if (ObjectsList.SelectedItem == null)
+                        foreach (var geometricModel in _models)
+                            geometricModel.Rotate(-deltaY, 0, 0);
+                    else
+                    {
+                        var model = ObjectsList.SelectedItem as GeometricModel;
+                        if (model != null) model.Rotate(-deltaY, 0, 0);
+                    }
+                    DrawWorld();
                     break;
                 case Operation.RotationY:
-                    matrix = OperationsMatrices.RotationY(deltaX * factor);
+                    if (ObjectsList.SelectedItem == null)
+                        foreach (var geometricModel in _models)
+                            geometricModel.Rotate(0, deltaX, 0);
+                    else
+                    {
+                        var model = ObjectsList.SelectedItem as GeometricModel;
+                        if (model != null) model.Rotate(0, deltaX, 0);
+                    }
+                    DrawWorld();
                     break;
                 case Operation.RotationZ:
-                    matrix = OperationsMatrices.RotationZ(deltaX * factor);
+                    if (ObjectsList.SelectedItem == null)
+                        foreach (var geometricModel in _models)
+                            geometricModel.Rotate(0, 0, deltaX);
+                    else
+                    {
+                        var model = ObjectsList.SelectedItem as GeometricModel;
+                        if (model != null) model.Rotate(0, 0, deltaX);
+                    }
+                    DrawWorld();
                     break;
                 case Operation.Scale:
-                    if (deltaY < 0 && _actualScale < MaximumScale)
+                    if (ObjectsList.SelectedItem == null)
+                        foreach (var geometricModel in _models)
+                            geometricModel.Scale(deltaY);
+                    else
                     {
-                        matrix = OperationsMatrices.Scale(positiveScale);
-                        _actualScale *= positiveScale;
+                        var model = ObjectsList.SelectedItem as GeometricModel;
+                        if (model != null) model.Scale(deltaY);
                     }
-                    if (deltaY > 0 && _actualScale > MinimumScale)
-                    {
-                        matrix = OperationsMatrices.Scale(negativeScale);
-                        _actualScale *= negativeScale;
-                    }
+                    DrawWorld();
                     break;
-                default:
-                    _mousePositionX = e.X;
-                    _mousePositionY = e.Y;
-                    return;
             }
             _mousePositionX = e.X;
             _mousePositionY = e.Y;
-            ApplyOperationsChange(matrix);
-        }
-
-        private void ApplyOperationsChange(Matrix matrix)
-        {
-            if (ObjectsList.SelectedItem == null)
-                foreach (var geometricModel in _models)
-                {
-                    _enableAnimations = true;
-                    geometricModel.CurrentOperationsMatrix = matrix * geometricModel.CurrentOperationsMatrix;
-                }
-            else
-            {
-                var model = ObjectsList.SelectedItem as GeometricModel;
-                if (model != null)
-                {
-                    if (model is ImplicitGeometricModel)
-                        _enableAnimations = true;
-                    else
-                        _enableAnimations = false;
-                    model.CurrentOperationsMatrix = matrix * model.CurrentOperationsMatrix;
-                }
-            }
-            DrawWorld();
         }
 
         private void WorldPanel_MouseUp(object sender, MouseEventArgs e)
         {
             _operationInProgress = false;
+            _enableAnimations = true;
         }
         #endregion
 
@@ -366,7 +383,7 @@ namespace Geometric_Modeling
             var textBox = sender as TextBox;
             double result;
             if (textBox == null) return;
-            if (double.TryParse(textBox.Text, NumberStyles.Any, CultureInfo.InvariantCulture, out result) && result >= 0 && result <= 1)
+            if (double.TryParse(textBox.Text, NumberStyles.Any, CultureInfo.InvariantCulture, out result) && result >= 0 && result <= 100)
             {
                 Parameters.Illuminance = result;
                 UpdateCurrentModel();
@@ -442,6 +459,8 @@ namespace Geometric_Modeling
 
         private void MainWindow_Resize(object sender, EventArgs e)
         {
+            Parameters.WorldPanelWidth = WorldPanel.Width;
+            Parameters.WorldPanelHeight = WorldPanel.Height;
             DrawWorld();
         }
         #endregion

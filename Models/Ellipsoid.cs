@@ -32,46 +32,45 @@ namespace Models
         {
             var shiftW = (Parameters.WorldPanelWidth / 2 / pixelSize) * pixelSize;
             var shiftH = (Parameters.WorldPanelHeight / 2 / pixelSize) * pixelSize;
-            var halfSize = pixelSize / 2;
-            for (int x = 0; x < shiftW; x += pixelSize)
+            for (int x = pixelSize / 2; x < shiftW; x += pixelSize)
             {
-                for (int y = 0; y < shiftH; y += pixelSize)
+                for (int y = pixelSize / 2; y < shiftH; y += pixelSize)
                 {
-                    double z;
-                    if (!CalculateZValue(resultMatrix, x, y, out z)) continue;
-                    var vertex = new Vector4(x, y, z);
-                    vertex = currentProjectionMatrix * vertex;
-                    graphics.FillRectangle(new SolidBrush(Parameters.DefaultModelColor),
-                        (int)vertex.X - halfSize,
-                        (int)vertex.Y - halfSize,
-                        pixelSize,
-                        pixelSize);
-                    if (!CalculateZValue(resultMatrix, -x, y, out z)) continue;
-                    vertex = new Vector4(-x, y, z);
-                    vertex = currentProjectionMatrix * vertex;
-                    graphics.FillRectangle(new SolidBrush(Parameters.DefaultModelColor),
-                        (int)vertex.X - halfSize,
-                        (int)vertex.Y - halfSize,
-                        pixelSize,
-                        pixelSize);
-                    if (!CalculateZValue(resultMatrix, x, -y, out z)) continue;
-                    vertex = new Vector4(x, -y, z);
-                    vertex = currentProjectionMatrix * vertex;
-                    graphics.FillRectangle(new SolidBrush(Parameters.DefaultModelColor),
-                        (int)vertex.X - halfSize,
-                        (int)vertex.Y - halfSize,
-                        pixelSize,
-                        pixelSize);
-                    if (!CalculateZValue(resultMatrix, -x, -y, out z)) continue;
-                    vertex = new Vector4(-x, -y, z);
-                    vertex = currentProjectionMatrix * vertex;
-                    graphics.FillRectangle(new SolidBrush(Parameters.DefaultModelColor),
-                        (int)vertex.X - halfSize,
-                        (int)vertex.Y - halfSize,
-                        pixelSize,
-                        pixelSize);
+                    CastRay(x, y, graphics, resultMatrix, currentProjectionMatrix, pixelSize);
+                    CastRay(-x, y, graphics, resultMatrix, currentProjectionMatrix, pixelSize);
+                    CastRay(x, -y, graphics, resultMatrix, currentProjectionMatrix, pixelSize);
+                    CastRay(-x, -y, graphics, resultMatrix, currentProjectionMatrix, pixelSize);
                 }
             }
+        }
+
+        void CastRay(int x, int y, Graphics graphics, Matrix resultMatrix, Matrix currentProjectionMatrix, int pixelSize)
+        {
+            double z;
+            if (!CalculateZValue(resultMatrix, x, y, out z)) return;
+            var vertex = new Vector4(x, y, z);
+            var normal = (vertex * resultMatrix) * 2;
+            normal.Normalize();
+            normal.W = 0;
+            var view = new Vector4(-x, -y, 1 / currentProjectionMatrix[3,2], 0);
+            view.Normalize();
+            var factor = normal * view;
+            if (factor < 0) factor = 0;
+            factor = Math.Pow(factor, Parameters.Illuminance);
+            var r = (int)(factor * 255 + Parameters.DefaultModelColor.R);
+            var g = (int)(factor * 255 + Parameters.DefaultModelColor.G);
+            var b = (int)(factor * 255 + Parameters.DefaultModelColor.B);
+            if (r < 0) r = 0;
+            if (r > 255) r = 255;
+            if (g < 0) g = 0;
+            if (g > 255) g = 255;
+            if (b < 0) b = 0;
+            if (b > 255) b = 255;
+            graphics.FillRectangle(new SolidBrush(Color.FromArgb(Parameters.DefaultModelColor.A, r, g, b)),
+                x - pixelSize / 2,
+                y - pixelSize / 2,
+                pixelSize,
+                pixelSize);
         }
 
         private bool CalculateZValue(Matrix matrix, int x, int y, out double z)

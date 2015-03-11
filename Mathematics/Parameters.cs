@@ -7,7 +7,7 @@ namespace Mathematics
         public static int GridResolutionY = 10;
         public static int WorldPanelWidth;
         public static int WorldPanelHeight;
-        public static double Illuminance = 0.75;
+        public static double Illuminance = 10;
         public static double XAxisFactor = 200;
         public static double YAxisFactor = 100;
         public static double ZAxisFactor = 100;

@@ -14,6 +14,10 @@ namespace Models
         {
             Vertices = new List<Vector4>();
             Edges = new List<Edge>();
+            TranslationFactor = 0.009;
+            RotationFactor = 0.01;
+            ScaleFactor = 1.04;
+            MaximumScaleFactor = 20;
         }
 
         protected abstract void CreateEdges();

@@ -1,4 +1,6 @@
-﻿namespace Mathematics
+﻿using System;
+
+namespace Mathematics
 {
     public class Vector4
     {
@@ -30,17 +32,15 @@
 
         public void Normalize()
         {
-
-            for (int i = 0; i < 4; i++)
-            {
-                PointsArray[i] /= W;
-            }
+            var norm = Math.Sqrt(X * X + Y * Y + Z * Z);
+            X /= norm;
+            Z /= norm;
+            Y /= norm;
         }
 
         public Vector4()
         {
             PointsArray = new double[4];
-            Z = 1;
         }
 
         public Vector4(double x, double y, double z, double w = 1)
@@ -62,6 +62,10 @@
                 result.Z += matrix[2, i] * vector.PointsArray[i];
                 result.W += matrix[3, i] * vector.PointsArray[i];
             }
+            /*for (int i = 0; i < 4; i++)
+            {
+                result.PointsArray[i] /= result.W;
+            }*/
             return result;
         }
 
@@ -75,15 +79,24 @@
                 result.Z += matrix[i, 2] * vector.PointsArray[i];
                 result.W += matrix[i, 3] * vector.PointsArray[i];
             }
+            /*for (int i = 0; i < 4; i++)
+            {
+                result.PointsArray[i] /= result.W;
+            }*/
             return result;
         }
 
-        public static double operator *(Vector4 vector1, Vector4 vector2)
+        public static double operator *(Vector4 vector, Vector4 vector2)
         {
             double result = 0;
             for (int i = 0; i < 4; i++)
-                result += vector1.PointsArray[i] * vector2.PointsArray[i];
+                result += vector.PointsArray[i] * vector2.PointsArray[i];
             return result;
+        }
+
+        public static Vector4 operator *(Vector4 vector, double value)
+        {
+            return new Vector4(vector.X * value, vector.Y * value, vector.Z * value, vector.W * value);
         }
     }
 }

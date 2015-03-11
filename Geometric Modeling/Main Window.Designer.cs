@@ -92,7 +92,7 @@
             // 
             // EllipsoidButton
             // 
-            this.EllipsoidButton.Location = new System.Drawing.Point(385, 3);
+            this.EllipsoidButton.Location = new System.Drawing.Point(84, 3);
             this.EllipsoidButton.Name = "EllipsoidButton";
             this.EllipsoidButton.Size = new System.Drawing.Size(75, 23);
             this.EllipsoidButton.TabIndex = 10;
@@ -102,7 +102,7 @@
             // 
             // TorusButton
             // 
-            this.TorusButton.Location = new System.Drawing.Point(304, 3);
+            this.TorusButton.Location = new System.Drawing.Point(3, 3);
             this.TorusButton.Name = "TorusButton";
             this.TorusButton.Size = new System.Drawing.Size(75, 23);
             this.TorusButton.TabIndex = 2;
@@ -278,7 +278,7 @@
             // 
             // TranslationXButton
             // 
-            this.TranslationXButton.Location = new System.Drawing.Point(72, 3);
+            this.TranslationXButton.Location = new System.Drawing.Point(3, 3);
             this.TranslationXButton.Name = "TranslationXButton";
             this.TranslationXButton.Size = new System.Drawing.Size(84, 23);
             this.TranslationXButton.TabIndex = 2;
@@ -305,7 +305,7 @@
             // 
             // ScaleButton
             // 
-            this.ScaleButton.Location = new System.Drawing.Point(612, 3);
+            this.ScaleButton.Location = new System.Drawing.Point(543, 3);
             this.ScaleButton.Name = "ScaleButton";
             this.ScaleButton.Size = new System.Drawing.Size(75, 23);
             this.ScaleButton.TabIndex = 4;
@@ -315,7 +315,7 @@
             // 
             // RotationZButton
             // 
-            this.RotationZButton.Location = new System.Drawing.Point(522, 3);
+            this.RotationZButton.Location = new System.Drawing.Point(453, 3);
             this.RotationZButton.Name = "RotationZButton";
             this.RotationZButton.Size = new System.Drawing.Size(84, 23);
             this.RotationZButton.TabIndex = 6;
@@ -325,7 +325,7 @@
             // 
             // RotationYButton
             // 
-            this.RotationYButton.Location = new System.Drawing.Point(432, 3);
+            this.RotationYButton.Location = new System.Drawing.Point(363, 3);
             this.RotationYButton.Name = "RotationYButton";
             this.RotationYButton.Size = new System.Drawing.Size(84, 23);
             this.RotationYButton.TabIndex = 5;
@@ -335,7 +335,7 @@
             // 
             // RotationXButton
             // 
-            this.RotationXButton.Location = new System.Drawing.Point(342, 3);
+            this.RotationXButton.Location = new System.Drawing.Point(273, 3);
             this.RotationXButton.Name = "RotationXButton";
             this.RotationXButton.Size = new System.Drawing.Size(84, 23);
             this.RotationXButton.TabIndex = 3;
@@ -345,7 +345,7 @@
             // 
             // TranslationZButton
             // 
-            this.TranslationZButton.Location = new System.Drawing.Point(252, 3);
+            this.TranslationZButton.Location = new System.Drawing.Point(183, 3);
             this.TranslationZButton.Name = "TranslationZButton";
             this.TranslationZButton.Size = new System.Drawing.Size(84, 23);
             this.TranslationZButton.TabIndex = 4;
@@ -355,7 +355,7 @@
             // 
             // TranslationYButton
             // 
-            this.TranslationYButton.Location = new System.Drawing.Point(162, 3);
+            this.TranslationYButton.Location = new System.Drawing.Point(93, 3);
             this.TranslationYButton.Name = "TranslationYButton";
             this.TranslationYButton.Size = new System.Drawing.Size(84, 23);
             this.TranslationYButton.TabIndex = 3;
