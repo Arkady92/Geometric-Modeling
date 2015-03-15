@@ -32,7 +32,7 @@ namespace Models
             CreateEdges();
         }
 
-        public abstract void DrawStereoscopy(System.Drawing.Graphics graphics, Matrix leftMatrix, Matrix rightMatrix);
+        public abstract void DrawStereoscopy(System.Drawing.Graphics graphics, Matrix leftMatrix, Matrix rightMatrix, bool intersectionsDetection = false);
 
     }
 }

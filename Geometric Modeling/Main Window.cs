@@ -27,6 +27,7 @@ namespace Geometric_Modeling
         private bool _enableStereoscopy;
         private const double ProjectionR = 20;
         private const double ProjectionE = 10;
+        private bool _enableIntersectionsDetection;
 
         #endregion
 
@@ -67,7 +68,7 @@ namespace Geometric_Modeling
             _modelsParameters = new Dictionary<ModelType, List<Control>>
             {
                 {ModelType.Torus, new List<Control> {GridResolutionXBox, GridResolutionYBox, GridResolutionXLabel, 
-                    GridResolutionYLabel, StereoscopyChackBox}},
+                    GridResolutionYLabel, StereoscopyChackBox, DetectIntersectionsCheckBox}},
                 {ModelType.Ellipsoid, new List<Control> {IlluminanceBox, XAxisFactorBox, YAxisFactorBox, ZAxisFactorBox, PixelMaxSizeBox, 
                     IlluminanceLabel, XAxisFactorLabel, YAxisFactorLabel, ZAxisFactorLabel, PixelMaxSizeLabel}}
             };
@@ -120,7 +121,7 @@ namespace Geometric_Modeling
             {
                 if (geometricModel is ParametricGeometricModel && _enableStereoscopy)
                     (geometricModel as ParametricGeometricModel).DrawStereoscopy(graphics, _currentStereoscopyLeftMatrix,
-                        _currentStereoscopyRightMatrix);
+                        _currentStereoscopyRightMatrix, _enableIntersectionsDetection);
                 else
                     geometricModel.Draw(graphics, _currentProjectionMatrix);
             }
@@ -469,6 +470,14 @@ namespace Geometric_Modeling
             var checkBox = sender as CheckBox;
             if (checkBox == null) return;
             _enableStereoscopy = checkBox.Checked;
+            DrawWorld();
+        }
+
+        private void DetectIntersectionsCheckBox_CheckedChanged(object sender, EventArgs e)
+        {
+            var checkBox = sender as CheckBox;
+            if (checkBox == null) return;
+            _enableIntersectionsDetection = checkBox.Checked;
             DrawWorld();
         }
 

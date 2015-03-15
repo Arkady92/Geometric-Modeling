@@ -63,6 +63,7 @@
             this.EffectsLabel = new System.Windows.Forms.Label();
             this.EffectsPanel = new System.Windows.Forms.Panel();
             this.StereoscopyChackBox = new System.Windows.Forms.CheckBox();
+            this.DetectIntersectionsCheckBox = new System.Windows.Forms.CheckBox();
             this.ObjectsPanel.SuspendLayout();
             this.OptionsPanel.SuspendLayout();
             this.OperationsPanel.SuspendLayout();
@@ -416,7 +417,7 @@
             this.WorldPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.WorldPanel.Location = new System.Drawing.Point(12, 103);
             this.WorldPanel.Name = "WorldPanel";
-            this.WorldPanel.Size = new System.Drawing.Size(594, 447);
+            this.WorldPanel.Size = new System.Drawing.Size(594, 446);
             this.WorldPanel.TabIndex = 9;
             this.WorldPanel.TabStop = false;
             this.WorldPanel.MouseDown += new System.Windows.Forms.MouseEventHandler(this.WorldPanel_MouseDown);
@@ -438,6 +439,7 @@
             // 
             this.EffectsPanel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.EffectsPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.EffectsPanel.Controls.Add(this.DetectIntersectionsCheckBox);
             this.EffectsPanel.Controls.Add(this.StereoscopyChackBox);
             this.EffectsPanel.Location = new System.Drawing.Point(622, 309);
             this.EffectsPanel.Name = "EffectsPanel";
@@ -455,6 +457,18 @@
             this.StereoscopyChackBox.UseVisualStyleBackColor = true;
             this.StereoscopyChackBox.Visible = false;
             this.StereoscopyChackBox.CheckedChanged += new System.EventHandler(this.StereoscopyChackBox_CheckedChanged);
+            // 
+            // DetectIntersectionsCheckBox
+            // 
+            this.DetectIntersectionsCheckBox.AutoSize = true;
+            this.DetectIntersectionsCheckBox.Location = new System.Drawing.Point(10, 27);
+            this.DetectIntersectionsCheckBox.Name = "DetectIntersectionsCheckBox";
+            this.DetectIntersectionsCheckBox.Size = new System.Drawing.Size(121, 17);
+            this.DetectIntersectionsCheckBox.TabIndex = 1;
+            this.DetectIntersectionsCheckBox.Text = "Detect Intersections";
+            this.DetectIntersectionsCheckBox.UseVisualStyleBackColor = true;
+            this.DetectIntersectionsCheckBox.Visible = false;
+            this.DetectIntersectionsCheckBox.CheckedChanged += new System.EventHandler(this.DetectIntersectionsCheckBox_CheckedChanged);
             // 
             // MainWindow
             // 
@@ -527,6 +541,7 @@
         private System.Windows.Forms.Label EffectsLabel;
         private System.Windows.Forms.Panel EffectsPanel;
         private System.Windows.Forms.CheckBox StereoscopyChackBox;
+        private System.Windows.Forms.CheckBox DetectIntersectionsCheckBox;
     }
 }
 
