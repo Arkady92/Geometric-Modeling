@@ -98,5 +98,27 @@ namespace Mathematics
             matrix[3, 3] = d;
             return matrix;
         }
+
+        public static Matrix StereoscopyLeft(double r, double e)
+        {
+            var matrix = new Matrix(4, 4);
+            matrix[0, 0] = 1;
+            matrix[0, 2] = -e * 0.5 / r;
+            matrix[1, 1] = 1;
+            matrix[3, 2] = 1 / r;
+            matrix[3, 3] = 1;
+            return matrix;
+        }
+
+        public static Matrix StereoscopyRight(double r, double e)
+        {
+            var matrix = new Matrix(4, 4);
+            matrix[0, 0] = 1;
+            matrix[0, 2] = e * 0.5 / r;
+            matrix[1, 1] = 1;
+            matrix[3, 2] = 1 / r;
+            matrix[3, 3] = 1;
+            return matrix;
+        }
     }
 }

@@ -31,5 +31,8 @@ namespace Models
             CreateVertices();
             CreateEdges();
         }
+
+        public abstract void DrawStereoscopy(System.Drawing.Graphics graphics, Matrix leftMatrix, Matrix rightMatrix);
+
     }
 }

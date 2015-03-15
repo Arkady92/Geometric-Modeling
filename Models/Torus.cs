@@ -12,11 +12,14 @@ namespace Models
         public double BigRadius { get; private set; }
         public double SmallRadius { get; private set; }
 
+        private Pen _currentPen;
+
         public Torus(double bigRadius = 1, double smallRadius = 0.5)
             : base(ModelType.Torus)
         {
             BigRadius = bigRadius;
             SmallRadius = smallRadius;
+            _currentPen = Pens.Black;
             CreateVertices();
             CreateEdges();
         }
@@ -29,12 +32,12 @@ namespace Models
                 Edges.Add(new Edge(0, Parameters.GridResolutionX));
                 for (int i = 1; i < Parameters.GridResolutionY; i++)
                 {
-                    var shift = i*Parameters.GridResolutionX;
+                    var shift = i * Parameters.GridResolutionX;
                     for (int j = 0; j < Parameters.GridResolutionX; j++)
                     {
-                        Edges.Add(new Edge(shift + j, shift + (j + 1)%Parameters.GridResolutionX));
+                        Edges.Add(new Edge(shift + j, shift + (j + 1) % Parameters.GridResolutionX));
                     }
-                    Edges.Add(new Edge(shift, (shift + Parameters.GridResolutionX)%verticesCount));
+                    Edges.Add(new Edge(shift, (shift + Parameters.GridResolutionX) % verticesCount));
                 }
             }
             if (verticesCount > 1)
@@ -44,10 +47,10 @@ namespace Models
                 {
                     for (int j = 0; j < Parameters.GridResolutionY; j++)
                     {
-                        var shift = j*Parameters.GridResolutionX;
-                        Edges.Add(new Edge(shift + i, (shift + Parameters.GridResolutionX + i)%verticesCount));
+                        var shift = j * Parameters.GridResolutionX;
+                        Edges.Add(new Edge(shift + i, (shift + Parameters.GridResolutionX + i) % verticesCount));
                     }
-                    Edges.Add(new Edge(i, (i + 1)%Parameters.GridResolutionX));
+                    Edges.Add(new Edge(i, (i + 1) % Parameters.GridResolutionX));
                 }
             }
         }
@@ -72,9 +75,9 @@ namespace Models
                 (BigRadius + SmallRadius * Math.Cos(alpha)) * Math.Sin(beta), SmallRadius * Math.Sin(alpha));
         }
 
-        public override void Draw(Graphics graphics, /*Matrix currentOperationsMatrix,*/ Matrix currentProjectionMatrix)
+        public override void Draw(Graphics graphics, Matrix currentProjectionMatrix = null)
         {
-            var currentMatrix = currentProjectionMatrix*CurrentOperationsMatrix;
+            var currentMatrix = currentProjectionMatrix * CurrentOperationsMatrix;
             var vertices = Vertices.Select(vertex => currentMatrix * vertex).ToList();
             float factor = (Parameters.WorldPanelWidth < Parameters.WorldPanelHeight) ?
                 Parameters.WorldPanelWidth * 0.25f : Parameters.WorldPanelHeight * 0.25f;
@@ -87,7 +90,17 @@ namespace Models
                     (float)vertices[edge.EndVertex].X * factor,
                     (float)vertices[edge.EndVertex].Y * factor);
             }
-            graphics.DrawPath(Pens.Black, graphicsPath);
+            graphics.DrawPath(_currentPen, graphicsPath);
+        }
+
+        public override void DrawStereoscopy(Graphics graphics, Matrix leftMatrix, Matrix rightMatrix)
+        {
+            var currentMatrix = leftMatrix * CurrentOperationsMatrix;
+            _currentPen = Pens.Red;
+            Draw(graphics, currentMatrix);
+            currentMatrix = rightMatrix * CurrentOperationsMatrix;
+            _currentPen = Pens.Blue;
+            Draw(graphics, currentMatrix);
         }
     }
 }

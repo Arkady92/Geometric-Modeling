@@ -58,7 +58,7 @@ namespace Models
             _actualScale = 1;
         }
 
-        public abstract void Draw(Graphics graphics, Matrix currentProjectionMatrix);
+        public abstract void Draw(Graphics graphics, Matrix currentProjectionMatrix = null);
 
         public abstract void UpdateModel();
     }

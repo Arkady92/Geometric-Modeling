@@ -8,27 +8,29 @@ namespace Models
     public class Ellipsoid : ImplicitGeometricModel
     {
         private Matrix _diagonalMatrix;
+        private Vector4 LightPosition;
 
         public Ellipsoid()
             : base(ModelType.Ellipsoid)
         {
             UpdateModel();
+            LightPosition = new Vector4(500, 500, 500, 0);
         }
-        public override void Draw(Graphics graphics, /*Matrix currentOperationsMatrix,*/ Matrix currentProjectionMatrix)
+        public override void Draw(Graphics graphics, Matrix currentProjectionMatrix = null)
         {
             var inverseMatrix = CurrentOperationsMatrix.Invert();
             var resultMatrix = Matrix.Transpose(inverseMatrix) * _diagonalMatrix * inverseMatrix;
-            DrawFrame(graphics, resultMatrix, currentProjectionMatrix, 1);
+            DrawFrame(graphics, resultMatrix, 1);
         }
 
-        public override void Draw(Graphics graphics, Matrix currentProjectionMatrix, int pixelSize)
+        public override void Draw(Graphics graphics, int pixelSize, Matrix currentProjectionMatrix = null)
         {
             var inverseMatrix = CurrentOperationsMatrix.Invert();
             var resultMatrix = Matrix.Transpose(inverseMatrix) * _diagonalMatrix * inverseMatrix;
-            DrawFrame(graphics, resultMatrix, currentProjectionMatrix, pixelSize);
+            DrawFrame(graphics, resultMatrix, pixelSize);
         }
 
-        private void DrawFrame(Graphics graphics, Matrix resultMatrix, Matrix currentProjectionMatrix, int pixelSize)
+        private void DrawFrame(Graphics graphics, Matrix resultMatrix, int pixelSize)
         {
             var shiftW = (Parameters.WorldPanelWidth / 2 / pixelSize) * pixelSize;
             var shiftH = (Parameters.WorldPanelHeight / 2 / pixelSize) * pixelSize;
@@ -36,30 +38,31 @@ namespace Models
             {
                 for (int y = pixelSize / 2; y < shiftH; y += pixelSize)
                 {
-                    CastRay(x, y, graphics, resultMatrix, currentProjectionMatrix, pixelSize);
-                    CastRay(-x, y, graphics, resultMatrix, currentProjectionMatrix, pixelSize);
-                    CastRay(x, -y, graphics, resultMatrix, currentProjectionMatrix, pixelSize);
-                    CastRay(-x, -y, graphics, resultMatrix, currentProjectionMatrix, pixelSize);
+                    CastRay(x, y, graphics, resultMatrix, pixelSize);
+                    CastRay(-x, y, graphics, resultMatrix, pixelSize);
+                    CastRay(x, -y, graphics, resultMatrix, pixelSize);
+                    CastRay(-x, -y, graphics, resultMatrix, pixelSize);
                 }
             }
         }
 
-        void CastRay(int x, int y, Graphics graphics, Matrix resultMatrix, Matrix currentProjectionMatrix, int pixelSize)
+        void CastRay(int x, int y, Graphics graphics, Matrix resultMatrix, int pixelSize)
         {
             double z;
-            if (!CalculateZValue(resultMatrix, x, y, out z)) return;
+            if (!CalculateZValue(resultMatrix, x, y, out z) || z < 0) return;
             var vertex = new Vector4(x, y, z);
             var normal = (vertex * resultMatrix) * 2;
-            normal.Normalize();
+            normal.NormalizeSecond();
             normal.W = 0;
-            var view = new Vector4(-x, -y, 1 / currentProjectionMatrix[3,2], 0);
-            view.Normalize();
-            var factor = normal * view;
+            var light = new Vector4(-x + LightPosition.X, -y + LightPosition.Y, LightPosition.Z, 0);
+            //light = light * resultMatrix;
+            light.NormalizeSecond();
+            var factor = normal * light;
             if (factor < 0) factor = 0;
             factor = Math.Pow(factor, Parameters.Illuminance);
-            var r = (int)(factor * 255 + Parameters.DefaultModelColor.R);
-            var g = (int)(factor * 255 + Parameters.DefaultModelColor.G);
-            var b = (int)(factor * 255 + Parameters.DefaultModelColor.B);
+            var r = (int)(factor * Parameters.DefaultModelColor.R);
+            var g = (int)(factor * Parameters.DefaultModelColor.G);
+            var b = (int)(factor * Parameters.DefaultModelColor.B);
             if (r < 0) r = 0;
             if (r > 255) r = 255;
             if (g < 0) g = 0;

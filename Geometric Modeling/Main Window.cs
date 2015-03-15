@@ -18,14 +18,15 @@ namespace Geometric_Modeling
         private bool _operationInProgress;
         private int _mousePositionX;
         private int _mousePositionY;
-        //private Matrix _currentOperationsMatrix;
         private Matrix _currentProjectionMatrix;
-        private const double MaximumScale = 40;
-        private const double MinimumScale = 0.025;
-        private double _actualScale;
+        private Matrix _currentStereoscopyLeftMatrix;
+        private Matrix _currentStereoscopyRightMatrix;
         private Bitmap _backBuffer;
         private bool _forceStaticGraphics;
         private bool _enableAnimations;
+        private bool _enableStereoscopy;
+        private const double ProjectionR = 20;
+        private const double ProjectionE = 10;
 
         #endregion
 
@@ -66,14 +67,15 @@ namespace Geometric_Modeling
             _modelsParameters = new Dictionary<ModelType, List<Control>>
             {
                 {ModelType.Torus, new List<Control> {GridResolutionXBox, GridResolutionYBox, GridResolutionXLabel, 
-                    GridResolutionYLabel}},
+                    GridResolutionYLabel, StereoscopyChackBox}},
                 {ModelType.Ellipsoid, new List<Control> {IlluminanceBox, XAxisFactorBox, YAxisFactorBox, ZAxisFactorBox, PixelMaxSizeBox, 
                     IlluminanceLabel, XAxisFactorLabel, YAxisFactorLabel, ZAxisFactorLabel, PixelMaxSizeLabel}}
             };
+            DisableAllSettings();
             _currentOperation = Operation.None;
-            //_currentOperationsMatrix = OperationsMatrices.Identity();
-            _currentProjectionMatrix = OperationsMatrices.Projection(100);
-            _actualScale = 1;
+            _currentProjectionMatrix = OperationsMatrices.Projection(200);
+            _currentStereoscopyLeftMatrix = OperationsMatrices.StereoscopyLeft(ProjectionR, ProjectionE);
+            _currentStereoscopyRightMatrix = OperationsMatrices.StereoscopyRight(ProjectionR, ProjectionE);
         }
 
         public static void SetDoubleBuffered(Control c)
@@ -105,18 +107,23 @@ namespace Geometric_Modeling
                     var pixelSize = Parameters.PixelMaxSize;
                     while (pixelSize > 1)
                     {
-                        graphics.Clear(Color.White);
-                        (geometricModel as ImplicitGeometricModel).Draw(graphics, _currentProjectionMatrix,
-                            pixelSize);
+                        graphics.Clear(Color.Black);
+                        (geometricModel as ImplicitGeometricModel).Draw(graphics, pixelSize);
                         if (Parameters.GridResolutionX * Parameters.GridResolutionY < 5000 && !_forceStaticGraphics)
                             WorldPanel.Image = _backBuffer;
                         pixelSize--;
-                        System.Threading.Thread.Sleep(50);
+                        //System.Threading.Thread.Sleep(50);
                     }
                 }
             }
             foreach (var geometricModel in _models)
-                geometricModel.Draw(graphics, _currentProjectionMatrix);
+            {
+                if (geometricModel is ParametricGeometricModel && _enableStereoscopy)
+                    (geometricModel as ParametricGeometricModel).DrawStereoscopy(graphics, _currentStereoscopyLeftMatrix,
+                        _currentStereoscopyRightMatrix);
+                else
+                    geometricModel.Draw(graphics, _currentProjectionMatrix);
+            }
 
             if (Parameters.GridResolutionX * Parameters.GridResolutionY < 5000 && !_forceStaticGraphics)
                 WorldPanel.Image = _backBuffer;
@@ -135,7 +142,7 @@ namespace Geometric_Modeling
         private void WorldPanel_MouseDown(object sender, MouseEventArgs e)
         {
             _operationInProgress = true;
-            _enableAnimations = false;
+            //_enableAnimations = false;
             _mousePositionX = e.X;
             _mousePositionY = e.Y;
         }
@@ -232,7 +239,7 @@ namespace Geometric_Modeling
         private void WorldPanel_MouseUp(object sender, MouseEventArgs e)
         {
             _operationInProgress = false;
-            _enableAnimations = true;
+            //_enableAnimations = true;
         }
         #endregion
 
@@ -326,7 +333,7 @@ namespace Geometric_Modeling
             DisableAllSettings();
             foreach (var parameterBox in _modelsParameters[((GeometricModel)item).Type])
             {
-                parameterBox.Enabled = true;
+                parameterBox.Visible = true;
             }
         }
 
@@ -342,7 +349,7 @@ namespace Geometric_Modeling
             {
                 foreach (var parameterBox in modelsParameter)
                 {
-                    parameterBox.Enabled = false;
+                    parameterBox.Visible = false;
                 }
             }
         }
@@ -455,6 +462,14 @@ namespace Geometric_Modeling
             }
             else if (textBox.Text != string.Empty)
                 textBox.Text = Parameters.PixelMaxSize.ToString(CultureInfo.InvariantCulture);
+        }
+
+        private void StereoscopyChackBox_CheckedChanged(object sender, EventArgs e)
+        {
+            var checkBox = sender as CheckBox;
+            if (checkBox == null) return;
+            _enableStereoscopy = checkBox.Checked;
+            DrawWorld();
         }
 
         private void MainWindow_Resize(object sender, EventArgs e)

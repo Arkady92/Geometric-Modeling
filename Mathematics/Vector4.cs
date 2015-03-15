@@ -30,9 +30,10 @@ namespace Mathematics
 
         public double[] PointsArray;
 
-        public void Normalize()
+        public void NormalizeSecond()
         {
             var norm = Math.Sqrt(X * X + Y * Y + Z * Z);
+            if(Math.Abs(norm) < Double.Epsilon) return;
             X /= norm;
             Z /= norm;
             Y /= norm;
@@ -97,6 +98,15 @@ namespace Mathematics
         public static Vector4 operator *(Vector4 vector, double value)
         {
             return new Vector4(vector.X * value, vector.Y * value, vector.Z * value, vector.W * value);
+        }
+
+        public void NormalizeFirst()
+        {
+            var sum = Math.Abs(X) + Math.Abs(Y) + Math.Abs(Z);
+            if(Math.Abs(sum) < Double.Epsilon) return;
+            X /= sum;
+            Z /= sum;
+            Y /= sum;
         }
     }
 }
