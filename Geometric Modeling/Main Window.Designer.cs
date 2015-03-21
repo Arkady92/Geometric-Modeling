@@ -30,6 +30,7 @@
         {
             this.ObjectsList = new System.Windows.Forms.ListBox();
             this.ObjectsPanel = new System.Windows.Forms.Panel();
+            this.BezierCurveButton = new System.Windows.Forms.Button();
             this.PointButton = new System.Windows.Forms.Button();
             this.EllipsoidButton = new System.Windows.Forms.Button();
             this.TorusButton = new System.Windows.Forms.Button();
@@ -65,12 +66,23 @@
             this.EffectsPanel = new System.Windows.Forms.Panel();
             this.AdditiveColorBlendingCheckBox = new System.Windows.Forms.CheckBox();
             this.StereoscopyCheckBox = new System.Windows.Forms.CheckBox();
-            this.BezierCurveButton = new System.Windows.Forms.Button();
+            this.CursorXLabel = new System.Windows.Forms.Label();
+            this.CursorXBox = new System.Windows.Forms.TextBox();
+            this.CursorYLabel = new System.Windows.Forms.Label();
+            this.CursorYBox = new System.Windows.Forms.TextBox();
+            this.CursorZLabel = new System.Windows.Forms.Label();
+            this.CursorZBox = new System.Windows.Forms.TextBox();
+            this.CursorScreenXLabel = new System.Windows.Forms.Label();
+            this.CursorScreenXBox = new System.Windows.Forms.TextBox();
+            this.CursorScreenYLabel = new System.Windows.Forms.Label();
+            this.CursorScreenYBox = new System.Windows.Forms.TextBox();
+            this.panel1 = new System.Windows.Forms.Panel();
             this.ObjectsPanel.SuspendLayout();
             this.OptionsPanel.SuspendLayout();
             this.OperationsPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.WorldPanel)).BeginInit();
             this.EffectsPanel.SuspendLayout();
+            this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // ObjectsList
@@ -78,10 +90,10 @@
             this.ObjectsList.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.ObjectsList.FormattingEnabled = true;
-            this.ObjectsList.Location = new System.Drawing.Point(622, 416);
+            this.ObjectsList.Location = new System.Drawing.Point(702, 424);
             this.ObjectsList.Name = "ObjectsList";
             this.ObjectsList.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
-            this.ObjectsList.Size = new System.Drawing.Size(150, 134);
+            this.ObjectsList.Size = new System.Drawing.Size(150, 186);
             this.ObjectsList.TabIndex = 0;
             this.ObjectsList.MouseClick += new System.Windows.Forms.MouseEventHandler(this.ObjectsList_MouseClick);
             this.ObjectsList.KeyDown += new System.Windows.Forms.KeyEventHandler(this.ObjectsList_KeyDown);
@@ -98,8 +110,18 @@
             this.ObjectsPanel.Controls.Add(this.TorusButton);
             this.ObjectsPanel.Location = new System.Drawing.Point(12, 12);
             this.ObjectsPanel.Name = "ObjectsPanel";
-            this.ObjectsPanel.Size = new System.Drawing.Size(760, 31);
+            this.ObjectsPanel.Size = new System.Drawing.Size(840, 31);
             this.ObjectsPanel.TabIndex = 1;
+            // 
+            // BezierCurveButton
+            // 
+            this.BezierCurveButton.Location = new System.Drawing.Point(246, 3);
+            this.BezierCurveButton.Name = "BezierCurveButton";
+            this.BezierCurveButton.Size = new System.Drawing.Size(75, 23);
+            this.BezierCurveButton.TabIndex = 12;
+            this.BezierCurveButton.Text = "Bezier Curve";
+            this.BezierCurveButton.UseVisualStyleBackColor = true;
+            this.BezierCurveButton.Click += new System.EventHandler(this.BezierCurveButton_Click);
             // 
             // PointButton
             // 
@@ -149,7 +171,7 @@
             this.OptionsPanel.Controls.Add(this.GridResolutionYBox);
             this.OptionsPanel.Controls.Add(this.GridResolutionXLabel);
             this.OptionsPanel.Controls.Add(this.GridResolutionXBox);
-            this.OptionsPanel.Location = new System.Drawing.Point(622, 103);
+            this.OptionsPanel.Location = new System.Drawing.Point(702, 103);
             this.OptionsPanel.Name = "OptionsPanel";
             this.OptionsPanel.Size = new System.Drawing.Size(150, 190);
             this.OptionsPanel.TabIndex = 2;
@@ -319,7 +341,7 @@
             this.OperationsPanel.Controls.Add(this.TranslationXButton);
             this.OperationsPanel.Location = new System.Drawing.Point(12, 57);
             this.OperationsPanel.Name = "OperationsPanel";
-            this.OperationsPanel.Size = new System.Drawing.Size(760, 31);
+            this.OperationsPanel.Size = new System.Drawing.Size(840, 31);
             this.OperationsPanel.TabIndex = 4;
             // 
             // ScaleButton
@@ -386,7 +408,7 @@
             // 
             this.ObjectsLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)));
             this.ObjectsLabel.AutoSize = true;
-            this.ObjectsLabel.Location = new System.Drawing.Point(376, 0);
+            this.ObjectsLabel.Location = new System.Drawing.Point(416, 0);
             this.ObjectsLabel.Name = "ObjectsLabel";
             this.ObjectsLabel.Size = new System.Drawing.Size(43, 13);
             this.ObjectsLabel.TabIndex = 5;
@@ -396,7 +418,7 @@
             // 
             this.OperationsLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)));
             this.OperationsLabel.AutoSize = true;
-            this.OperationsLabel.Location = new System.Drawing.Point(369, 45);
+            this.OperationsLabel.Location = new System.Drawing.Point(409, 45);
             this.OperationsLabel.Name = "OperationsLabel";
             this.OperationsLabel.Size = new System.Drawing.Size(58, 13);
             this.OperationsLabel.TabIndex = 6;
@@ -407,7 +429,7 @@
             this.SettingsLabel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.SettingsLabel.AutoSize = true;
-            this.SettingsLabel.Location = new System.Drawing.Point(674, 91);
+            this.SettingsLabel.Location = new System.Drawing.Point(754, 91);
             this.SettingsLabel.Name = "SettingsLabel";
             this.SettingsLabel.Size = new System.Drawing.Size(45, 13);
             this.SettingsLabel.TabIndex = 7;
@@ -417,7 +439,7 @@
             // 
             this.ObjectsListLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.ObjectsListLabel.AutoSize = true;
-            this.ObjectsListLabel.Location = new System.Drawing.Point(664, 404);
+            this.ObjectsListLabel.Location = new System.Drawing.Point(744, 412);
             this.ObjectsListLabel.Name = "ObjectsListLabel";
             this.ObjectsListLabel.Size = new System.Drawing.Size(62, 13);
             this.ObjectsListLabel.TabIndex = 8;
@@ -433,7 +455,7 @@
             this.WorldPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.WorldPanel.Location = new System.Drawing.Point(12, 103);
             this.WorldPanel.Name = "WorldPanel";
-            this.WorldPanel.Size = new System.Drawing.Size(594, 446);
+            this.WorldPanel.Size = new System.Drawing.Size(674, 464);
             this.WorldPanel.TabIndex = 9;
             this.WorldPanel.TabStop = false;
             this.WorldPanel.MouseDown += new System.Windows.Forms.MouseEventHandler(this.WorldPanel_MouseDown);
@@ -445,7 +467,7 @@
             this.EffectsLabel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.EffectsLabel.AutoSize = true;
-            this.EffectsLabel.Location = new System.Drawing.Point(674, 297);
+            this.EffectsLabel.Location = new System.Drawing.Point(754, 297);
             this.EffectsLabel.Name = "EffectsLabel";
             this.EffectsLabel.Size = new System.Drawing.Size(40, 13);
             this.EffectsLabel.TabIndex = 11;
@@ -457,9 +479,9 @@
             this.EffectsPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.EffectsPanel.Controls.Add(this.AdditiveColorBlendingCheckBox);
             this.EffectsPanel.Controls.Add(this.StereoscopyCheckBox);
-            this.EffectsPanel.Location = new System.Drawing.Point(622, 309);
+            this.EffectsPanel.Location = new System.Drawing.Point(702, 309);
             this.EffectsPanel.Name = "EffectsPanel";
-            this.EffectsPanel.Size = new System.Drawing.Size(150, 92);
+            this.EffectsPanel.Size = new System.Drawing.Size(150, 100);
             this.EffectsPanel.TabIndex = 10;
             // 
             // AdditiveColorBlendingCheckBox
@@ -486,21 +508,125 @@
             this.StereoscopyCheckBox.Visible = false;
             this.StereoscopyCheckBox.CheckedChanged += new System.EventHandler(this.StereoscopyChackBox_CheckedChanged);
             // 
-            // BezierCurveButton
+            // CursorXLabel
             // 
-            this.BezierCurveButton.Location = new System.Drawing.Point(246, 3);
-            this.BezierCurveButton.Name = "BezierCurveButton";
-            this.BezierCurveButton.Size = new System.Drawing.Size(75, 23);
-            this.BezierCurveButton.TabIndex = 12;
-            this.BezierCurveButton.Text = "Bezier Curve";
-            this.BezierCurveButton.UseVisualStyleBackColor = true;
-            this.BezierCurveButton.Click += new System.EventHandler(this.BezierCurveButton_Click);
+            this.CursorXLabel.AutoSize = true;
+            this.CursorXLabel.Location = new System.Drawing.Point(40, 6);
+            this.CursorXLabel.Name = "CursorXLabel";
+            this.CursorXLabel.Size = new System.Drawing.Size(47, 13);
+            this.CursorXLabel.TabIndex = 13;
+            this.CursorXLabel.Text = "Cursor X";
+            // 
+            // CursorXBox
+            // 
+            this.CursorXBox.Location = new System.Drawing.Point(93, 3);
+            this.CursorXBox.Name = "CursorXBox";
+            this.CursorXBox.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.CursorXBox.Size = new System.Drawing.Size(46, 20);
+            this.CursorXBox.TabIndex = 12;
+            this.CursorXBox.Tag = "";
+            this.CursorXBox.TextChanged += new System.EventHandler(this.CursorXBox_TextChanged);
+            // 
+            // CursorYLabel
+            // 
+            this.CursorYLabel.AutoSize = true;
+            this.CursorYLabel.Location = new System.Drawing.Point(145, 6);
+            this.CursorYLabel.Name = "CursorYLabel";
+            this.CursorYLabel.Size = new System.Drawing.Size(47, 13);
+            this.CursorYLabel.TabIndex = 15;
+            this.CursorYLabel.Text = "Cursor Y";
+            // 
+            // CursorYBox
+            // 
+            this.CursorYBox.Location = new System.Drawing.Point(198, 3);
+            this.CursorYBox.Name = "CursorYBox";
+            this.CursorYBox.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.CursorYBox.Size = new System.Drawing.Size(46, 20);
+            this.CursorYBox.TabIndex = 14;
+            this.CursorYBox.Tag = "";
+            this.CursorYBox.TextChanged += new System.EventHandler(this.CursorYBox_TextChanged);
+            // 
+            // CursorZLabel
+            // 
+            this.CursorZLabel.AutoSize = true;
+            this.CursorZLabel.Location = new System.Drawing.Point(250, 6);
+            this.CursorZLabel.Name = "CursorZLabel";
+            this.CursorZLabel.Size = new System.Drawing.Size(47, 13);
+            this.CursorZLabel.TabIndex = 17;
+            this.CursorZLabel.Text = "Cursor Z";
+            // 
+            // CursorZBox
+            // 
+            this.CursorZBox.Location = new System.Drawing.Point(303, 3);
+            this.CursorZBox.Name = "CursorZBox";
+            this.CursorZBox.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.CursorZBox.Size = new System.Drawing.Size(46, 20);
+            this.CursorZBox.TabIndex = 16;
+            this.CursorZBox.Tag = "";
+            this.CursorZBox.TextChanged += new System.EventHandler(this.CursorZBox_TextChanged);
+            // 
+            // CursorScreenXLabel
+            // 
+            this.CursorScreenXLabel.AutoSize = true;
+            this.CursorScreenXLabel.Location = new System.Drawing.Point(355, 6);
+            this.CursorScreenXLabel.Name = "CursorScreenXLabel";
+            this.CursorScreenXLabel.Size = new System.Drawing.Size(84, 13);
+            this.CursorScreenXLabel.TabIndex = 19;
+            this.CursorScreenXLabel.Text = "Cursor Screen X";
+            // 
+            // CursorScreenXBox
+            // 
+            this.CursorScreenXBox.Location = new System.Drawing.Point(445, 3);
+            this.CursorScreenXBox.Name = "CursorScreenXBox";
+            this.CursorScreenXBox.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.CursorScreenXBox.Size = new System.Drawing.Size(46, 20);
+            this.CursorScreenXBox.TabIndex = 18;
+            this.CursorScreenXBox.Tag = "";
+            this.CursorScreenXBox.TextChanged += new System.EventHandler(this.CursorScreenXBox_TextChanged);
+            // 
+            // CursorScreenYLabel
+            // 
+            this.CursorScreenYLabel.AutoSize = true;
+            this.CursorScreenYLabel.Location = new System.Drawing.Point(497, 6);
+            this.CursorScreenYLabel.Name = "CursorScreenYLabel";
+            this.CursorScreenYLabel.Size = new System.Drawing.Size(84, 13);
+            this.CursorScreenYLabel.TabIndex = 21;
+            this.CursorScreenYLabel.Text = "Cursor Screen Y";
+            // 
+            // CursorScreenYBox
+            // 
+            this.CursorScreenYBox.Location = new System.Drawing.Point(587, 3);
+            this.CursorScreenYBox.Name = "CursorScreenYBox";
+            this.CursorScreenYBox.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.CursorScreenYBox.Size = new System.Drawing.Size(46, 20);
+            this.CursorScreenYBox.TabIndex = 20;
+            this.CursorScreenYBox.Tag = "";
+            this.CursorScreenYBox.TextChanged += new System.EventHandler(this.CursorScreenYBox_TextChanged);
+            // 
+            // panel1
+            // 
+            this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panel1.Controls.Add(this.CursorXLabel);
+            this.panel1.Controls.Add(this.CursorScreenYLabel);
+            this.panel1.Controls.Add(this.CursorXBox);
+            this.panel1.Controls.Add(this.CursorScreenYBox);
+            this.panel1.Controls.Add(this.CursorYBox);
+            this.panel1.Controls.Add(this.CursorScreenXLabel);
+            this.panel1.Controls.Add(this.CursorYLabel);
+            this.panel1.Controls.Add(this.CursorScreenXBox);
+            this.panel1.Controls.Add(this.CursorZBox);
+            this.panel1.Controls.Add(this.CursorZLabel);
+            this.panel1.Location = new System.Drawing.Point(12, 581);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(674, 29);
+            this.panel1.TabIndex = 22;
             // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(784, 562);
+            this.ClientSize = new System.Drawing.Size(864, 622);
+            this.Controls.Add(this.panel1);
             this.Controls.Add(this.EffectsLabel);
             this.Controls.Add(this.EffectsPanel);
             this.Controls.Add(this.WorldPanel);
@@ -513,7 +639,7 @@
             this.Controls.Add(this.ObjectsPanel);
             this.Controls.Add(this.ObjectsList);
             this.DoubleBuffered = true;
-            this.MinimumSize = new System.Drawing.Size(800, 600);
+            this.MinimumSize = new System.Drawing.Size(880, 660);
             this.Name = "MainWindow";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Geometric Modeling";
@@ -525,6 +651,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.WorldPanel)).EndInit();
             this.EffectsPanel.ResumeLayout(false);
             this.EffectsPanel.PerformLayout();
+            this.panel1.ResumeLayout(false);
+            this.panel1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -570,6 +698,17 @@
         private System.Windows.Forms.CheckBox AdditiveColorBlendingCheckBox;
         private System.Windows.Forms.Button PointButton;
         private System.Windows.Forms.Button BezierCurveButton;
+        private System.Windows.Forms.Label CursorXLabel;
+        private System.Windows.Forms.TextBox CursorXBox;
+        private System.Windows.Forms.Label CursorYLabel;
+        private System.Windows.Forms.TextBox CursorYBox;
+        private System.Windows.Forms.Label CursorZLabel;
+        private System.Windows.Forms.TextBox CursorZBox;
+        private System.Windows.Forms.Label CursorScreenXLabel;
+        private System.Windows.Forms.TextBox CursorScreenXBox;
+        private System.Windows.Forms.Label CursorScreenYLabel;
+        private System.Windows.Forms.TextBox CursorScreenYBox;
+        private System.Windows.Forms.Panel panel1;
     }
 }
 

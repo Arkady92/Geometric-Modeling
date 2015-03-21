@@ -53,6 +53,11 @@ namespace Geometric_Modeling
             YAxisFactorBox.Text = Parameters.YAxisFactor.ToString(CultureInfo.InvariantCulture);
             ZAxisFactorBox.Text = Parameters.ZAxisFactor.ToString(CultureInfo.InvariantCulture);
             PixelMaxSizeBox.Text = Parameters.PixelMaxSize.ToString(CultureInfo.InvariantCulture);
+            CursorXBox.Text = Parameters.CursorXPosition.ToString(CultureInfo.InvariantCulture);
+            CursorYBox.Text = Parameters.CursorYPosition.ToString(CultureInfo.InvariantCulture);
+            CursorZBox.Text = Parameters.CursorZPosition.ToString(CultureInfo.InvariantCulture);
+            CursorScreenXBox.Text = Parameters.CursorScreenXPosition.ToString(CultureInfo.InvariantCulture);
+            CursorScreenYBox.Text = Parameters.CursorScreenYPosition.ToString(CultureInfo.InvariantCulture);
             Parameters.WorldPanelWidth = WorldPanel.Width;
             Parameters.WorldPanelHeight = WorldPanel.Height;
             _models = new List<GeometricModel>();
@@ -530,6 +535,84 @@ namespace Geometric_Modeling
             }
             else if (textBox.Text != string.Empty)
                 textBox.Text = Parameters.PixelMaxSize.ToString(CultureInfo.InvariantCulture);
+        }
+
+        private void CursorXBox_TextChanged(object sender, EventArgs e)
+        {
+            var textBox = sender as TextBox;
+            double result;
+            if (textBox == null) return;
+            if (double.TryParse(textBox.Text, NumberStyles.Any, CultureInfo.InvariantCulture, out result) 
+                && result >= -1 && result <= 1)
+            {
+                Parameters.CursorXPosition = result;
+                DrawWorld();
+            }
+            else if (textBox.Text != string.Empty && textBox.Text[0] != '.' && textBox.Text[textBox.TextLength - 1] != '.'
+                && textBox.Text != @"-")
+                textBox.Text = Parameters.CursorXPosition.ToString(CultureInfo.InvariantCulture);
+        }
+
+        private void CursorYBox_TextChanged(object sender, EventArgs e)
+        {
+            var textBox = sender as TextBox;
+            double result;
+            if (textBox == null) return;
+            if (double.TryParse(textBox.Text, NumberStyles.Any, CultureInfo.InvariantCulture, out result)
+                && result >= -1 && result <= 1)
+            {
+                Parameters.CursorYPosition = result;
+                DrawWorld();
+            }
+            else if (textBox.Text != string.Empty && textBox.Text[0] != '.' && textBox.Text[textBox.TextLength - 1] != '.'
+                && textBox.Text != @"-")
+                textBox.Text = Parameters.CursorYPosition.ToString(CultureInfo.InvariantCulture);
+        }
+
+        private void CursorZBox_TextChanged(object sender, EventArgs e)
+        {
+            var textBox = sender as TextBox;
+            double result;
+            if (textBox == null) return;
+            if (double.TryParse(textBox.Text, NumberStyles.Any, CultureInfo.InvariantCulture, out result)
+                && result >= -1 && result <= 1)
+            {
+                Parameters.CursorZPosition = result;
+                DrawWorld();
+            }
+            else if (textBox.Text != string.Empty && textBox.Text[0] != '.' && textBox.Text[textBox.TextLength - 1] != '.'
+                && textBox.Text != @"-")
+                textBox.Text = Parameters.CursorZPosition.ToString(CultureInfo.InvariantCulture);
+        }
+
+        private void CursorScreenXBox_TextChanged(object sender, EventArgs e)
+        {
+            var textBox = sender as TextBox;
+            int result;
+            if (textBox == null) return;
+            if (int.TryParse(textBox.Text, out result) && result >= -Parameters.WorldPanelWidth / 2 && result <= Parameters.WorldPanelWidth / 2)
+            {
+                Parameters.CursorScreenXPosition = result;
+                UpdateCurrentModel();
+                DrawWorld();
+            }
+            else if (textBox.Text != string.Empty && textBox.Text != @"-")
+                textBox.Text = Parameters.CursorScreenXPosition.ToString(CultureInfo.InvariantCulture);
+        }
+
+        private void CursorScreenYBox_TextChanged(object sender, EventArgs e)
+        {
+            var textBox = sender as TextBox;
+            int result;
+            if (textBox == null) return;
+            if (int.TryParse(textBox.Text, out result) && result >= -Parameters.WorldPanelHeight / 2 && result <= Parameters.WorldPanelHeight / 2)
+            {
+                Parameters.CursorScreenYPosition = result;
+                UpdateCurrentModel();
+                DrawWorld();
+            }
+            else if (textBox.Text != string.Empty && textBox.Text != @"-")
+                textBox.Text = Parameters.CursorScreenYPosition.ToString(CultureInfo.InvariantCulture);
         }
 
         private void StereoscopyChackBox_CheckedChanged(object sender, EventArgs e)

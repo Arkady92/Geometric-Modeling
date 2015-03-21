@@ -13,5 +13,11 @@ namespace Mathematics
         public static double ZAxisFactor = 100;
         public static Color DefaultModelColor = Color.Yellow;
         public static int PixelMaxSize = 80;
+        public static double CursorXPosition = 0;
+        public static double CursorYPosition = 0;
+        public static double CursorZPosition = 0;
+        public static int CursorScreenXPosition = 0;
+        public static int CursorScreenYPosition = 0;
+
     }
 }
