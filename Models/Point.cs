@@ -38,6 +38,11 @@ namespace Models
             CreateEdges();
         }
 
+        public Vector4 ToVector4()
+        {
+            return new Vector4(X,Y,Z);
+        }
+
         protected override void DrawModel(Graphics graphics, Matrix currentProjectionMatrix, Color color)
         {
             Matrix currentMatrix = OperationsMatrices.Identity();

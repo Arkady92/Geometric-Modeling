@@ -56,13 +56,11 @@ namespace Models
 
         public void RemoveParent(ParametricGeometricModel parent)
         {
-            if (Parents.Contains(parent))
-                Parents.Remove(parent);
+            Parents.Remove(parent);
         }
         public void RemoveChild(ParametricGeometricModel child)
         {
-            if (Children.Contains(child))
-                Children.Remove(child);
+            Children.Remove(child);
         }
 
         public void RemoveModel()

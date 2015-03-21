@@ -4,6 +4,7 @@
     {
         Torus,
         Ellipsoid,
-        Point
+        Point,
+        BezierCurve
     }
 }

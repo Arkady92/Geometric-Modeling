@@ -64,7 +64,8 @@
             this.EffectsLabel = new System.Windows.Forms.Label();
             this.EffectsPanel = new System.Windows.Forms.Panel();
             this.AdditiveColorBlendingCheckBox = new System.Windows.Forms.CheckBox();
-            this.StereoscopyChackBox = new System.Windows.Forms.CheckBox();
+            this.StereoscopyCheckBox = new System.Windows.Forms.CheckBox();
+            this.BezierCurveButton = new System.Windows.Forms.Button();
             this.ObjectsPanel.SuspendLayout();
             this.OptionsPanel.SuspendLayout();
             this.OperationsPanel.SuspendLayout();
@@ -91,6 +92,7 @@
             this.ObjectsPanel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.ObjectsPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.ObjectsPanel.Controls.Add(this.BezierCurveButton);
             this.ObjectsPanel.Controls.Add(this.PointButton);
             this.ObjectsPanel.Controls.Add(this.EllipsoidButton);
             this.ObjectsPanel.Controls.Add(this.TorusButton);
@@ -454,7 +456,7 @@
             this.EffectsPanel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.EffectsPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.EffectsPanel.Controls.Add(this.AdditiveColorBlendingCheckBox);
-            this.EffectsPanel.Controls.Add(this.StereoscopyChackBox);
+            this.EffectsPanel.Controls.Add(this.StereoscopyCheckBox);
             this.EffectsPanel.Location = new System.Drawing.Point(622, 309);
             this.EffectsPanel.Name = "EffectsPanel";
             this.EffectsPanel.Size = new System.Drawing.Size(150, 92);
@@ -472,17 +474,27 @@
             this.AdditiveColorBlendingCheckBox.Visible = false;
             this.AdditiveColorBlendingCheckBox.CheckedChanged += new System.EventHandler(this.AdditiveColorBlendingCheckBox_CheckedChanged);
             // 
-            // StereoscopyChackBox
+            // StereoscopyCheckBox
             // 
-            this.StereoscopyChackBox.AutoSize = true;
-            this.StereoscopyChackBox.Location = new System.Drawing.Point(10, 4);
-            this.StereoscopyChackBox.Name = "StereoscopyChackBox";
-            this.StereoscopyChackBox.Size = new System.Drawing.Size(85, 17);
-            this.StereoscopyChackBox.TabIndex = 0;
-            this.StereoscopyChackBox.Text = "Stereoscopy";
-            this.StereoscopyChackBox.UseVisualStyleBackColor = true;
-            this.StereoscopyChackBox.Visible = false;
-            this.StereoscopyChackBox.CheckedChanged += new System.EventHandler(this.StereoscopyChackBox_CheckedChanged);
+            this.StereoscopyCheckBox.AutoSize = true;
+            this.StereoscopyCheckBox.Location = new System.Drawing.Point(10, 4);
+            this.StereoscopyCheckBox.Name = "StereoscopyCheckBox";
+            this.StereoscopyCheckBox.Size = new System.Drawing.Size(85, 17);
+            this.StereoscopyCheckBox.TabIndex = 0;
+            this.StereoscopyCheckBox.Text = "Stereoscopy";
+            this.StereoscopyCheckBox.UseVisualStyleBackColor = true;
+            this.StereoscopyCheckBox.Visible = false;
+            this.StereoscopyCheckBox.CheckedChanged += new System.EventHandler(this.StereoscopyChackBox_CheckedChanged);
+            // 
+            // BezierCurveButton
+            // 
+            this.BezierCurveButton.Location = new System.Drawing.Point(246, 3);
+            this.BezierCurveButton.Name = "BezierCurveButton";
+            this.BezierCurveButton.Size = new System.Drawing.Size(75, 23);
+            this.BezierCurveButton.TabIndex = 12;
+            this.BezierCurveButton.Text = "Bezier Curve";
+            this.BezierCurveButton.UseVisualStyleBackColor = true;
+            this.BezierCurveButton.Click += new System.EventHandler(this.BezierCurveButton_Click);
             // 
             // MainWindow
             // 
@@ -554,9 +566,10 @@
         private System.Windows.Forms.TextBox PixelMaxSizeBox;
         private System.Windows.Forms.Label EffectsLabel;
         private System.Windows.Forms.Panel EffectsPanel;
-        private System.Windows.Forms.CheckBox StereoscopyChackBox;
+        private System.Windows.Forms.CheckBox StereoscopyCheckBox;
         private System.Windows.Forms.CheckBox AdditiveColorBlendingCheckBox;
         private System.Windows.Forms.Button PointButton;
+        private System.Windows.Forms.Button BezierCurveButton;
     }
 }
 

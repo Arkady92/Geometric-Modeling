@@ -69,10 +69,11 @@ namespace Geometric_Modeling
             _modelsParameters = new Dictionary<ModelType, List<Control>>
             {
                 {ModelType.Torus, new List<Control> {GridResolutionXBox, GridResolutionYBox, GridResolutionXLabel, 
-                    GridResolutionYLabel, StereoscopyChackBox, AdditiveColorBlendingCheckBox}},
+                    GridResolutionYLabel, StereoscopyCheckBox, AdditiveColorBlendingCheckBox}},
                 {ModelType.Ellipsoid, new List<Control> {IlluminanceBox, XAxisFactorBox, YAxisFactorBox, ZAxisFactorBox, PixelMaxSizeBox, 
                     IlluminanceLabel, XAxisFactorLabel, YAxisFactorLabel, ZAxisFactorLabel, PixelMaxSizeLabel}},
-                    {ModelType.Point, new List<Control>{StereoscopyChackBox, AdditiveColorBlendingCheckBox}}
+                    {ModelType.Point, new List<Control>{StereoscopyCheckBox, AdditiveColorBlendingCheckBox}},
+                    {ModelType.BezierCurve, new List<Control>{StereoscopyCheckBox, AdditiveColorBlendingCheckBox}}
             };
             DisableAllSettings();
             _currentOperation = Operation.None;
@@ -273,6 +274,14 @@ namespace Geometric_Modeling
             DrawWorld();
         }
 
+        private void BezierCurveButton_Click(object sender, EventArgs e)
+        {
+            var geometricObject = new BezierCurve();
+            _models.Add(geometricObject);
+            ObjectsList.Items.Add(geometricObject);
+            DrawWorld();
+        }
+
         private void TranslationXButton_Click(object sender, EventArgs e)
         {
             SwitchOperation(Operation.TranslationX);
@@ -326,27 +335,20 @@ namespace Geometric_Modeling
 
         private void ObjectsList_MouseDoubleClick(object sender, MouseEventArgs e)
         {
-            var item = ObjectsList.SelectedItem;
-            if (item != null)
-            {
-                if (item is ParametricGeometricModel)
-                    (item as ParametricGeometricModel).RemoveModel();
-                _models.Remove(item as GeometricModel);
-                ObjectsList.Items.Remove(ObjectsList.SelectedItem);
-            }
-            DisableAllSettings();
-            DrawWorld();
+            RemoveObject();
         }
 
         private void ObjectsList_MouseClick(object sender, MouseEventArgs e)
         {
-            var item = ObjectsList.SelectedItem;
+            var item = ObjectsList.SelectedItem as GeometricModel;
             if (item == null) return;
             DisableAllSettings();
-            foreach (var parameterBox in _modelsParameters[((GeometricModel)item).Type])
+            foreach (var parameterBox in _modelsParameters[(item).Type])
             {
                 parameterBox.Visible = true;
             }
+            _enableAnimations = !(item is ParametricGeometricModel);
+            _forceStaticGraphics = !(item is ParametricGeometricModel);
         }
 
         private void ObjectsList_KeyDown(object sender, KeyEventArgs e)
@@ -364,8 +366,28 @@ namespace Geometric_Modeling
                         ObjectsList.Items[ObjectsList.SelectedIndex] = ObjectsList.SelectedItem;
                     }
                     break;
-                default:
-                    return;
+                case Keys.Delete:
+                    RemoveObject();
+                    break;
+                case Keys.Space:
+                    var count = ObjectsList.SelectedItems.Count;
+                    if (count < 2) break;
+                    var points = new List<Point>();
+                    for (int i = count - 1; i >= 0; i--)
+                    {
+                        if (!(ObjectsList.SelectedItems[i] is Point)) continue;
+                        points.Add(ObjectsList.SelectedItems[i] as Point);
+                        _models.Remove(points[-i + count - 1]);
+                        ObjectsList.Items.Remove(ObjectsList.SelectedItems[i]);
+                    }
+                    points.Reverse();
+                    if(points.Count < 2) break;
+                    var bezierCurve = new BezierCurve(points);
+                    _models.Add(bezierCurve);
+                    ObjectsList.Items.Add(bezierCurve);
+                    ObjectsList.SelectedItem = bezierCurve;
+                    DrawWorld();
+                    break;
             }
         }
 
@@ -373,6 +395,20 @@ namespace Geometric_Modeling
         {
             ObjectsList.ClearSelected();
             DisableAllSettings();
+        }
+
+        private void RemoveObject()
+        {
+            var item = ObjectsList.SelectedItem;
+            if (item != null)
+            {
+                if (item is ParametricGeometricModel)
+                    (item as ParametricGeometricModel).RemoveModel();
+                _models.Remove(item as GeometricModel);
+                ObjectsList.Items.Remove(ObjectsList.SelectedItem);
+            }
+            DisableAllSettings();
+            DrawWorld();
         }
 
         private void DisableAllSettings()
