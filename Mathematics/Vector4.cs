@@ -39,6 +39,14 @@ namespace Mathematics
             Y /= norm;
         }
 
+        public void NormalizeW()
+        {
+            for (int i = 0; i < 4; i++)
+            {
+                PointsArray[i] /= W;
+            }
+        }
+
         public Vector4()
         {
             PointsArray = new double[4];

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Drawing;
-using System.Security.Cryptography.X509Certificates;
 using Mathematics;
 
 namespace Models
@@ -9,7 +8,7 @@ namespace Models
     {
         public ModelType Type;
 
-        protected Matrix CurrentOperationsMatrix;
+        public Matrix CurrentOperationMatrix { get; protected set; }
 
         protected double TranslationFactor;
 
@@ -23,30 +22,30 @@ namespace Models
 
         public void Translate(double x, double y, double z)
         {
-            CurrentOperationsMatrix = OperationsMatrices.Translation(x * TranslationFactor, y * TranslationFactor,
-                z * TranslationFactor) * CurrentOperationsMatrix;
+            CurrentOperationMatrix = OperationsMatrices.Translation(x * TranslationFactor, y * TranslationFactor,
+                z * TranslationFactor) * CurrentOperationMatrix;
         }
 
         public void Rotate(double x, double y, double z)
         {
             if (Math.Abs(x) > Double.Epsilon)
-                CurrentOperationsMatrix = OperationsMatrices.RotationX(x * RotationFactor) * CurrentOperationsMatrix;
+                CurrentOperationMatrix = OperationsMatrices.RotationX(x * RotationFactor) * CurrentOperationMatrix;
             if (Math.Abs(y) > Double.Epsilon)
-                CurrentOperationsMatrix = OperationsMatrices.RotationY(y * RotationFactor) * CurrentOperationsMatrix;
+                CurrentOperationMatrix = OperationsMatrices.RotationY(y * RotationFactor) * CurrentOperationMatrix;
             if (Math.Abs(z) > Double.Epsilon)
-                CurrentOperationsMatrix = OperationsMatrices.RotationZ(z * RotationFactor) * CurrentOperationsMatrix;
+                CurrentOperationMatrix = OperationsMatrices.RotationZ(z * RotationFactor) * CurrentOperationMatrix;
         }
 
         public void Scale(double s)
         {
             if (s > 0 && _actualScale > 1 / MaximumScaleFactor)
             {
-                CurrentOperationsMatrix = OperationsMatrices.Scale(1 / ScaleFactor)*CurrentOperationsMatrix;
+                CurrentOperationMatrix = OperationsMatrices.Scale(1 / ScaleFactor)*CurrentOperationMatrix;
                 _actualScale /= ScaleFactor;
             }
             if (s < 0 && _actualScale < MaximumScaleFactor)
             {
-                CurrentOperationsMatrix = OperationsMatrices.Scale(ScaleFactor) * CurrentOperationsMatrix;
+                CurrentOperationMatrix = OperationsMatrices.Scale(ScaleFactor) * CurrentOperationMatrix;
                 _actualScale *= ScaleFactor;
             }
         }
@@ -54,11 +53,11 @@ namespace Models
         protected GeometricModel(ModelType type)
         {
             Type = type;
-            CurrentOperationsMatrix = OperationsMatrices.Identity();
+            CurrentOperationMatrix = OperationsMatrices.Identity();
             _actualScale = 1;
         }
 
-        public abstract void Draw(Graphics graphics, Matrix currentProjectionMatrix = null);
+        public abstract void Draw(Graphics graphics, Matrix currentProjectionMatrix);
 
         public abstract void UpdateModel();
     }

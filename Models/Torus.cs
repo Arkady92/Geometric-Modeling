@@ -12,6 +12,8 @@ namespace Models
         public double BigRadius { get; private set; }
         public double SmallRadius { get; private set; }
 
+        private static int _increment = 1;
+
         public Torus(double bigRadius = 1, double smallRadius = 0.5)
             : base(ModelType.Torus)
         {
@@ -61,7 +63,9 @@ namespace Models
             {
                 for (double beta = betaStep; beta < 2 * Math.PI + betaStep / 2; beta += betaStep)
                 {
-                    Vertices.Add(ParametricEquation(alpha, beta));
+                    var result = ParametricEquation(alpha, beta);
+                    Vertices.Add(result);
+                    Children.Add(new Point(result, this));
                 }
             }
         }
@@ -72,9 +76,13 @@ namespace Models
                 (BigRadius + SmallRadius * Math.Cos(alpha)) * Math.Sin(beta), SmallRadius * Math.Sin(alpha));
         }
 
-        private void DrawTorus(Graphics graphics, Matrix matrix, Pen pen)
+        protected override void DrawModel(Graphics graphics, Matrix currentProjectionMatrix, Color color)
         {
-            var currentMatrix = matrix * CurrentOperationsMatrix;
+            Matrix currentMatrix = OperationsMatrices.Identity();
+            currentMatrix = Parents.Aggregate(currentMatrix, (current, parent) => current * parent.CurrentOperationMatrix);
+            currentMatrix = currentProjectionMatrix * CurrentOperationMatrix * currentMatrix;
+
+            var pen = new Pen(color);
             var vertices = Vertices.Select(vertex => currentMatrix * vertex).ToList();
             float factor = (Parameters.WorldPanelWidth < Parameters.WorldPanelHeight) ?
                 Parameters.WorldPanelWidth * 0.25f : Parameters.WorldPanelHeight * 0.25f;
@@ -89,47 +97,9 @@ namespace Models
             }
             graphics.DrawPath(pen, graphicsPath);
         }
-
-        public override void Draw(Graphics graphics, Matrix currentProjectionMatrix = null)
+        public override string ToString()
         {
-            DrawTorus(graphics, currentProjectionMatrix, Pens.Black);
-        }
-
-        public override void DrawStereoscopy(Graphics graphics, Matrix leftMatrix, Matrix rightMatrix,
-            bool intersectionsDetection = false)
-        {
-            if (!intersectionsDetection)
-            {
-                DrawTorus(graphics, leftMatrix * CurrentOperationsMatrix, Pens.Red);
-                DrawTorus(graphics, rightMatrix * CurrentOperationsMatrix, Pens.Blue);
-            }
-            else
-            {
-                var bitmapLeft = new Bitmap(Parameters.WorldPanelWidth, Parameters.WorldPanelHeight);
-                var bitmapRight = new Bitmap(Parameters.WorldPanelWidth, Parameters.WorldPanelHeight);
-                var bitmapResult = new Bitmap(Parameters.WorldPanelWidth, Parameters.WorldPanelHeight);
-                var graphicsLeft = Graphics.FromImage(bitmapLeft);
-                graphicsLeft.TranslateTransform(Parameters.WorldPanelWidth * 0.5f, Parameters.WorldPanelHeight * 0.5f);
-                var graphicsRight = Graphics.FromImage(bitmapRight);
-                graphicsRight.TranslateTransform(Parameters.WorldPanelWidth * 0.5f, Parameters.WorldPanelHeight * 0.5f);
-                DrawTorus(graphicsLeft, leftMatrix * CurrentOperationsMatrix, Pens.Red);
-                DrawTorus(graphicsRight, rightMatrix * CurrentOperationsMatrix, Pens.Blue);
-
-                for (int y = 0; y < Parameters.WorldPanelHeight; y++)
-                {
-                    for (int x = 0; x < Parameters.WorldPanelWidth; x++)
-                    {
-                        var cA = bitmapLeft.GetPixel(x, y);
-                        var cB = bitmapRight.GetPixel(x, y);
-                        var A = cA.A + cB.A;
-                        if (A > 255) A = 255;
-                        var cC = Color.FromArgb(A, cA.R + cB.R, cA.G + cB.G, cA.B + cB.B);
-                        bitmapResult.SetPixel(x, y, cC);
-                    }
-                }
-                graphics.DrawImage(bitmapResult, new Rectangle(-Parameters.WorldPanelWidth / 2, -Parameters.WorldPanelHeight / 2,
-                    Parameters.WorldPanelWidth, Parameters.WorldPanelHeight));
-            }
+            return "Torus <" + _increment++ + ">";
         }
     }
 }

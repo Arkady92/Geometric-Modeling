@@ -8,24 +8,27 @@ namespace Models
     public class Ellipsoid : ImplicitGeometricModel
     {
         private Matrix _diagonalMatrix;
-        private Vector4 LightPosition;
+        private readonly Vector4 _lightPosition;
+
+        private static int _increment = 1;
+
 
         public Ellipsoid()
             : base(ModelType.Ellipsoid)
         {
             UpdateModel();
-            LightPosition = new Vector4(500, 500, 500, 0);
+            _lightPosition = new Vector4(500, 500, 500, 0);
         }
         public override void Draw(Graphics graphics, Matrix currentProjectionMatrix = null)
         {
-            var inverseMatrix = CurrentOperationsMatrix.Invert();
+            var inverseMatrix = CurrentOperationMatrix.Invert();
             var resultMatrix = Matrix.Transpose(inverseMatrix) * _diagonalMatrix * inverseMatrix;
             DrawFrame(graphics, resultMatrix, 1);
         }
 
         public override void Draw(Graphics graphics, int pixelSize, Matrix currentProjectionMatrix = null)
         {
-            var inverseMatrix = CurrentOperationsMatrix.Invert();
+            var inverseMatrix = CurrentOperationMatrix.Invert();
             var resultMatrix = Matrix.Transpose(inverseMatrix) * _diagonalMatrix * inverseMatrix;
             DrawFrame(graphics, resultMatrix, pixelSize);
         }
@@ -54,7 +57,7 @@ namespace Models
             var normal = (vertex * resultMatrix) * 2;
             normal.NormalizeSecond();
             normal.W = 0;
-            var light = new Vector4(-x + LightPosition.X, -y + LightPosition.Y, LightPosition.Z, 0);
+            var light = new Vector4(-x + _lightPosition.X, -y + _lightPosition.Y, _lightPosition.Z, 0);
             //light = light * resultMatrix;
             light.NormalizeSecond();
             var factor = normal * light;
@@ -94,6 +97,11 @@ namespace Models
         public override void UpdateModel()
         {
             _diagonalMatrix = OperationsMatrices.Diagonal(Parameters.XAxisFactor, Parameters.YAxisFactor, Parameters.ZAxisFactor, -1);
+        }
+
+        public override string ToString()
+        {
+            return "Ellipsoid <" + _increment++ + ">";
         }
     }
 }

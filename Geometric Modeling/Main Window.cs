@@ -5,6 +5,7 @@ using System.Globalization;
 using System.Windows.Forms;
 using Mathematics;
 using Models;
+using Point = Models.Point;
 
 namespace Geometric_Modeling
 {
@@ -25,9 +26,9 @@ namespace Geometric_Modeling
         private bool _forceStaticGraphics;
         private bool _enableAnimations;
         private bool _enableStereoscopy;
-        private const double ProjectionR = 20;
-        private const double ProjectionE = 10;
-        private bool _enableIntersectionsDetection;
+        private const double ProjectionR = 11;
+        private const double ProjectionE = 1;
+        private bool _enableAdditiveColorBlending;
 
         #endregion
 
@@ -68,9 +69,10 @@ namespace Geometric_Modeling
             _modelsParameters = new Dictionary<ModelType, List<Control>>
             {
                 {ModelType.Torus, new List<Control> {GridResolutionXBox, GridResolutionYBox, GridResolutionXLabel, 
-                    GridResolutionYLabel, StereoscopyChackBox, DetectIntersectionsCheckBox}},
+                    GridResolutionYLabel, StereoscopyChackBox, AdditiveColorBlendingCheckBox}},
                 {ModelType.Ellipsoid, new List<Control> {IlluminanceBox, XAxisFactorBox, YAxisFactorBox, ZAxisFactorBox, PixelMaxSizeBox, 
-                    IlluminanceLabel, XAxisFactorLabel, YAxisFactorLabel, ZAxisFactorLabel, PixelMaxSizeLabel}}
+                    IlluminanceLabel, XAxisFactorLabel, YAxisFactorLabel, ZAxisFactorLabel, PixelMaxSizeLabel}},
+                    {ModelType.Point, new List<Control>{StereoscopyChackBox, AdditiveColorBlendingCheckBox}}
             };
             DisableAllSettings();
             _currentOperation = Operation.None;
@@ -98,7 +100,7 @@ namespace Geometric_Modeling
                 graphics = Graphics.FromImage(_backBuffer);
             else
                 graphics = WorldPanel.CreateGraphics();
-            graphics.Clear(Color.White);
+            graphics.Clear(Color.Black);
             if (_models == null) return;
             graphics.TranslateTransform((float)(WorldPanel.Size.Width * 0.5), (float)(WorldPanel.Size.Height * 0.5));
             foreach (var geometricModel in _models)
@@ -113,7 +115,6 @@ namespace Geometric_Modeling
                         if (Parameters.GridResolutionX * Parameters.GridResolutionY < 5000 && !_forceStaticGraphics)
                             WorldPanel.Image = _backBuffer;
                         pixelSize--;
-                        //System.Threading.Thread.Sleep(50);
                     }
                 }
             }
@@ -121,7 +122,7 @@ namespace Geometric_Modeling
             {
                 if (geometricModel is ParametricGeometricModel && _enableStereoscopy)
                     (geometricModel as ParametricGeometricModel).DrawStereoscopy(graphics, _currentStereoscopyLeftMatrix,
-                        _currentStereoscopyRightMatrix, _enableIntersectionsDetection);
+                        _currentStereoscopyRightMatrix, _enableAdditiveColorBlending);
                 else
                     geometricModel.Draw(graphics, _currentProjectionMatrix);
             }
@@ -264,6 +265,14 @@ namespace Geometric_Modeling
             DrawWorld();
         }
 
+        private void PointButton_Click(object sender, EventArgs e)
+        {
+            var geometricObject = new Point(0, 0, 0);
+            _models.Add(geometricObject);
+            ObjectsList.Items.Add(geometricObject);
+            DrawWorld();
+        }
+
         private void TranslationXButton_Click(object sender, EventArgs e)
         {
             SwitchOperation(Operation.TranslationX);
@@ -320,6 +329,8 @@ namespace Geometric_Modeling
             var item = ObjectsList.SelectedItem;
             if (item != null)
             {
+                if(item is ParametricGeometricModel)
+                    (item as ParametricGeometricModel).RemoveModel();
                 _models.Remove(item as GeometricModel);
                 ObjectsList.Items.Remove(ObjectsList.SelectedItem);
             }
@@ -473,11 +484,11 @@ namespace Geometric_Modeling
             DrawWorld();
         }
 
-        private void DetectIntersectionsCheckBox_CheckedChanged(object sender, EventArgs e)
+        private void AdditiveColorBlendingCheckBox_CheckedChanged(object sender, EventArgs e)
         {
             var checkBox = sender as CheckBox;
             if (checkBox == null) return;
-            _enableIntersectionsDetection = checkBox.Checked;
+            _enableAdditiveColorBlending = checkBox.Checked;
             DrawWorld();
         }
 

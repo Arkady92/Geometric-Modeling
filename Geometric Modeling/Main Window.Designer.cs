@@ -62,8 +62,9 @@
             this.WorldPanel = new System.Windows.Forms.PictureBox();
             this.EffectsLabel = new System.Windows.Forms.Label();
             this.EffectsPanel = new System.Windows.Forms.Panel();
+            this.AdditiveColorBlendingCheckBox = new System.Windows.Forms.CheckBox();
             this.StereoscopyChackBox = new System.Windows.Forms.CheckBox();
-            this.DetectIntersectionsCheckBox = new System.Windows.Forms.CheckBox();
+            this.PointButton = new System.Windows.Forms.Button();
             this.ObjectsPanel.SuspendLayout();
             this.OptionsPanel.SuspendLayout();
             this.OperationsPanel.SuspendLayout();
@@ -78,6 +79,7 @@
             this.ObjectsList.FormattingEnabled = true;
             this.ObjectsList.Location = new System.Drawing.Point(622, 416);
             this.ObjectsList.Name = "ObjectsList";
+            this.ObjectsList.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
             this.ObjectsList.Size = new System.Drawing.Size(150, 134);
             this.ObjectsList.TabIndex = 0;
             this.ObjectsList.MouseClick += new System.Windows.Forms.MouseEventHandler(this.ObjectsList_MouseClick);
@@ -88,6 +90,7 @@
             this.ObjectsPanel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.ObjectsPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.ObjectsPanel.Controls.Add(this.PointButton);
             this.ObjectsPanel.Controls.Add(this.EllipsoidButton);
             this.ObjectsPanel.Controls.Add(this.TorusButton);
             this.ObjectsPanel.Location = new System.Drawing.Point(12, 12);
@@ -413,7 +416,7 @@
             this.WorldPanel.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.WorldPanel.BackColor = System.Drawing.Color.White;
+            this.WorldPanel.BackColor = System.Drawing.Color.Black;
             this.WorldPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.WorldPanel.Location = new System.Drawing.Point(12, 103);
             this.WorldPanel.Name = "WorldPanel";
@@ -439,12 +442,24 @@
             // 
             this.EffectsPanel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.EffectsPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.EffectsPanel.Controls.Add(this.DetectIntersectionsCheckBox);
+            this.EffectsPanel.Controls.Add(this.AdditiveColorBlendingCheckBox);
             this.EffectsPanel.Controls.Add(this.StereoscopyChackBox);
             this.EffectsPanel.Location = new System.Drawing.Point(622, 309);
             this.EffectsPanel.Name = "EffectsPanel";
             this.EffectsPanel.Size = new System.Drawing.Size(150, 92);
             this.EffectsPanel.TabIndex = 10;
+            // 
+            // AdditiveColorBlendingCheckBox
+            // 
+            this.AdditiveColorBlendingCheckBox.AutoSize = true;
+            this.AdditiveColorBlendingCheckBox.Location = new System.Drawing.Point(10, 27);
+            this.AdditiveColorBlendingCheckBox.Name = "AdditiveColorBlendingCheckBox";
+            this.AdditiveColorBlendingCheckBox.Size = new System.Drawing.Size(135, 17);
+            this.AdditiveColorBlendingCheckBox.TabIndex = 1;
+            this.AdditiveColorBlendingCheckBox.Text = "Additive Color Blending";
+            this.AdditiveColorBlendingCheckBox.UseVisualStyleBackColor = true;
+            this.AdditiveColorBlendingCheckBox.Visible = false;
+            this.AdditiveColorBlendingCheckBox.CheckedChanged += new System.EventHandler(this.AdditiveColorBlendingCheckBox_CheckedChanged);
             // 
             // StereoscopyChackBox
             // 
@@ -458,17 +473,15 @@
             this.StereoscopyChackBox.Visible = false;
             this.StereoscopyChackBox.CheckedChanged += new System.EventHandler(this.StereoscopyChackBox_CheckedChanged);
             // 
-            // DetectIntersectionsCheckBox
+            // PointButton
             // 
-            this.DetectIntersectionsCheckBox.AutoSize = true;
-            this.DetectIntersectionsCheckBox.Location = new System.Drawing.Point(10, 27);
-            this.DetectIntersectionsCheckBox.Name = "DetectIntersectionsCheckBox";
-            this.DetectIntersectionsCheckBox.Size = new System.Drawing.Size(121, 17);
-            this.DetectIntersectionsCheckBox.TabIndex = 1;
-            this.DetectIntersectionsCheckBox.Text = "Detect Intersections";
-            this.DetectIntersectionsCheckBox.UseVisualStyleBackColor = true;
-            this.DetectIntersectionsCheckBox.Visible = false;
-            this.DetectIntersectionsCheckBox.CheckedChanged += new System.EventHandler(this.DetectIntersectionsCheckBox_CheckedChanged);
+            this.PointButton.Location = new System.Drawing.Point(165, 3);
+            this.PointButton.Name = "PointButton";
+            this.PointButton.Size = new System.Drawing.Size(75, 23);
+            this.PointButton.TabIndex = 11;
+            this.PointButton.Text = "Point";
+            this.PointButton.UseVisualStyleBackColor = true;
+            this.PointButton.Click += new System.EventHandler(this.PointButton_Click);
             // 
             // MainWindow
             // 
@@ -541,7 +554,8 @@
         private System.Windows.Forms.Label EffectsLabel;
         private System.Windows.Forms.Panel EffectsPanel;
         private System.Windows.Forms.CheckBox StereoscopyChackBox;
-        private System.Windows.Forms.CheckBox DetectIntersectionsCheckBox;
+        private System.Windows.Forms.CheckBox AdditiveColorBlendingCheckBox;
+        private System.Windows.Forms.Button PointButton;
     }
 }
 

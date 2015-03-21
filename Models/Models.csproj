@@ -46,6 +46,7 @@
     <Compile Include="ImplicitGeometricModel.cs" />
     <Compile Include="ModelType.cs" />
     <Compile Include="ParametricGeometricModel.cs" />
+    <Compile Include="Point.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Torus.cs" />
   </ItemGroup>
