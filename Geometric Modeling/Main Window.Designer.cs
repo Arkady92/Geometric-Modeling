@@ -30,6 +30,7 @@
         {
             this.ObjectsList = new System.Windows.Forms.ListBox();
             this.ObjectsPanel = new System.Windows.Forms.Panel();
+            this.PointButton = new System.Windows.Forms.Button();
             this.EllipsoidButton = new System.Windows.Forms.Button();
             this.TorusButton = new System.Windows.Forms.Button();
             this.OptionsPanel = new System.Windows.Forms.Panel();
@@ -64,7 +65,6 @@
             this.EffectsPanel = new System.Windows.Forms.Panel();
             this.AdditiveColorBlendingCheckBox = new System.Windows.Forms.CheckBox();
             this.StereoscopyChackBox = new System.Windows.Forms.CheckBox();
-            this.PointButton = new System.Windows.Forms.Button();
             this.ObjectsPanel.SuspendLayout();
             this.OptionsPanel.SuspendLayout();
             this.OperationsPanel.SuspendLayout();
@@ -83,6 +83,7 @@
             this.ObjectsList.Size = new System.Drawing.Size(150, 134);
             this.ObjectsList.TabIndex = 0;
             this.ObjectsList.MouseClick += new System.Windows.Forms.MouseEventHandler(this.ObjectsList_MouseClick);
+            this.ObjectsList.KeyDown += new System.Windows.Forms.KeyEventHandler(this.ObjectsList_KeyDown);
             this.ObjectsList.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.ObjectsList_MouseDoubleClick);
             // 
             // ObjectsPanel
@@ -97,6 +98,16 @@
             this.ObjectsPanel.Name = "ObjectsPanel";
             this.ObjectsPanel.Size = new System.Drawing.Size(760, 31);
             this.ObjectsPanel.TabIndex = 1;
+            // 
+            // PointButton
+            // 
+            this.PointButton.Location = new System.Drawing.Point(165, 3);
+            this.PointButton.Name = "PointButton";
+            this.PointButton.Size = new System.Drawing.Size(75, 23);
+            this.PointButton.TabIndex = 11;
+            this.PointButton.Text = "Point";
+            this.PointButton.UseVisualStyleBackColor = true;
+            this.PointButton.Click += new System.EventHandler(this.PointButton_Click);
             // 
             // EllipsoidButton
             // 
@@ -472,16 +483,6 @@
             this.StereoscopyChackBox.UseVisualStyleBackColor = true;
             this.StereoscopyChackBox.Visible = false;
             this.StereoscopyChackBox.CheckedChanged += new System.EventHandler(this.StereoscopyChackBox_CheckedChanged);
-            // 
-            // PointButton
-            // 
-            this.PointButton.Location = new System.Drawing.Point(165, 3);
-            this.PointButton.Name = "PointButton";
-            this.PointButton.Size = new System.Drawing.Size(75, 23);
-            this.PointButton.TabIndex = 11;
-            this.PointButton.Text = "Point";
-            this.PointButton.UseVisualStyleBackColor = true;
-            this.PointButton.Click += new System.EventHandler(this.PointButton_Click);
             // 
             // MainWindow
             // 

@@ -329,7 +329,7 @@ namespace Geometric_Modeling
             var item = ObjectsList.SelectedItem;
             if (item != null)
             {
-                if(item is ParametricGeometricModel)
+                if (item is ParametricGeometricModel)
                     (item as ParametricGeometricModel).RemoveModel();
                 _models.Remove(item as GeometricModel);
                 ObjectsList.Items.Remove(ObjectsList.SelectedItem);
@@ -346,6 +346,26 @@ namespace Geometric_Modeling
             foreach (var parameterBox in _modelsParameters[((GeometricModel)item).Type])
             {
                 parameterBox.Visible = true;
+            }
+        }
+
+        private void ObjectsList_KeyDown(object sender, KeyEventArgs e)
+        {
+            switch (e.KeyCode)
+            {
+                case Keys.Enter:
+                    var item = ObjectsList.SelectedItem as GeometricModel;
+                    if (item == null) return;
+                    var form = new RenameForm();
+                    var result = form.ShowDialog();
+                    if (result == DialogResult.OK)
+                    {
+                        item.SetCustomName(form.EnteredText);
+                        ObjectsList.Items[ObjectsList.SelectedIndex] = ObjectsList.SelectedItem;
+                    }
+                    break;
+                default:
+                    return;
             }
         }
 

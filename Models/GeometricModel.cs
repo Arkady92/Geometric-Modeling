@@ -8,6 +8,8 @@ namespace Models
     {
         public ModelType Type;
 
+        protected string CustomName;
+
         public Matrix CurrentOperationMatrix { get; protected set; }
 
         protected double TranslationFactor;
@@ -19,6 +21,11 @@ namespace Models
         protected double MaximumScaleFactor;
 
         private double _actualScale;
+
+        public void SetCustomName(string name)
+        {
+            CustomName = name;
+        }
 
         public void Translate(double x, double y, double z)
         {

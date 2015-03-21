@@ -99,6 +99,8 @@ namespace Models
         }
         public override string ToString()
         {
+            if (CustomName != null)
+                return CustomName;
             return "Torus <" + _increment++ + ">";
         }
     }

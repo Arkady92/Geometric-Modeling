@@ -87,6 +87,8 @@ namespace Models
 
         public override string ToString()
         {
+            if (CustomName != null)
+                return CustomName;
             return "Point <" + _increment++ + ">";
         }
     }
