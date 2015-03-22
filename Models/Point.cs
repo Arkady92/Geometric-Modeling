@@ -1,15 +1,15 @@
-﻿using System.Drawing;
-using System.Linq;
+﻿using System.Collections.Generic;
 using Mathematics;
-using Matrix = Mathematics.Matrix;
 
 namespace Models
 {
     public class Point : ParametricGeometricModel
     {
-        public double X { get { return Dimentions[0]; } set { Dimentions[0] = value; } }
-        public double Y { get { return Dimentions[1]; } set { Dimentions[1] = value; } }
-        public double Z { get { return Dimentions[2]; } set { Dimentions[2] = value; } }
+        private readonly Dictionary<ParametricGeometricModel, int> _parentsVerticIndexes;
+
+        public double X { get { return SpacePosition.X; } set { SpacePosition.X = value; } }
+        public double Y { get { return SpacePosition.Y; } set { SpacePosition.Y = value; } }
+        public double Z { get { return SpacePosition.Z; } set { SpacePosition.Z = value; } }
 
         public double[] Dimentions { get; set; }
 
@@ -17,49 +17,27 @@ namespace Models
 
         private static int _increment = 1;
 
-        public Point(double x, double y, double z) : base(ModelType.Point)
+        public Point(Vector4 position)
+            : base(ModelType.Point, position)
         {
-            Dimentions = new double[3];
-            X = x;
-            Y = y;
-            Z = z;
+            _parentsVerticIndexes = new Dictionary<ParametricGeometricModel, int>();
             CreateVertices();
             CreateEdges();
         }
 
-        public Point(Vector4 vector, ParametricGeometricModel parent) : base(ModelType.Point)
+        public Point(Vector4 position, ParametricGeometricModel parent, int vertexIndex)
+            : base(ModelType.Point, position)
         {
-            Dimentions = new double[3];
-            X = vector.X;
-            Y = vector.Y;
-            Z = vector.Z;
+            _parentsVerticIndexes = new Dictionary<ParametricGeometricModel, int>();
+            AddParent(parent, vertexIndex);
+            CreateVertices();
+            CreateEdges();
+        }
+
+        public void AddParent(ParametricGeometricModel parent, int vertexIndex)
+        {
             AddParent(parent);
-            CreateVertices();
-            CreateEdges();
-        }
-
-        public Vector4 ToVector4()
-        {
-            return new Vector4(X,Y,Z);
-        }
-
-        protected override void DrawModel(Graphics graphics, Matrix currentProjectionMatrix, Color color)
-        {
-            Matrix currentMatrix = OperationsMatrices.Identity();
-            currentMatrix = Parents.Aggregate(currentMatrix, (current, parent) => current*parent.CurrentOperationMatrix);
-            currentMatrix = currentProjectionMatrix * CurrentOperationMatrix * currentMatrix;
-
-            var pen = new Pen(color);
-            var vertices = Vertices.Select(vertex => currentMatrix * vertex).ToList();
-            float factor = (Parameters.WorldPanelWidth < Parameters.WorldPanelHeight) ?
-                Parameters.WorldPanelWidth * 0.25f : Parameters.WorldPanelHeight * 0.25f;
-            foreach (var edge in Edges)
-            {
-                graphics.DrawLine(pen, (float)vertices[edge.StartVertex].X * factor,
-                    (float)vertices[edge.StartVertex].Y * factor,
-                    (float)vertices[edge.EndVertex].X * factor,
-                    (float)vertices[edge.EndVertex].Y * factor);
-            }
+            _parentsVerticIndexes.Add(parent, vertexIndex);
         }
 
         protected override void CreateEdges()

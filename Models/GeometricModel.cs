@@ -10,6 +10,8 @@ namespace Models
 
         protected string CustomName;
 
+        protected Vector4 SpacePosition;
+
         public Matrix CurrentOperationMatrix { get; protected set; }
 
         protected double TranslationFactor;
@@ -25,6 +27,16 @@ namespace Models
         public void SetCustomName(string name)
         {
             CustomName = name;
+        }
+
+        public Vector4 GetCurrentPosition()
+        {
+            return CurrentOperationMatrix * SpacePosition;
+        }
+
+        public void SetCurrentPosition(Vector4 position)
+        {
+            SpacePosition = position;
         }
 
         public void Translate(double x, double y, double z)
@@ -57,9 +69,10 @@ namespace Models
             }
         }
 
-        protected GeometricModel(ModelType type)
+        protected GeometricModel(ModelType type, Vector4 position)
         {
             Type = type;
+            SpacePosition = position;
             CurrentOperationMatrix = OperationsMatrices.Identity();
             _actualScale = 1;
         }

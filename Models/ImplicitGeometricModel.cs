@@ -1,9 +1,11 @@
-﻿namespace Models
+﻿using Mathematics;
+
+namespace Models
 {
     public abstract class ImplicitGeometricModel : GeometricModel
     {
-        protected ImplicitGeometricModel(ModelType modelType)
-            : base(modelType)
+        protected ImplicitGeometricModel(ModelType modelType, Vector4 position)
+            : base(modelType, position)
         {
             TranslationFactor = 0.5;
             RotationFactor = 0.004;

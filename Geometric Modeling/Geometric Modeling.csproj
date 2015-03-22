@@ -51,6 +51,15 @@
     <Compile Include="Main Window.Designer.cs">
       <DependentUpon>Main Window.cs</DependentUpon>
     </Compile>
+    <Compile Include="MainWindowContentsChange.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MainWindowEvents.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MainWindowInitialization.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Operation.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

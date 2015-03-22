@@ -13,13 +13,13 @@ namespace Models
         private static int _increment = 1;
 
 
-        public Ellipsoid()
-            : base(ModelType.Ellipsoid)
+        public Ellipsoid(Vector4 position)
+            : base(ModelType.Ellipsoid, position)
         {
             UpdateModel();
             _lightPosition = new Vector4(500, 500, 500, 0);
         }
-        public override void Draw(Graphics graphics, Matrix currentProjectionMatrix = null)
+        public override void Draw(Graphics graphics, Matrix currentProjectionMatrix)
         {
             var inverseMatrix = CurrentOperationMatrix.Invert();
             var resultMatrix = Matrix.Transpose(inverseMatrix) * _diagonalMatrix * inverseMatrix;
@@ -51,8 +51,10 @@ namespace Models
 
         void CastRay(int x, int y, Graphics graphics, Matrix resultMatrix, int pixelSize)
         {
+            var xMove = (int)(SpacePosition.X * Parameters.XAxisFactor);
+            var yMove = (int)(SpacePosition.Y * Parameters.YAxisFactor);
             double z;
-            if (!CalculateZValue(resultMatrix, x, y, out z) || z < 0) return;
+            if (!CalculateZValue(resultMatrix, x - xMove, y - yMove, out z) || z < 0) return;
             var vertex = new Vector4(x, y, z);
             var normal = (vertex * resultMatrix) * 2;
             normal.NormalizeSecond();

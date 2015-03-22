@@ -506,7 +506,7 @@
             this.StereoscopyCheckBox.Text = "Stereoscopy";
             this.StereoscopyCheckBox.UseVisualStyleBackColor = true;
             this.StereoscopyCheckBox.Visible = false;
-            this.StereoscopyCheckBox.CheckedChanged += new System.EventHandler(this.StereoscopyChackBox_CheckedChanged);
+            this.StereoscopyCheckBox.CheckedChanged += new System.EventHandler(this.StereoscopyCheckBox_CheckedChanged);
             // 
             // CursorXLabel
             // 
@@ -576,6 +576,7 @@
             // 
             // CursorScreenXBox
             // 
+            this.CursorScreenXBox.Enabled = false;
             this.CursorScreenXBox.Location = new System.Drawing.Point(445, 3);
             this.CursorScreenXBox.Name = "CursorScreenXBox";
             this.CursorScreenXBox.RightToLeft = System.Windows.Forms.RightToLeft.No;
@@ -595,6 +596,7 @@
             // 
             // CursorScreenYBox
             // 
+            this.CursorScreenYBox.Enabled = false;
             this.CursorScreenYBox.Location = new System.Drawing.Point(587, 3);
             this.CursorScreenYBox.Name = "CursorScreenYBox";
             this.CursorScreenYBox.RightToLeft = System.Windows.Forms.RightToLeft.No;
@@ -639,10 +641,12 @@
             this.Controls.Add(this.ObjectsPanel);
             this.Controls.Add(this.ObjectsList);
             this.DoubleBuffered = true;
+            this.KeyPreview = true;
             this.MinimumSize = new System.Drawing.Size(880, 660);
             this.Name = "MainWindow";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Geometric Modeling";
+            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.MainWindow_KeyDown);
             this.Resize += new System.EventHandler(this.MainWindow_Resize);
             this.ObjectsPanel.ResumeLayout(false);
             this.OptionsPanel.ResumeLayout(false);

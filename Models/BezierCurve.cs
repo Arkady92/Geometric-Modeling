@@ -11,21 +11,20 @@ namespace Models
     {
         private static int _increment = 1;
 
-        public BezierCurve()
-            : base(ModelType.BezierCurve)
+        public BezierCurve(Vector4 position)
+            : base(ModelType.BezierCurve, position)
         {
             CreateVertices();
             CreateEdges();
         }
-        public BezierCurve(IEnumerable<Point> points)
-            : base(ModelType.BezierCurve)
+        public BezierCurve(List<Point> points, Vector4 position)
+            : base(ModelType.BezierCurve, position)
         {
-            foreach (var point in points)
+            for (int i = 0; i < points.Count(); i++)
             {
-                var vector = point.ToVector4();
-                vector = point.CurrentOperationMatrix * vector;
+                var vector = points[i].GetCurrentPosition();
                 Vertices.Add(vector);
-                Children.Add(new Point(vector, this));
+                Children.Add(new Point(vector, this, i));
             }
             CreateEdges();
         }
@@ -38,36 +37,14 @@ namespace Models
 
         protected override void CreateVertices()
         {
-            Vertices.Add(new Vector4(-1, -1, -1));
-            Vertices.Add(new Vector4(0.5, -0.5, 0.5));
-            Vertices.Add(new Vector4(-0.5, 0.5, -0.5));
-            Vertices.Add(new Vector4(1, 1, 1));
-            foreach (var vertex in Vertices)
+            Vertices.Add(new Vector4(-1, -1, -1) + SpacePosition);
+            Vertices.Add(new Vector4(0.5, -0.5, 0.5) + SpacePosition);
+            Vertices.Add(new Vector4(-0.5, 0.5, -0.5) + SpacePosition);
+            Vertices.Add(new Vector4(1, 1, 1) + SpacePosition);
+            for (int i = 0; i < Vertices.Count(); i++)
             {
-                Children.Add(new Point(vertex, this));             
+                Children.Add(new Point(Vertices[i], this, i));             
             }
-        }
-
-        protected override void DrawModel(Graphics graphics, Matrix currentProjectionMatrix, Color color)
-        {
-            Matrix currentMatrix = OperationsMatrices.Identity();
-            currentMatrix = Parents.Aggregate(currentMatrix, (current, parent) => current * parent.CurrentOperationMatrix);
-            currentMatrix = currentProjectionMatrix * CurrentOperationMatrix * currentMatrix;
-
-            var pen = new Pen(color);
-            var vertices = Vertices.Select(vertex => currentMatrix * vertex).ToList();
-            float factor = (Parameters.WorldPanelWidth < Parameters.WorldPanelHeight) ?
-                Parameters.WorldPanelWidth * 0.25f : Parameters.WorldPanelHeight * 0.25f;
-            var graphicsPath = new GraphicsPath();
-            foreach (var edge in Edges)
-            {
-                graphicsPath.AddLine(
-                    (float)vertices[edge.StartVertex].X * factor,
-                    (float)vertices[edge.StartVertex].Y * factor,
-                    (float)vertices[edge.EndVertex].X * factor,
-                    (float)vertices[edge.EndVertex].Y * factor);
-            }
-            graphics.DrawPath(pen, graphicsPath);
         }
 
         public override string ToString()

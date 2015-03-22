@@ -60,6 +60,10 @@ namespace Mathematics
             Z = z;
             W = w;
         }
+        public static Vector4 operator +(Vector4 vector1, Vector4 vector2)
+        {
+            return new Vector4(vector1.X + vector2.X, vector1.Y + vector2.Y, vector1.Z + vector2.Z);
+        }
 
         public static Vector4 operator *(Matrix matrix, Vector4 vector)
         {

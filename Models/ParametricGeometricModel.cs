@@ -17,14 +17,14 @@ namespace Models
 
         protected List<ParametricGeometricModel> Parents;
 
-        protected ParametricGeometricModel(ModelType modelType)
-            : base(modelType)
+        protected ParametricGeometricModel(ModelType modelType, Vector4 position)
+            : base(modelType, position)
         {
             Vertices = new List<Vector4>();
             Edges = new List<Edge>();
             Children = new List<ParametricGeometricModel>();
             Parents = new List<ParametricGeometricModel>();
-            TranslationFactor = 0.009;
+            TranslationFactor = 0.0086;
             RotationFactor = 0.01;
             ScaleFactor = 1.04;
             MaximumScaleFactor = 20;
@@ -123,6 +123,23 @@ namespace Models
             DrawModel(graphics, currentProjectionMatrix, DefaultColor);
         }
 
-        protected abstract void DrawModel(Graphics graphics, Matrix currentProjectionMatrix, Color color);
+        protected virtual void DrawModel(Graphics graphics, Matrix currentProjectionMatrix, Color color)
+        {
+            Matrix currentMatrix = OperationsMatrices.Identity();
+            currentMatrix = Parents.Aggregate(currentMatrix, (current, parent) => current * parent.CurrentOperationMatrix);
+            currentMatrix = currentProjectionMatrix * CurrentOperationMatrix * currentMatrix;
+
+            var pen = new Pen(color);
+            var vertices = Vertices.Select(vertex => currentMatrix * vertex).ToList();
+            float factor = (Parameters.WorldPanelWidth < Parameters.WorldPanelHeight) ?
+                Parameters.WorldPanelWidth * 0.25f : Parameters.WorldPanelHeight * 0.25f;
+            foreach (var edge in Edges)
+            {
+                graphics.DrawLine(pen, (float)vertices[edge.StartVertex].X * factor,
+                    (float)vertices[edge.StartVertex].Y * factor,
+                    (float)vertices[edge.EndVertex].X * factor,
+                    (float)vertices[edge.EndVertex].Y * factor);
+            }
+        }
     }
 }

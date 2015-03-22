@@ -1,0 +1,114 @@
+﻿using System.Collections.Generic;
+using System.Drawing;
+using System.Globalization;
+using System.Windows.Forms;
+using Mathematics;
+using Models;
+
+namespace Geometric_Modeling
+{
+    public partial class MainWindow
+    {
+        #region Members
+        private List<GeometricModel> _models;
+        private Dictionary<Operation, Button> _operationsButtons;
+        private Dictionary<ModelType, List<Control>> _modelsParameters;
+        private Operation _currentOperation;
+        private bool _operationInProgress;
+        private int _mousePositionX;
+        private int _mousePositionY;
+        private Matrix _currentProjectionMatrix;
+        private Matrix _currentStereoscopyLeftMatrix;
+        private Matrix _currentStereoscopyRightMatrix;
+        private Bitmap _backBuffer;
+        private bool _forceStaticGraphics;
+        private bool _enableAnimations;
+        private bool _enableStereoscopy;
+        private const double ProjectionR = 11;
+        private const double ProjectionE = 1;
+        private bool _enableAdditiveColorBlending;
+        private bool _enableWorldDrawing;
+
+        #endregion
+
+        #region Initialization
+        public MainWindow()
+        {
+            InitializeComponent();
+            SetStyle(ControlStyles.AllPaintingInWmPaint | ControlStyles.UserPaint | ControlStyles.DoubleBuffer, true);
+            SetDoubleBuffered(WorldPanel);
+            InitializeMembers();
+        }
+
+        private void InitializeMembers()
+        {
+            UpdateTextBoxes();
+            _enableWorldDrawing = false;
+            _backBuffer = new Bitmap(WorldPanel.Width, WorldPanel.Height);
+            _forceStaticGraphics = false;
+            _enableAnimations = false;
+            _currentOperation = Operation.None;
+            _currentProjectionMatrix = OperationsMatrices.Projection(200);
+            _currentStereoscopyLeftMatrix = OperationsMatrices.StereoscopyLeft(ProjectionR, ProjectionE);
+            _currentStereoscopyRightMatrix = OperationsMatrices.StereoscopyRight(ProjectionR, ProjectionE);
+            Parameters.WorldPanelWidth = WorldPanel.Width;
+            Parameters.WorldPanelHeight = WorldPanel.Height;
+            _models = new List<GeometricModel>();
+            _operationsButtons = new Dictionary<Operation, Button>
+            {
+                {Operation.TranslationX, TranslationXButton},
+                {Operation.TranslationY, TranslationYButton},
+                {Operation.TranslationZ, TranslationZButton},
+                {Operation.RotationX, RotationXButton},
+                {Operation.RotationY, RotationYButton},
+                {Operation.RotationZ, RotationZButton},
+                {Operation.Scale, ScaleButton}
+            };
+            _modelsParameters = new Dictionary<ModelType, List<Control>>
+            {
+                {ModelType.Torus, new List<Control> {GridResolutionXBox, GridResolutionYBox, GridResolutionXLabel, 
+                    GridResolutionYLabel, StereoscopyCheckBox, AdditiveColorBlendingCheckBox}},
+                {ModelType.Ellipsoid, new List<Control> {IlluminanceBox, XAxisFactorBox, YAxisFactorBox, ZAxisFactorBox, PixelMaxSizeBox, 
+                    IlluminanceLabel, XAxisFactorLabel, YAxisFactorLabel, ZAxisFactorLabel, PixelMaxSizeLabel}},
+                    {ModelType.Point, new List<Control>{StereoscopyCheckBox, AdditiveColorBlendingCheckBox}},
+                    {ModelType.BezierCurve, new List<Control>{StereoscopyCheckBox, AdditiveColorBlendingCheckBox}},
+                    {ModelType.Cursor, new List<Control>{StereoscopyCheckBox, AdditiveColorBlendingCheckBox}}
+            };
+            DisableAllSettings();
+
+            _models.Add(Models.Cursor.Instance);
+
+            _enableWorldDrawing = true;
+            DrawWorld();
+        }
+
+        private void UpdateTextBoxes()
+        {
+            _enableWorldDrawing = false;
+            GridResolutionXBox.Text = Parameters.GridResolutionX.ToString(CultureInfo.InvariantCulture);
+            GridResolutionYBox.Text = Parameters.GridResolutionY.ToString(CultureInfo.InvariantCulture);
+            IlluminanceBox.Text = Parameters.Illuminance.ToString(CultureInfo.InvariantCulture);
+            XAxisFactorBox.Text = Parameters.XAxisFactor.ToString(CultureInfo.InvariantCulture);
+            YAxisFactorBox.Text = Parameters.YAxisFactor.ToString(CultureInfo.InvariantCulture);
+            ZAxisFactorBox.Text = Parameters.ZAxisFactor.ToString(CultureInfo.InvariantCulture);
+            PixelMaxSizeBox.Text = Parameters.PixelMaxSize.ToString(CultureInfo.InvariantCulture);
+            CursorXBox.Text = Models.Cursor.XPosition.ToString(CultureInfo.InvariantCulture);
+            CursorYBox.Text = Models.Cursor.YPosition.ToString(CultureInfo.InvariantCulture);
+            CursorZBox.Text = Models.Cursor.ZPosition.ToString(CultureInfo.InvariantCulture);
+            CursorScreenXBox.Text = Models.Cursor.ScreenXPosition.ToString(CultureInfo.InvariantCulture);
+            CursorScreenYBox.Text = Models.Cursor.ScreenYPosition.ToString(CultureInfo.InvariantCulture);
+            _enableWorldDrawing = true;
+        }
+
+        public static void SetDoubleBuffered(Control c)
+        {
+            System.Reflection.PropertyInfo aProp = typeof(Control).GetProperty(
+                        "DoubleBuffered",
+                        System.Reflection.BindingFlags.NonPublic |
+                        System.Reflection.BindingFlags.Instance);
+
+            aProp.SetValue(c, true, null);
+        }
+        #endregion
+    }
+}

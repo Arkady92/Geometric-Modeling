@@ -14,8 +14,8 @@ namespace Models
 
         private static int _increment = 1;
 
-        public Torus(double bigRadius = 1, double smallRadius = 0.5)
-            : base(ModelType.Torus)
+        public Torus(Vector4 position, double bigRadius = 1, double smallRadius = 0.5)
+            : base(ModelType.Torus, position)
         {
             BigRadius = bigRadius;
             SmallRadius = smallRadius;
@@ -63,9 +63,9 @@ namespace Models
             {
                 for (double beta = betaStep; beta < 2 * Math.PI + betaStep / 2; beta += betaStep)
                 {
-                    var result = ParametricEquation(alpha, beta);
+                    var result = ParametricEquation(alpha, beta) + SpacePosition;
                     Vertices.Add(result);
-                    Children.Add(new Point(result, this));
+                    Children.Add(new Point(result, this, Vertices.Count-1));
                 }
             }
         }

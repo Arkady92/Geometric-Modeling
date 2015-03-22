@@ -42,6 +42,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BezierCurve.cs" />
+    <Compile Include="Cursor.cs" />
     <Compile Include="Ellipsoid.cs" />
     <Compile Include="GeometricModel.cs" />
     <Compile Include="ImplicitGeometricModel.cs" />

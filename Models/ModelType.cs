@@ -5,6 +5,7 @@
         Torus,
         Ellipsoid,
         Point,
-        BezierCurve
+        BezierCurve,
+        Cursor
     }
 }
