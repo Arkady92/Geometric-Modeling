@@ -118,7 +118,7 @@
             this.BezierCurveButton.Location = new System.Drawing.Point(246, 3);
             this.BezierCurveButton.Name = "BezierCurveButton";
             this.BezierCurveButton.Size = new System.Drawing.Size(75, 23);
-            this.BezierCurveButton.TabIndex = 12;
+            this.BezierCurveButton.TabIndex = 5;
             this.BezierCurveButton.Text = "Bezier Curve";
             this.BezierCurveButton.UseVisualStyleBackColor = true;
             this.BezierCurveButton.Click += new System.EventHandler(this.BezierCurveButton_Click);
@@ -128,7 +128,7 @@
             this.PointButton.Location = new System.Drawing.Point(165, 3);
             this.PointButton.Name = "PointButton";
             this.PointButton.Size = new System.Drawing.Size(75, 23);
-            this.PointButton.TabIndex = 11;
+            this.PointButton.TabIndex = 4;
             this.PointButton.Text = "Point";
             this.PointButton.UseVisualStyleBackColor = true;
             this.PointButton.Click += new System.EventHandler(this.PointButton_Click);
@@ -138,7 +138,7 @@
             this.EllipsoidButton.Location = new System.Drawing.Point(84, 3);
             this.EllipsoidButton.Name = "EllipsoidButton";
             this.EllipsoidButton.Size = new System.Drawing.Size(75, 23);
-            this.EllipsoidButton.TabIndex = 10;
+            this.EllipsoidButton.TabIndex = 3;
             this.EllipsoidButton.Text = "Ellipsoid";
             this.EllipsoidButton.UseVisualStyleBackColor = true;
             this.EllipsoidButton.Click += new System.EventHandler(this.EllipsoidButton_Click);
@@ -349,7 +349,7 @@
             this.ScaleButton.Location = new System.Drawing.Point(543, 3);
             this.ScaleButton.Name = "ScaleButton";
             this.ScaleButton.Size = new System.Drawing.Size(75, 23);
-            this.ScaleButton.TabIndex = 4;
+            this.ScaleButton.TabIndex = 8;
             this.ScaleButton.Text = "Scale";
             this.ScaleButton.UseVisualStyleBackColor = true;
             this.ScaleButton.Click += new System.EventHandler(this.ScaleButton_Click);
@@ -359,7 +359,7 @@
             this.RotationZButton.Location = new System.Drawing.Point(453, 3);
             this.RotationZButton.Name = "RotationZButton";
             this.RotationZButton.Size = new System.Drawing.Size(84, 23);
-            this.RotationZButton.TabIndex = 6;
+            this.RotationZButton.TabIndex = 7;
             this.RotationZButton.Text = "Rotation Z";
             this.RotationZButton.UseVisualStyleBackColor = true;
             this.RotationZButton.Click += new System.EventHandler(this.RotationZButton_Click);
@@ -369,7 +369,7 @@
             this.RotationYButton.Location = new System.Drawing.Point(363, 3);
             this.RotationYButton.Name = "RotationYButton";
             this.RotationYButton.Size = new System.Drawing.Size(84, 23);
-            this.RotationYButton.TabIndex = 5;
+            this.RotationYButton.TabIndex = 6;
             this.RotationYButton.Text = "Rotation Y";
             this.RotationYButton.UseVisualStyleBackColor = true;
             this.RotationYButton.Click += new System.EventHandler(this.RotationYButton_Click);
@@ -379,7 +379,7 @@
             this.RotationXButton.Location = new System.Drawing.Point(273, 3);
             this.RotationXButton.Name = "RotationXButton";
             this.RotationXButton.Size = new System.Drawing.Size(84, 23);
-            this.RotationXButton.TabIndex = 3;
+            this.RotationXButton.TabIndex = 5;
             this.RotationXButton.Text = "Rotation X";
             this.RotationXButton.UseVisualStyleBackColor = true;
             this.RotationXButton.Click += new System.EventHandler(this.RotationXButton_Click);

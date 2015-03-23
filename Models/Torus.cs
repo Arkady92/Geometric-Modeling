@@ -84,16 +84,14 @@ namespace Models
 
             var pen = new Pen(color);
             var vertices = Vertices.Select(vertex => currentMatrix * vertex).ToList();
-            float factor = (Parameters.WorldPanelWidth < Parameters.WorldPanelHeight) ?
-                Parameters.WorldPanelWidth * 0.25f : Parameters.WorldPanelHeight * 0.25f;
             var graphicsPath = new GraphicsPath();
             foreach (var edge in Edges)
             {
                 graphicsPath.AddLine(
-                    (float)vertices[edge.StartVertex].X * factor,
-                    (float)vertices[edge.StartVertex].Y * factor,
-                    (float)vertices[edge.EndVertex].X * factor,
-                    (float)vertices[edge.EndVertex].Y * factor);
+                    (float)vertices[edge.StartVertex].X * Parameters.WorldPanelSizeFactor,
+                    (float)vertices[edge.StartVertex].Y * Parameters.WorldPanelSizeFactor,
+                    (float)vertices[edge.EndVertex].X * Parameters.WorldPanelSizeFactor,
+                    (float)vertices[edge.EndVertex].Y * Parameters.WorldPanelSizeFactor);
             }
             graphics.DrawPath(pen, graphicsPath);
         }

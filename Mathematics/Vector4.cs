@@ -60,9 +60,26 @@ namespace Mathematics
             Z = z;
             W = w;
         }
+        public static double Distance3(Vector4 vector1, Vector4 vector2)
+        {
+            return Math.Sqrt((vector1.X - vector2.X)*(vector1.X - vector2.X) + 
+                (vector1.Y - vector2.Y)*(vector1.Y - vector2.Y) +
+                (vector1.Z - vector2.Z)*(vector1.Z - vector2.Z));
+        }
+
+        public static double Distance2(double x1, double y1, double x2, double y2)
+        {
+            return Math.Sqrt((x1 - x2)*(x1 - x2) + (y1 - y2)*(y1 - y2));
+        }
+
         public static Vector4 operator +(Vector4 vector1, Vector4 vector2)
         {
             return new Vector4(vector1.X + vector2.X, vector1.Y + vector2.Y, vector1.Z + vector2.Z);
+        }
+
+        public static Vector4 operator -(Vector4 vector1, Vector4 vector2)
+        {
+            return new Vector4(vector1.X - vector2.X, vector1.Y - vector2.Y, vector1.Z - vector2.Z);
         }
 
         public static Vector4 operator *(Matrix matrix, Vector4 vector)

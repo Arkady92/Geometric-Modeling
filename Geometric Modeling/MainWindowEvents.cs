@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
+using Mathematics;
 using Models;
 using Point = Models.Point;
 
@@ -13,10 +14,31 @@ namespace Geometric_Modeling
 
         private void WorldPanel_MouseDown(object sender, MouseEventArgs e)
         {
-            _operationInProgress = true;
-            //_enableAnimations = false;
             _mousePositionX = e.X;
             _mousePositionY = e.Y;
+            if (Models.Cursor.ModelHandled)
+            {
+                _operationInProgress = true;
+                return;
+            }
+
+            foreach (var geometricModel in _models)
+            {
+                if (geometricModel is Models.Cursor) continue;
+                var position = geometricModel.GetCurrentPosition();
+                if (!(Vector4.Distance2(
+                    position.X*Parameters.WorldPanelSizeFactor,
+                    position.Y*Parameters.WorldPanelSizeFactor,
+                    _mousePositionX - Parameters.WorldPanelWidth / 2,
+                    _mousePositionY - Parameters.WorldPanelHeight / 2)
+                      < Parameters.MouseInaccuracy)) continue;
+                Models.Cursor.SetPosition(position);
+                Models.Cursor.Instance.UpdateModel();
+                DrawWorld();
+                ObjectsList.SelectedItems.Clear();
+                ObjectsList.SelectedItem = geometricModel;
+                break;
+            }
         }
 
         private void WorldPanel_MouseMove(object sender, MouseEventArgs e)
@@ -311,6 +333,20 @@ namespace Geometric_Modeling
                     Models.Cursor.ZPosition += moveFactor;
                     break;
                 case Keys.Space:
+                    e.Handled = true;
+                    if (!Models.Cursor.ModelHandled)
+                        foreach (var geometricModel in _models)
+                        {
+                            if (geometricModel is Models.Cursor) continue;
+                            if (Vector4.Distance3(geometricModel.GetCurrentPosition(), Models.Cursor.GetPosition())
+                                < Models.Cursor.CursorSize)
+                            {
+                                Models.Cursor.AddHandledModel(geometricModel);
+                                break;
+                            }
+                        }
+                    else
+                        Models.Cursor.RemoveHandledModel();
                     return;
                 default:
                     return;

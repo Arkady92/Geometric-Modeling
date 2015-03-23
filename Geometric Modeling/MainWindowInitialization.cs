@@ -77,6 +77,9 @@ namespace Geometric_Modeling
             DisableAllSettings();
 
             _models.Add(Models.Cursor.Instance);
+            
+            Parameters.WorldPanelSizeFactor = (Parameters.WorldPanelWidth < Parameters.WorldPanelHeight) ?
+                Parameters.WorldPanelWidth * 0.25f : Parameters.WorldPanelHeight * 0.25f;
 
             _enableWorldDrawing = true;
             DrawWorld();

@@ -44,6 +44,17 @@ namespace Models
             CreateEdges();
         }
 
+        public override void UpdatePositions(Vector4 shift)
+        {
+            foreach (var child in Children)
+                child.UpdatePositions(shift);
+            for (int i = 0; i < Vertices.Count; i++)
+            {
+                Vertices[i] = Vertices[i] + shift;
+            }
+            SpacePosition = SpacePosition + shift;
+        }
+
         public void AddParent(ParametricGeometricModel parent)
         {
             Parents.Add(parent);
@@ -105,13 +116,15 @@ namespace Models
             currentMatrix = currentProjectionMatrix * CurrentOperationMatrix * currentMatrix;
 
             var vertices = Vertices.Select(vertex => currentMatrix * vertex).ToList();
-            float factor = (Parameters.WorldPanelWidth < Parameters.WorldPanelHeight) ?
-                Parameters.WorldPanelWidth * 0.25f : Parameters.WorldPanelHeight * 0.25f;
             foreach (var edge in Edges)
             {
-                var customLine = new CustomLine(new System.Drawing.Point((int)(vertices[edge.StartVertex].X * factor),
-                   (int)(vertices[edge.StartVertex].Y * factor)), new System.Drawing.Point((int)(vertices[edge.EndVertex].X * factor),
-                        (int)(vertices[edge.EndVertex].Y * factor)));
+                var customLine = new CustomLine(
+                    new System.Drawing.Point(
+                        (int)(vertices[edge.StartVertex].X * Parameters.WorldPanelSizeFactor),
+                        (int)(vertices[edge.StartVertex].Y * Parameters.WorldPanelSizeFactor)),
+                    new System.Drawing.Point(
+                        (int)(vertices[edge.EndVertex].X * Parameters.WorldPanelSizeFactor),
+                        (int)(vertices[edge.EndVertex].Y * Parameters.WorldPanelSizeFactor)));
                 customLine.Draw(bitmap, graphics, color, 1);
             }
         }
@@ -131,14 +144,12 @@ namespace Models
 
             var pen = new Pen(color);
             var vertices = Vertices.Select(vertex => currentMatrix * vertex).ToList();
-            float factor = (Parameters.WorldPanelWidth < Parameters.WorldPanelHeight) ?
-                Parameters.WorldPanelWidth * 0.25f : Parameters.WorldPanelHeight * 0.25f;
             foreach (var edge in Edges)
             {
-                graphics.DrawLine(pen, (float)vertices[edge.StartVertex].X * factor,
-                    (float)vertices[edge.StartVertex].Y * factor,
-                    (float)vertices[edge.EndVertex].X * factor,
-                    (float)vertices[edge.EndVertex].Y * factor);
+                graphics.DrawLine(pen, (float)vertices[edge.StartVertex].X * Parameters.WorldPanelSizeFactor,
+                    (float)vertices[edge.StartVertex].Y * Parameters.WorldPanelSizeFactor,
+                    (float)vertices[edge.EndVertex].X * Parameters.WorldPanelSizeFactor,
+                    (float)vertices[edge.EndVertex].Y * Parameters.WorldPanelSizeFactor);
             }
         }
     }

@@ -11,8 +11,6 @@ namespace Models
         public double Y { get { return SpacePosition.Y; } set { SpacePosition.Y = value; } }
         public double Z { get { return SpacePosition.Z; } set { SpacePosition.Z = value; } }
 
-        public double[] Dimentions { get; set; }
-
         private const double CubeSize = 0.01;
 
         private static int _increment = 1;

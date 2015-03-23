@@ -13,5 +13,7 @@ namespace Mathematics
         public static double ZAxisFactor = 100;
         public static Color DefaultModelColor = Color.Yellow;
         public static int PixelMaxSize = 80;
+        public static float WorldPanelSizeFactor;
+        public static double MouseInaccuracy = 5;
     }
 }

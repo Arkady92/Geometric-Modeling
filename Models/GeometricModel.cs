@@ -29,9 +29,19 @@ namespace Models
             CustomName = name;
         }
 
+        public void ResetOperationMatrix()
+        {
+            CurrentOperationMatrix = OperationsMatrices.Identity();
+        }
+
         public Vector4 GetCurrentPosition()
         {
             return CurrentOperationMatrix * SpacePosition;
+        }
+
+        public Vector4 GetBasePosition()
+        {
+            return SpacePosition;
         }
 
         public void SetCurrentPosition(Vector4 position)
@@ -80,5 +90,6 @@ namespace Models
         public abstract void Draw(Graphics graphics, Matrix currentProjectionMatrix);
 
         public abstract void UpdateModel();
+        public abstract void UpdatePositions(Vector4 shift);
     }
 }

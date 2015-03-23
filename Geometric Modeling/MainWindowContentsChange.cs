@@ -229,6 +229,8 @@ namespace Geometric_Modeling
         {
             Parameters.WorldPanelWidth = WorldPanel.Width;
             Parameters.WorldPanelHeight = WorldPanel.Height;
+            Parameters.WorldPanelSizeFactor = (Parameters.WorldPanelWidth < Parameters.WorldPanelHeight) ?
+                Parameters.WorldPanelWidth * 0.25f : Parameters.WorldPanelHeight * 0.25f;
             DrawWorld();
         }
         #endregion
