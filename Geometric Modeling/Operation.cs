@@ -9,6 +9,7 @@
         RotationY,
         RotationZ,
         Scale,
-        None
+        None,
+        Selection
     }
 }

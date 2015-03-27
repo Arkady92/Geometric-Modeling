@@ -14,7 +14,7 @@ namespace Models
 
         private static int _increment = 1;
 
-        public Torus(Vector4 position, double bigRadius = 1, double smallRadius = 0.5)
+        public Torus(Vector4 position, double bigRadius = 0.3, double smallRadius = 0.15)
             : base(ModelType.Torus, position)
         {
             BigRadius = bigRadius;

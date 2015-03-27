@@ -13,11 +13,6 @@ namespace Models
             MaximumScaleFactor = 10;
         }
 
-        public override void UpdatePositions(Vector4 shift)
-        {
-            SpacePosition = SpacePosition + shift;
-        }
-
-        public abstract void Draw(System.Drawing.Graphics graphic, int pixelSize, Mathematics.Matrix currentProjectionMatrix = null);
+        public abstract void Draw(System.Drawing.Graphics graphic, int pixelSize, Matrix currentProjectionMatrix = null);
     }
 }

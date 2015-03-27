@@ -16,7 +16,8 @@ namespace Geometric_Modeling
         {
             _mousePositionX = e.X;
             _mousePositionY = e.Y;
-            if (Models.Cursor.ModelHandled)
+            if (Models.Cursor.ModelHandled) return;
+            if (_currentOperation != Operation.Selection)
             {
                 _operationInProgress = true;
                 return;
@@ -26,13 +27,14 @@ namespace Geometric_Modeling
             {
                 if (geometricModel is Models.Cursor) continue;
                 var position = geometricModel.GetCurrentPosition();
+                var screenPosition = (_currentProjectionMatrix * position) * Parameters.WorldPanelSizeFactor;
                 if (!(Vector4.Distance2(
-                    position.X*Parameters.WorldPanelSizeFactor,
-                    position.Y*Parameters.WorldPanelSizeFactor,
+                    screenPosition.X, screenPosition.Y,
                     _mousePositionX - Parameters.WorldPanelWidth / 2,
                     _mousePositionY - Parameters.WorldPanelHeight / 2)
                       < Parameters.MouseInaccuracy)) continue;
-                Models.Cursor.SetPosition(position);
+
+                Models.Cursor.Instance.TranslateToPosition(position);
                 Models.Cursor.Instance.UpdateModel();
                 DrawWorld();
                 ObjectsList.SelectedItems.Clear();
@@ -141,7 +143,8 @@ namespace Geometric_Modeling
         #region Buttons click events
         private void TorusButton_Click(object sender, EventArgs e)
         {
-            var geometricObject = new Torus(Models.Cursor.GetPosition());
+            var geometricObject = new Torus(new Vector4(0, 0, 0));
+            geometricObject.TranslateToPosition(Models.Cursor.GetCurrentPosition());
             _models.Add(geometricObject);
             ObjectsList.Items.Add(geometricObject);
             _enableAnimations = false;
@@ -150,7 +153,7 @@ namespace Geometric_Modeling
 
         private void EllipsoidButton_Click(object sender, EventArgs e)
         {
-            var geometricObject = new Ellipsoid(Models.Cursor.GetPosition());
+            var geometricObject = new Ellipsoid(new Vector4(0,0,0));
             _models.Add(geometricObject);
             ObjectsList.Items.Add(geometricObject);
             _forceStaticGraphics = true;
@@ -160,7 +163,7 @@ namespace Geometric_Modeling
 
         private void PointButton_Click(object sender, EventArgs e)
         {
-            var geometricObject = new Point(Models.Cursor.GetPosition());
+            var geometricObject = new Point(Models.Cursor.GetCurrentPosition());
             _models.Add(geometricObject);
             ObjectsList.Items.Add(geometricObject);
             DrawWorld();
@@ -183,7 +186,7 @@ namespace Geometric_Modeling
                 points.Reverse();
                 if (points.Count >= 2)
                 {
-                    var bezierCurve = new BezierCurve(points, Models.Cursor.GetPosition());
+                    var bezierCurve = new BezierCurve(points, Models.Cursor.GetCurrentPosition());
                     _models.Add(bezierCurve);
                     ObjectsList.Items.Add(bezierCurve);
                     ObjectsList.SelectedItem = bezierCurve;
@@ -191,7 +194,7 @@ namespace Geometric_Modeling
                     return;
                 }
             }
-            var geometricObject = new BezierCurve(Models.Cursor.GetPosition());
+            var geometricObject = new BezierCurve(Models.Cursor.GetCurrentPosition());
             _models.Add(geometricObject);
             ObjectsList.Items.Add(geometricObject);
             DrawWorld();
@@ -232,6 +235,27 @@ namespace Geometric_Modeling
             SwitchOperation(Operation.Scale);
         }
 
+        private void SelectionButton_Click(object sender, EventArgs e)
+        {
+            SwitchOperation(Operation.Selection);
+        }
+
+        private void ClearButton_Click(object sender, EventArgs e)
+        {
+            _enableStereoscopy = false;
+            _forceStaticGraphics = false;
+            _enableAnimations = false;
+            DisableAllSettings();
+            ObjectsList.Items.Clear();
+            _models.Clear();
+            Models.Cursor.ResetPositions();
+            Models.Cursor.Instance.ResetOperationMatrix();
+            Models.Cursor.Instance.UpdateModel();
+            _models.Add(Models.Cursor.Instance);
+            UpdateTextBoxes();
+            DrawWorld();
+        }
+
         void SwitchOperation(Operation operation)
         {
             if (_currentOperation == operation)
@@ -255,6 +279,7 @@ namespace Geometric_Modeling
 
         private void ObjectsList_MouseClick(object sender, MouseEventArgs e)
         {
+            if (Models.Cursor.ModelHandled) return;
             var item = ObjectsList.SelectedItem as GeometricModel;
             if (item == null) return;
             DisableAllSettings();
@@ -264,7 +289,7 @@ namespace Geometric_Modeling
             }
             _enableAnimations = !(item is ParametricGeometricModel);
             _forceStaticGraphics = !(item is ParametricGeometricModel);
-            Models.Cursor.SetPosition(item.GetCurrentPosition());
+            Models.Cursor.Instance.TranslateToPosition(item.GetCurrentPosition());
             Models.Cursor.Instance.UpdateModel();
             DrawWorld();
             UpdateTextBoxes();
@@ -310,27 +335,25 @@ namespace Geometric_Modeling
 
         private void MainWindow_KeyDown(object sender, KeyEventArgs e)
         {
-            const double epsilon = 0.001;
-            const double moveFactor = 0.05;
             switch (e.KeyCode)
             {
                 case Keys.W:
-                    Models.Cursor.YPosition -= moveFactor;
+                    Models.Cursor.YPosition = Math.Round(Models.Cursor.YPosition - Parameters.CursorMoveValue, 2);
                     break;
                 case Keys.S:
-                    Models.Cursor.YPosition += moveFactor;
+                    Models.Cursor.YPosition = Math.Round(Models.Cursor.YPosition + Parameters.CursorMoveValue, 2);
                     break;
                 case Keys.A:
-                    Models.Cursor.XPosition -= moveFactor;
+                    Models.Cursor.XPosition = Math.Round(Models.Cursor.XPosition - Parameters.CursorMoveValue, 2);
                     break;
                 case Keys.D:
-                    Models.Cursor.XPosition += moveFactor;
+                    Models.Cursor.XPosition = Math.Round(Models.Cursor.XPosition + Parameters.CursorMoveValue, 2);
                     break;
                 case Keys.Q:
-                    Models.Cursor.ZPosition -= moveFactor;
+                    Models.Cursor.ZPosition = Math.Round(Models.Cursor.ZPosition - Parameters.CursorMoveValue, 2);
                     break;
                 case Keys.Z:
-                    Models.Cursor.ZPosition += moveFactor;
+                    Models.Cursor.ZPosition = Math.Round(Models.Cursor.ZPosition + Parameters.CursorMoveValue, 2);
                     break;
                 case Keys.Space:
                     e.Handled = true;
@@ -338,10 +361,12 @@ namespace Geometric_Modeling
                         foreach (var geometricModel in _models)
                         {
                             if (geometricModel is Models.Cursor) continue;
-                            if (Vector4.Distance3(geometricModel.GetCurrentPosition(), Models.Cursor.GetPosition())
+                            if (Vector4.Distance3(geometricModel.GetCurrentPosition(), Models.Cursor.GetCurrentPosition())
                                 < Models.Cursor.CursorSize)
                             {
                                 Models.Cursor.AddHandledModel(geometricModel);
+                                ObjectsList.SelectedItems.Clear();
+                                ObjectsList.SelectedItem = geometricModel;
                                 break;
                             }
                         }
@@ -351,12 +376,6 @@ namespace Geometric_Modeling
                 default:
                     return;
             }
-            if (Math.Abs(Models.Cursor.XPosition) < epsilon)
-                Models.Cursor.XPosition = 0;
-            if (Math.Abs(Models.Cursor.YPosition) < epsilon)
-                Models.Cursor.YPosition = 0;
-            if (Math.Abs(Models.Cursor.ZPosition) < epsilon)
-                Models.Cursor.ZPosition = 0;
             Models.Cursor.Instance.UpdateModel();
             DrawWorld();
             UpdateTextBoxes();
@@ -366,7 +385,7 @@ namespace Geometric_Modeling
         {
             switch (e.KeyCode)
             {
-                case Keys.Enter:
+                case Keys.F2:
                     var item = ObjectsList.SelectedItem as GeometricModel;
                     if (item == null) return;
                     var form = new RenameForm();

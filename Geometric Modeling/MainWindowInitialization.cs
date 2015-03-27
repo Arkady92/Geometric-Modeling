@@ -43,6 +43,8 @@ namespace Geometric_Modeling
         private void InitializeMembers()
         {
             UpdateTextBoxes();
+            Parameters.WorldPanelWidth = WorldPanel.Width;
+            Parameters.WorldPanelHeight = WorldPanel.Height;
             _enableWorldDrawing = false;
             _backBuffer = new Bitmap(WorldPanel.Width, WorldPanel.Height);
             _forceStaticGraphics = false;
@@ -51,8 +53,6 @@ namespace Geometric_Modeling
             _currentProjectionMatrix = OperationsMatrices.Projection(200);
             _currentStereoscopyLeftMatrix = OperationsMatrices.StereoscopyLeft(ProjectionR, ProjectionE);
             _currentStereoscopyRightMatrix = OperationsMatrices.StereoscopyRight(ProjectionR, ProjectionE);
-            Parameters.WorldPanelWidth = WorldPanel.Width;
-            Parameters.WorldPanelHeight = WorldPanel.Height;
             _models = new List<GeometricModel>();
             _operationsButtons = new Dictionary<Operation, Button>
             {
@@ -62,7 +62,8 @@ namespace Geometric_Modeling
                 {Operation.RotationX, RotationXButton},
                 {Operation.RotationY, RotationYButton},
                 {Operation.RotationZ, RotationZButton},
-                {Operation.Scale, ScaleButton}
+                {Operation.Scale, ScaleButton},
+                {Operation.Selection, SelectionButton}
             };
             _modelsParameters = new Dictionary<ModelType, List<Control>>
             {

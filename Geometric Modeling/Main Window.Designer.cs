@@ -51,6 +51,7 @@
             this.GridResolutionXBox = new System.Windows.Forms.TextBox();
             this.TranslationXButton = new System.Windows.Forms.Button();
             this.OperationsPanel = new System.Windows.Forms.Panel();
+            this.SelectionButton = new System.Windows.Forms.Button();
             this.ScaleButton = new System.Windows.Forms.Button();
             this.RotationZButton = new System.Windows.Forms.Button();
             this.RotationYButton = new System.Windows.Forms.Button();
@@ -77,6 +78,7 @@
             this.CursorScreenYLabel = new System.Windows.Forms.Label();
             this.CursorScreenYBox = new System.Windows.Forms.TextBox();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.ClearButton = new System.Windows.Forms.Button();
             this.ObjectsPanel.SuspendLayout();
             this.OptionsPanel.SuspendLayout();
             this.OperationsPanel.SuspendLayout();
@@ -332,6 +334,8 @@
             this.OperationsPanel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.OperationsPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.OperationsPanel.Controls.Add(this.ClearButton);
+            this.OperationsPanel.Controls.Add(this.SelectionButton);
             this.OperationsPanel.Controls.Add(this.ScaleButton);
             this.OperationsPanel.Controls.Add(this.RotationZButton);
             this.OperationsPanel.Controls.Add(this.RotationYButton);
@@ -343,6 +347,16 @@
             this.OperationsPanel.Name = "OperationsPanel";
             this.OperationsPanel.Size = new System.Drawing.Size(840, 31);
             this.OperationsPanel.TabIndex = 4;
+            // 
+            // SelectionButton
+            // 
+            this.SelectionButton.Location = new System.Drawing.Point(624, 3);
+            this.SelectionButton.Name = "SelectionButton";
+            this.SelectionButton.Size = new System.Drawing.Size(75, 23);
+            this.SelectionButton.TabIndex = 9;
+            this.SelectionButton.Text = "Select";
+            this.SelectionButton.UseVisualStyleBackColor = true;
+            this.SelectionButton.Click += new System.EventHandler(this.SelectionButton_Click);
             // 
             // ScaleButton
             // 
@@ -623,6 +637,16 @@
             this.panel1.Size = new System.Drawing.Size(674, 29);
             this.panel1.TabIndex = 22;
             // 
+            // ClearButton
+            // 
+            this.ClearButton.Location = new System.Drawing.Point(705, 3);
+            this.ClearButton.Name = "ClearButton";
+            this.ClearButton.Size = new System.Drawing.Size(75, 23);
+            this.ClearButton.TabIndex = 10;
+            this.ClearButton.Text = "Clear";
+            this.ClearButton.UseVisualStyleBackColor = true;
+            this.ClearButton.Click += new System.EventHandler(this.ClearButton_Click);
+            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -713,6 +737,8 @@
         private System.Windows.Forms.Label CursorScreenYLabel;
         private System.Windows.Forms.TextBox CursorScreenYBox;
         private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.Button SelectionButton;
+        private System.Windows.Forms.Button ClearButton;
     }
 }
 

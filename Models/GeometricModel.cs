@@ -44,15 +44,17 @@ namespace Models
             return SpacePosition;
         }
 
-        public void SetCurrentPosition(Vector4 position)
-        {
-            SpacePosition = position;
-        }
-
         public void Translate(double x, double y, double z)
         {
             CurrentOperationMatrix = OperationsMatrices.Translation(x * TranslationFactor, y * TranslationFactor,
                 z * TranslationFactor) * CurrentOperationMatrix;
+        }
+
+        public void TranslateToPosition(Vector4 position)
+        {
+            var shift = GetCurrentPosition();
+            shift = position - shift;
+            CurrentOperationMatrix = OperationsMatrices.Translation(shift.X, shift.Y, shift.Z) * CurrentOperationMatrix;
         }
 
         public void Rotate(double x, double y, double z)
@@ -90,6 +92,6 @@ namespace Models
         public abstract void Draw(Graphics graphics, Matrix currentProjectionMatrix);
 
         public abstract void UpdateModel();
-        public abstract void UpdatePositions(Vector4 shift);
+        //public abstract void UpdatePositions(Vector4 shift);
     }
 }

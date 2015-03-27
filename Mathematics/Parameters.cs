@@ -15,5 +15,6 @@ namespace Mathematics
         public static int PixelMaxSize = 80;
         public static float WorldPanelSizeFactor;
         public static double MouseInaccuracy = 5;
+        public static double CursorMoveValue = 0.01;
     }
 }

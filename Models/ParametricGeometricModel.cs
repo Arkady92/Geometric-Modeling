@@ -24,9 +24,9 @@ namespace Models
             Edges = new List<Edge>();
             Children = new List<ParametricGeometricModel>();
             Parents = new List<ParametricGeometricModel>();
-            TranslationFactor = 0.0086;
+            TranslationFactor = 0.003;
             RotationFactor = 0.01;
-            ScaleFactor = 1.04;
+            ScaleFactor = 1.02;
             MaximumScaleFactor = 20;
             DefaultColor = Color.White;
         }
@@ -42,17 +42,6 @@ namespace Models
             Children.Clear();
             CreateVertices();
             CreateEdges();
-        }
-
-        public override void UpdatePositions(Vector4 shift)
-        {
-            foreach (var child in Children)
-                child.UpdatePositions(shift);
-            for (int i = 0; i < Vertices.Count; i++)
-            {
-                Vertices[i] = Vertices[i] + shift;
-            }
-            SpacePosition = SpacePosition + shift;
         }
 
         public void AddParent(ParametricGeometricModel parent)
