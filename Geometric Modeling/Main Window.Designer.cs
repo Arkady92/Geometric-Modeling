@@ -51,6 +51,7 @@
             this.GridResolutionXBox = new System.Windows.Forms.TextBox();
             this.TranslationXButton = new System.Windows.Forms.Button();
             this.OperationsPanel = new System.Windows.Forms.Panel();
+            this.ClearButton = new System.Windows.Forms.Button();
             this.SelectionButton = new System.Windows.Forms.Button();
             this.ScaleButton = new System.Windows.Forms.Button();
             this.RotationZButton = new System.Windows.Forms.Button();
@@ -65,6 +66,9 @@
             this.WorldPanel = new System.Windows.Forms.PictureBox();
             this.EffectsLabel = new System.Windows.Forms.Label();
             this.EffectsPanel = new System.Windows.Forms.Panel();
+            this.PolygonalChainCheckBox = new System.Windows.Forms.CheckBox();
+            this.DeBoorsPointsRadioButton = new System.Windows.Forms.RadioButton();
+            this.ControlPointsRadioButton = new System.Windows.Forms.RadioButton();
             this.AdditiveColorBlendingCheckBox = new System.Windows.Forms.CheckBox();
             this.StereoscopyCheckBox = new System.Windows.Forms.CheckBox();
             this.CursorXLabel = new System.Windows.Forms.Label();
@@ -78,7 +82,6 @@
             this.CursorScreenYLabel = new System.Windows.Forms.Label();
             this.CursorScreenYBox = new System.Windows.Forms.TextBox();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.ClearButton = new System.Windows.Forms.Button();
             this.ObjectsPanel.SuspendLayout();
             this.OptionsPanel.SuspendLayout();
             this.OperationsPanel.SuspendLayout();
@@ -175,7 +178,7 @@
             this.OptionsPanel.Controls.Add(this.GridResolutionXBox);
             this.OptionsPanel.Location = new System.Drawing.Point(702, 103);
             this.OptionsPanel.Name = "OptionsPanel";
-            this.OptionsPanel.Size = new System.Drawing.Size(150, 190);
+            this.OptionsPanel.Size = new System.Drawing.Size(150, 139);
             this.OptionsPanel.TabIndex = 2;
             // 
             // PixelMaxSizeLabel
@@ -348,6 +351,16 @@
             this.OperationsPanel.Size = new System.Drawing.Size(840, 31);
             this.OperationsPanel.TabIndex = 4;
             // 
+            // ClearButton
+            // 
+            this.ClearButton.Location = new System.Drawing.Point(705, 3);
+            this.ClearButton.Name = "ClearButton";
+            this.ClearButton.Size = new System.Drawing.Size(75, 23);
+            this.ClearButton.TabIndex = 10;
+            this.ClearButton.Text = "Clear";
+            this.ClearButton.UseVisualStyleBackColor = true;
+            this.ClearButton.Click += new System.EventHandler(this.ClearButton_Click);
+            // 
             // SelectionButton
             // 
             this.SelectionButton.Location = new System.Drawing.Point(624, 3);
@@ -481,7 +494,7 @@
             this.EffectsLabel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.EffectsLabel.AutoSize = true;
-            this.EffectsLabel.Location = new System.Drawing.Point(754, 297);
+            this.EffectsLabel.Location = new System.Drawing.Point(754, 249);
             this.EffectsLabel.Name = "EffectsLabel";
             this.EffectsLabel.Size = new System.Drawing.Size(40, 13);
             this.EffectsLabel.TabIndex = 11;
@@ -491,12 +504,55 @@
             // 
             this.EffectsPanel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.EffectsPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.EffectsPanel.Controls.Add(this.PolygonalChainCheckBox);
+            this.EffectsPanel.Controls.Add(this.DeBoorsPointsRadioButton);
+            this.EffectsPanel.Controls.Add(this.ControlPointsRadioButton);
             this.EffectsPanel.Controls.Add(this.AdditiveColorBlendingCheckBox);
             this.EffectsPanel.Controls.Add(this.StereoscopyCheckBox);
-            this.EffectsPanel.Location = new System.Drawing.Point(702, 309);
+            this.EffectsPanel.Location = new System.Drawing.Point(702, 261);
             this.EffectsPanel.Name = "EffectsPanel";
-            this.EffectsPanel.Size = new System.Drawing.Size(150, 100);
+            this.EffectsPanel.Size = new System.Drawing.Size(150, 144);
             this.EffectsPanel.TabIndex = 10;
+            // 
+            // PolygonalChainCheckBox
+            // 
+            this.PolygonalChainCheckBox.AutoSize = true;
+            this.PolygonalChainCheckBox.Checked = true;
+            this.PolygonalChainCheckBox.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.PolygonalChainCheckBox.Location = new System.Drawing.Point(10, 50);
+            this.PolygonalChainCheckBox.Name = "PolygonalChainCheckBox";
+            this.PolygonalChainCheckBox.Size = new System.Drawing.Size(102, 17);
+            this.PolygonalChainCheckBox.TabIndex = 2;
+            this.PolygonalChainCheckBox.Text = "Polygonal Chain";
+            this.PolygonalChainCheckBox.UseVisualStyleBackColor = true;
+            this.PolygonalChainCheckBox.Visible = false;
+            this.PolygonalChainCheckBox.CheckedChanged += new System.EventHandler(this.PolygonalChainCheckBox_CheckedChanged);
+            // 
+            // DeBoorsPointsRadioButton
+            // 
+            this.DeBoorsPointsRadioButton.AutoSize = true;
+            this.DeBoorsPointsRadioButton.Location = new System.Drawing.Point(10, 96);
+            this.DeBoorsPointsRadioButton.Name = "DeBoorsPointsRadioButton";
+            this.DeBoorsPointsRadioButton.Size = new System.Drawing.Size(103, 17);
+            this.DeBoorsPointsRadioButton.TabIndex = 4;
+            this.DeBoorsPointsRadioButton.Text = "De Boor\'s Points";
+            this.DeBoorsPointsRadioButton.UseVisualStyleBackColor = true;
+            this.DeBoorsPointsRadioButton.Visible = false;
+            this.DeBoorsPointsRadioButton.CheckedChanged += new System.EventHandler(this.DeBoorsPointsRadioButton_CheckedChanged);
+            // 
+            // ControlPointsRadioButton
+            // 
+            this.ControlPointsRadioButton.AutoSize = true;
+            this.ControlPointsRadioButton.Checked = true;
+            this.ControlPointsRadioButton.Location = new System.Drawing.Point(10, 73);
+            this.ControlPointsRadioButton.Name = "ControlPointsRadioButton";
+            this.ControlPointsRadioButton.Size = new System.Drawing.Size(90, 17);
+            this.ControlPointsRadioButton.TabIndex = 3;
+            this.ControlPointsRadioButton.TabStop = true;
+            this.ControlPointsRadioButton.Text = "Control Points";
+            this.ControlPointsRadioButton.UseVisualStyleBackColor = true;
+            this.ControlPointsRadioButton.Visible = false;
+            this.ControlPointsRadioButton.CheckedChanged += new System.EventHandler(this.ControlPointsRadioButton_CheckedChanged);
             // 
             // AdditiveColorBlendingCheckBox
             // 
@@ -637,16 +693,6 @@
             this.panel1.Size = new System.Drawing.Size(674, 29);
             this.panel1.TabIndex = 22;
             // 
-            // ClearButton
-            // 
-            this.ClearButton.Location = new System.Drawing.Point(705, 3);
-            this.ClearButton.Name = "ClearButton";
-            this.ClearButton.Size = new System.Drawing.Size(75, 23);
-            this.ClearButton.TabIndex = 10;
-            this.ClearButton.Text = "Clear";
-            this.ClearButton.UseVisualStyleBackColor = true;
-            this.ClearButton.Click += new System.EventHandler(this.ClearButton_Click);
-            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -739,6 +785,9 @@
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Button SelectionButton;
         private System.Windows.Forms.Button ClearButton;
+        private System.Windows.Forms.RadioButton DeBoorsPointsRadioButton;
+        private System.Windows.Forms.RadioButton ControlPointsRadioButton;
+        private System.Windows.Forms.CheckBox PolygonalChainCheckBox;
     }
 }
 

@@ -1,4 +1,5 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Drawing;
 using Mathematics;
 
 namespace Models
@@ -22,7 +23,7 @@ namespace Models
             }
             set
             {
-                _position.X = value;
+                _position.X = Math.Round(value, 2);
                 if (ModelHandled)
                     _handledModel.TranslateToPosition(GetCurrentPosition());
             }
@@ -36,7 +37,7 @@ namespace Models
             }
             set
             {
-                _position.Y = value;
+                _position.Y = Math.Round(value, 2);
                 if (ModelHandled)
                     _handledModel.TranslateToPosition(GetCurrentPosition());
             }
@@ -50,7 +51,7 @@ namespace Models
             }
             set
             {
-                _position.Z = value;
+                _position.Z = Math.Round(value, 2);
                 if (ModelHandled)
                     _handledModel.TranslateToPosition(GetCurrentPosition());
             }
@@ -82,11 +83,13 @@ namespace Models
         {
             _handledModel = model;
             ModelHandled = true;
+            Instance.DefaultColor = Color.Yellow;
         }
         public static void RemoveHandledModel()
         {
             _handledModel = null;
             ModelHandled = false;
+            Instance.DefaultColor = Color.White;
         }
 
         protected override void CreateEdges()
@@ -121,12 +124,6 @@ namespace Models
             var rPos = rightMatrix * CurrentOperationMatrix * _position;
             _screenPosition.X = (int)((lPos.X + rPos.X) * 0.5 * Parameters.WorldPanelSizeFactor);
             _screenPosition.Y = -(int)((lPos.Y + rPos.Y) * 0.5 * Parameters.WorldPanelSizeFactor);
-        }
-
-        public static void ResetPositions()
-        {
-            _position = new Vector4(0,0,0);
-            _screenPosition = new Vector4(0,0,0);
         }
     }
 }

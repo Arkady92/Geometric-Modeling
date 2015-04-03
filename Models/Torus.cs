@@ -80,7 +80,7 @@ namespace Models
         {
             Matrix currentMatrix = OperationsMatrices.Identity();
             currentMatrix = Parents.Aggregate(currentMatrix, (current, parent) => current * parent.CurrentOperationMatrix);
-            currentMatrix = currentProjectionMatrix * CurrentOperationMatrix * currentMatrix;
+            currentMatrix = currentProjectionMatrix * currentMatrix * CurrentOperationMatrix;
 
             var pen = new Pen(color);
             var vertices = Vertices.Select(vertex => currentMatrix * vertex).ToList();
@@ -98,7 +98,7 @@ namespace Models
         public override string ToString()
         {
             if (CustomName != null)
-                return CustomName;
+                return "Torus <" + CustomName + ">";
             return "Torus <" + _increment++ + ">";
         }
     }

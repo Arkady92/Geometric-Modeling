@@ -132,13 +132,15 @@ namespace Geometric_Modeling
             if (double.TryParse(textBox.Text, NumberStyles.Any, CultureInfo.InvariantCulture, out result)
                 && result >= -10 && result <= 10)
             {
-                Models.Cursor.XPosition = result;
+                var position = Models.Cursor.GetCurrentPosition();
+                position.X = result;
+                Models.Cursor.Instance.TranslateToPosition(position);
                 Models.Cursor.Instance.UpdateModel();
                 DrawWorld();
             }
             else if (textBox.Text != string.Empty && textBox.Text[0] != '.' && textBox.Text[textBox.TextLength - 1] != '.'
                 && textBox.Text != @"-")
-                textBox.Text = Models.Cursor.XPosition.ToString(CultureInfo.InvariantCulture);
+                textBox.Text = Math.Round(Models.Cursor.GetCurrentPosition().X, 2).ToString(CultureInfo.InvariantCulture);
         }
 
         private void CursorYBox_TextChanged(object sender, EventArgs e)
@@ -150,13 +152,15 @@ namespace Geometric_Modeling
             if (double.TryParse(textBox.Text, NumberStyles.Any, CultureInfo.InvariantCulture, out result)
                 && result >= -10 && result <= 10)
             {
-                Models.Cursor.YPosition = result;
+                var position = Models.Cursor.GetCurrentPosition();
+                position.Y = result;
+                Models.Cursor.Instance.TranslateToPosition(position);
                 Models.Cursor.Instance.UpdateModel();
                 DrawWorld();
             }
             else if (textBox.Text != string.Empty && textBox.Text[0] != '.' && textBox.Text[textBox.TextLength - 1] != '.'
                 && textBox.Text != @"-")
-                textBox.Text = Models.Cursor.YPosition.ToString(CultureInfo.InvariantCulture);
+                textBox.Text = Math.Round(Models.Cursor.GetCurrentPosition().Y, 2).ToString(CultureInfo.InvariantCulture);
         }
 
         private void CursorZBox_TextChanged(object sender, EventArgs e)
@@ -168,13 +172,15 @@ namespace Geometric_Modeling
             if (double.TryParse(textBox.Text, NumberStyles.Any, CultureInfo.InvariantCulture, out result)
                 && result >= -10 && result <= 10)
             {
-                Models.Cursor.ZPosition = result;
+                var position = Models.Cursor.GetCurrentPosition();
+                position.Z = result;
+                Models.Cursor.Instance.TranslateToPosition(position);
                 Models.Cursor.Instance.UpdateModel();
                 DrawWorld();
             }
             else if (textBox.Text != string.Empty && textBox.Text[0] != '.' && textBox.Text[textBox.TextLength - 1] != '.'
                 && textBox.Text != @"-")
-                textBox.Text = Models.Cursor.ZPosition.ToString(CultureInfo.InvariantCulture);
+                textBox.Text = Math.Round(Models.Cursor.GetCurrentPosition().Z,2).ToString(CultureInfo.InvariantCulture);
         }
 
         private void CursorScreenXBox_TextChanged(object sender, EventArgs e)

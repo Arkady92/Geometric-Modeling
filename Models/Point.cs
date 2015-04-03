@@ -5,7 +5,6 @@ namespace Models
 {
     public class Point : ParametricGeometricModel
     {
-        private readonly Dictionary<ParametricGeometricModel, int> _parentsVerticIndexes;
 
         public double X { get { return SpacePosition.X; } set { SpacePosition.X = value; } }
         public double Y { get { return SpacePosition.Y; } set { SpacePosition.Y = value; } }
@@ -18,7 +17,6 @@ namespace Models
         public Point(Vector4 position)
             : base(ModelType.Point, position)
         {
-            _parentsVerticIndexes = new Dictionary<ParametricGeometricModel, int>();
             CreateVertices();
             CreateEdges();
         }
@@ -26,7 +24,6 @@ namespace Models
         public Point(Vector4 position, ParametricGeometricModel parent, int vertexIndex)
             : base(ModelType.Point, position)
         {
-            _parentsVerticIndexes = new Dictionary<ParametricGeometricModel, int>();
             AddParent(parent, vertexIndex);
             CreateVertices();
             CreateEdges();
@@ -35,7 +32,7 @@ namespace Models
         public void AddParent(ParametricGeometricModel parent, int vertexIndex)
         {
             AddParent(parent);
-            _parentsVerticIndexes.Add(parent, vertexIndex);
+            ParentsIndexes.Add(parent, vertexIndex);
         }
 
         protected override void CreateEdges()
@@ -69,8 +66,17 @@ namespace Models
         public override string ToString()
         {
             if (CustomName != null)
-                return CustomName;
+                return "Point <" + CustomName + ">";
             return "Point <" + _increment++ + ">";
+        }
+
+        public override void PropagateTransformation()
+        {
+            base.PropagateTransformation();
+            foreach (var parent in Parents)
+            {
+                parent.UpdateVertex(ParentsIndexes[parent]);
+            }
         }
     }
 }

@@ -104,7 +104,7 @@ namespace Models
         public override string ToString()
         {
             if (CustomName != null)
-                return CustomName;
+                return "Ellipsoid <" + CustomName + ">";
             return "Ellipsoid <" + _increment++ + ">";
         }
     }

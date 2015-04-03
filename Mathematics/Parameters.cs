@@ -16,5 +16,7 @@ namespace Mathematics
         public static float WorldPanelSizeFactor;
         public static double MouseInaccuracy = 5;
         public static double CursorMoveValue = 0.01;
+        public static bool ControlPointsEnabled = true;
+        public static bool PolygonalChainEnabled = true;
     }
 }

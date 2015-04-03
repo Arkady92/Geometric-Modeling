@@ -17,23 +17,44 @@ namespace Models
 
         protected List<ParametricGeometricModel> Parents;
 
-        protected ParametricGeometricModel(ModelType modelType, Vector4 position)
+        protected readonly Dictionary<ParametricGeometricModel, int> ParentsIndexes;
+
+
+        public bool ReturnChildrenOnRemove { get; set; }
+
+        protected ParametricGeometricModel(ModelType modelType, Vector4 position, bool returnChildrenOnRemove = false)
             : base(modelType, position)
         {
             Vertices = new List<Vector4>();
             Edges = new List<Edge>();
             Children = new List<ParametricGeometricModel>();
             Parents = new List<ParametricGeometricModel>();
+            ParentsIndexes = new Dictionary<ParametricGeometricModel, int>();
             TranslationFactor = 0.003;
             RotationFactor = 0.01;
             ScaleFactor = 1.02;
             MaximumScaleFactor = 20;
             DefaultColor = Color.White;
+            ReturnChildrenOnRemove = returnChildrenOnRemove;
         }
 
         protected abstract void CreateEdges();
 
         protected abstract void CreateVertices();
+
+        public override Vector4 GetCurrentPosition()
+        {
+            Matrix parrentsMatrix = OperationsMatrices.Identity();
+            parrentsMatrix = Parents.Aggregate(parrentsMatrix, (current, parent) => current * parent.CurrentOperationMatrix);
+            return CurrentOperationMatrix * parrentsMatrix * SpacePosition;
+        }
+
+        private Vector4 GetCurrentPositionWithoutMineTransformations(ParametricGeometricModel model)
+        {
+            Matrix parrentsMatrix = OperationsMatrices.Identity();
+            parrentsMatrix = Parents.Where(parent => parent != model).Aggregate(parrentsMatrix, (current, parent) => current * parent.CurrentOperationMatrix);
+            return CurrentOperationMatrix * parrentsMatrix * SpacePosition;
+        }
 
         public override void UpdateModel()
         {
@@ -42,6 +63,11 @@ namespace Models
             Children.Clear();
             CreateVertices();
             CreateEdges();
+        }
+
+        public List<ParametricGeometricModel> GetChildren()
+        {
+            return Children;
         }
 
         public void AddParent(ParametricGeometricModel parent)
@@ -56,6 +82,7 @@ namespace Models
 
         public void RemoveParent(ParametricGeometricModel parent)
         {
+            CurrentOperationMatrix = parent.CurrentOperationMatrix * CurrentOperationMatrix;
             Parents.Remove(parent);
         }
         public void RemoveChild(ParametricGeometricModel child)
@@ -72,7 +99,24 @@ namespace Models
             foreach (var parent in Parents)
             {
                 parent.RemoveChild(this);
+                parent.RecreateStructure();
             }
+        }
+
+        protected virtual void RecreateStructure() { }
+
+        public void SetParentIndex(ParametricGeometricModel parent, int index)
+        {
+            if (ParentsIndexes.ContainsKey(parent))
+                ParentsIndexes[parent] = index;
+        }
+
+        public void UpdateVertex(int number)
+        {
+            var position = Children[number].GetCurrentPositionWithoutMineTransformations(this);
+            Vertices[number].X = position.X;
+            Vertices[number].Y = position.Y;
+            Vertices[number].Z = position.Z;
         }
 
         public virtual void DrawStereoscopy(Graphics graphics, Matrix leftMatrix, Matrix rightMatrix,
@@ -102,7 +146,7 @@ namespace Models
         {
             Matrix currentMatrix = OperationsMatrices.Identity();
             currentMatrix = Parents.Aggregate(currentMatrix, (current, parent) => current * parent.CurrentOperationMatrix);
-            currentMatrix = currentProjectionMatrix * CurrentOperationMatrix * currentMatrix;
+            currentMatrix = currentProjectionMatrix * currentMatrix * CurrentOperationMatrix;
 
             var vertices = Vertices.Select(vertex => currentMatrix * vertex).ToList();
             foreach (var edge in Edges)
@@ -129,7 +173,7 @@ namespace Models
         {
             Matrix currentMatrix = OperationsMatrices.Identity();
             currentMatrix = Parents.Aggregate(currentMatrix, (current, parent) => current * parent.CurrentOperationMatrix);
-            currentMatrix = currentProjectionMatrix * CurrentOperationMatrix * currentMatrix;
+            currentMatrix = currentProjectionMatrix * currentMatrix * CurrentOperationMatrix;
 
             var pen = new Pen(color);
             var vertices = Vertices.Select(vertex => currentMatrix * vertex).ToList();
@@ -140,6 +184,40 @@ namespace Models
                     (float)vertices[edge.EndVertex].X * Parameters.WorldPanelSizeFactor,
                     (float)vertices[edge.EndVertex].Y * Parameters.WorldPanelSizeFactor);
             }
+        }
+
+        public virtual void PropagateTransformation()
+        {
+            foreach (var child in Children)
+            {
+                child.PropagateTransformation();
+            }
+        }
+
+        public override void Translate(double x, double y, double z)
+        {
+            base.Translate(x, y, z);
+            PropagateTransformation();
+        }
+
+        public override void TranslateToPosition(Vector4 position)
+        {
+            var shift = GetCurrentPosition();
+            shift = position - shift;
+            CurrentOperationMatrix = OperationsMatrices.Translation(shift.X, shift.Y, shift.Z) * CurrentOperationMatrix;
+            PropagateTransformation();
+        }
+
+        public override void Rotate(double x, double y, double z)
+        {
+            base.Rotate(x, y, z);
+            PropagateTransformation();
+        }
+
+        public override void Scale(double s)
+        {
+            base.Scale(s);
+            PropagateTransformation();
         }
     }
 }

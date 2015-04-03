@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Globalization;
 using System.Windows.Forms;
@@ -46,9 +47,11 @@ namespace Geometric_Modeling
             Parameters.WorldPanelWidth = WorldPanel.Width;
             Parameters.WorldPanelHeight = WorldPanel.Height;
             _enableWorldDrawing = false;
-            _backBuffer = new Bitmap(WorldPanel.Width, WorldPanel.Height);
             _forceStaticGraphics = false;
             _enableAnimations = false;
+            ControlPointsRadioButton.Checked = Parameters.ControlPointsEnabled;
+            PolygonalChainCheckBox.Checked = Parameters.PolygonalChainEnabled;
+            _backBuffer = new Bitmap(WorldPanel.Width, WorldPanel.Height);
             _currentOperation = Operation.None;
             _currentProjectionMatrix = OperationsMatrices.Projection(200);
             _currentStereoscopyLeftMatrix = OperationsMatrices.StereoscopyLeft(ProjectionR, ProjectionE);
@@ -72,7 +75,8 @@ namespace Geometric_Modeling
                 {ModelType.Ellipsoid, new List<Control> {IlluminanceBox, XAxisFactorBox, YAxisFactorBox, ZAxisFactorBox, PixelMaxSizeBox, 
                     IlluminanceLabel, XAxisFactorLabel, YAxisFactorLabel, ZAxisFactorLabel, PixelMaxSizeLabel}},
                     {ModelType.Point, new List<Control>{StereoscopyCheckBox, AdditiveColorBlendingCheckBox}},
-                    {ModelType.BezierCurve, new List<Control>{StereoscopyCheckBox, AdditiveColorBlendingCheckBox}},
+                    {ModelType.BezierCurve, new List<Control>{StereoscopyCheckBox, AdditiveColorBlendingCheckBox, PolygonalChainCheckBox,
+                        ControlPointsRadioButton, DeBoorsPointsRadioButton}},
                     {ModelType.Cursor, new List<Control>{StereoscopyCheckBox, AdditiveColorBlendingCheckBox}}
             };
             DisableAllSettings();
@@ -96,9 +100,10 @@ namespace Geometric_Modeling
             YAxisFactorBox.Text = Parameters.YAxisFactor.ToString(CultureInfo.InvariantCulture);
             ZAxisFactorBox.Text = Parameters.ZAxisFactor.ToString(CultureInfo.InvariantCulture);
             PixelMaxSizeBox.Text = Parameters.PixelMaxSize.ToString(CultureInfo.InvariantCulture);
-            CursorXBox.Text = Models.Cursor.XPosition.ToString(CultureInfo.InvariantCulture);
-            CursorYBox.Text = Models.Cursor.YPosition.ToString(CultureInfo.InvariantCulture);
-            CursorZBox.Text = Models.Cursor.ZPosition.ToString(CultureInfo.InvariantCulture);
+            var position = Models.Cursor.GetCurrentPosition();
+            CursorXBox.Text = Math.Round(position.X,2).ToString(CultureInfo.InvariantCulture);
+            CursorYBox.Text = Math.Round(position.Y,2).ToString(CultureInfo.InvariantCulture);
+            CursorZBox.Text = Math.Round(position.Z,2).ToString(CultureInfo.InvariantCulture);
             CursorScreenXBox.Text = Models.Cursor.ScreenXPosition.ToString(CultureInfo.InvariantCulture);
             CursorScreenYBox.Text = Models.Cursor.ScreenYPosition.ToString(CultureInfo.InvariantCulture);
             _enableWorldDrawing = true;

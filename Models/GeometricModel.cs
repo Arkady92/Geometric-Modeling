@@ -34,7 +34,7 @@ namespace Models
             CurrentOperationMatrix = OperationsMatrices.Identity();
         }
 
-        public Vector4 GetCurrentPosition()
+        public virtual Vector4 GetCurrentPosition()
         {
             return CurrentOperationMatrix * SpacePosition;
         }
@@ -44,20 +44,20 @@ namespace Models
             return SpacePosition;
         }
 
-        public void Translate(double x, double y, double z)
+        public virtual void Translate(double x, double y, double z)
         {
             CurrentOperationMatrix = OperationsMatrices.Translation(x * TranslationFactor, y * TranslationFactor,
                 z * TranslationFactor) * CurrentOperationMatrix;
         }
 
-        public void TranslateToPosition(Vector4 position)
+        public virtual void TranslateToPosition(Vector4 position)
         {
             var shift = GetCurrentPosition();
             shift = position - shift;
             CurrentOperationMatrix = OperationsMatrices.Translation(shift.X, shift.Y, shift.Z) * CurrentOperationMatrix;
         }
 
-        public void Rotate(double x, double y, double z)
+        public virtual void Rotate(double x, double y, double z)
         {
             if (Math.Abs(x) > Double.Epsilon)
                 CurrentOperationMatrix = OperationsMatrices.RotationX(x * RotationFactor) * CurrentOperationMatrix;
@@ -67,7 +67,7 @@ namespace Models
                 CurrentOperationMatrix = OperationsMatrices.RotationZ(z * RotationFactor) * CurrentOperationMatrix;
         }
 
-        public void Scale(double s)
+        public virtual void Scale(double s)
         {
             if (s > 0 && _actualScale > 1 / MaximumScaleFactor)
             {
