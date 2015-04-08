@@ -65,7 +65,7 @@ namespace Models
                 {
                     var result = ParametricEquation(alpha, beta) + SpacePosition;
                     Vertices.Add(result);
-                    Children.Add(new Point(result, this, Vertices.Count-1));
+                    Children.Add(new Point(new Vector4(result.X, result.Y, result.Z), this, Vertices.Count-1));
                 }
             }
         }
@@ -87,19 +87,26 @@ namespace Models
             var graphicsPath = new GraphicsPath();
             foreach (var edge in Edges)
             {
-                graphicsPath.AddLine(
+                //graphicsPath.AddLine(
+                graphics.DrawLine(pen,
                     (float)vertices[edge.StartVertex].X * Parameters.WorldPanelSizeFactor,
                     (float)vertices[edge.StartVertex].Y * Parameters.WorldPanelSizeFactor,
                     (float)vertices[edge.EndVertex].X * Parameters.WorldPanelSizeFactor,
                     (float)vertices[edge.EndVertex].Y * Parameters.WorldPanelSizeFactor);
             }
-            graphics.DrawPath(pen, graphicsPath);
+            //graphics.DrawPath(pen, graphicsPath);
         }
         public override string ToString()
         {
             if (CustomName != null)
                 return "Torus <" + CustomName + ">";
             return "Torus <" + _increment++ + ">";
+        }
+
+        protected override void RecreateStructure(int number = 0)
+        {
+            var tmpEdges = Edges.Where(edge => edge.StartVertex != number && edge.EndVertex != number).ToList();
+            Edges = tmpEdges;
         }
     }
 }

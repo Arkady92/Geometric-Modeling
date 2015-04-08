@@ -12,6 +12,7 @@ namespace Geometric_Modeling
     {
         #region Members
         private List<GeometricModel> _models;
+        private List<GeometricModel> _hiddenModels;
         private Dictionary<Operation, Button> _operationsButtons;
         private Dictionary<ModelType, List<Control>> _modelsParameters;
         private Operation _currentOperation;
@@ -57,6 +58,7 @@ namespace Geometric_Modeling
             _currentStereoscopyLeftMatrix = OperationsMatrices.StereoscopyLeft(ProjectionR, ProjectionE);
             _currentStereoscopyRightMatrix = OperationsMatrices.StereoscopyRight(ProjectionR, ProjectionE);
             _models = new List<GeometricModel>();
+            _hiddenModels = new List<GeometricModel>();
             _operationsButtons = new Dictionary<Operation, Button>
             {
                 {Operation.TranslationX, TranslationXButton},
@@ -75,7 +77,8 @@ namespace Geometric_Modeling
                 {ModelType.Ellipsoid, new List<Control> {IlluminanceBox, XAxisFactorBox, YAxisFactorBox, ZAxisFactorBox, PixelMaxSizeBox, 
                     IlluminanceLabel, XAxisFactorLabel, YAxisFactorLabel, ZAxisFactorLabel, PixelMaxSizeLabel}},
                     {ModelType.Point, new List<Control>{StereoscopyCheckBox, AdditiveColorBlendingCheckBox}},
-                    {ModelType.BezierCurve, new List<Control>{StereoscopyCheckBox, AdditiveColorBlendingCheckBox, PolygonalChainCheckBox,
+                    {ModelType.BezierCurve, new List<Control>{StereoscopyCheckBox, AdditiveColorBlendingCheckBox, PolygonalChainCheckBox,}},
+                    {ModelType.BezierCurveC2, new List<Control>{StereoscopyCheckBox, AdditiveColorBlendingCheckBox, PolygonalChainCheckBox,
                         ControlPointsRadioButton, DeBoorsPointsRadioButton}},
                     {ModelType.Cursor, new List<Control>{StereoscopyCheckBox, AdditiveColorBlendingCheckBox}}
             };

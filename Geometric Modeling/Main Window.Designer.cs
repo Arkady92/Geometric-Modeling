@@ -82,6 +82,7 @@
             this.CursorScreenYLabel = new System.Windows.Forms.Label();
             this.CursorScreenYBox = new System.Windows.Forms.TextBox();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.BezierCurveC2Button = new System.Windows.Forms.Button();
             this.ObjectsPanel.SuspendLayout();
             this.OptionsPanel.SuspendLayout();
             this.OperationsPanel.SuspendLayout();
@@ -109,6 +110,7 @@
             this.ObjectsPanel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.ObjectsPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.ObjectsPanel.Controls.Add(this.BezierCurveC2Button);
             this.ObjectsPanel.Controls.Add(this.BezierCurveButton);
             this.ObjectsPanel.Controls.Add(this.PointButton);
             this.ObjectsPanel.Controls.Add(this.EllipsoidButton);
@@ -124,7 +126,7 @@
             this.BezierCurveButton.Name = "BezierCurveButton";
             this.BezierCurveButton.Size = new System.Drawing.Size(75, 23);
             this.BezierCurveButton.TabIndex = 5;
-            this.BezierCurveButton.Text = "Bezier Curve";
+            this.BezierCurveButton.Text = "B. Curve C0";
             this.BezierCurveButton.UseVisualStyleBackColor = true;
             this.BezierCurveButton.Click += new System.EventHandler(this.BezierCurveButton_Click);
             // 
@@ -326,9 +328,9 @@
             // 
             this.TranslationXButton.Location = new System.Drawing.Point(3, 3);
             this.TranslationXButton.Name = "TranslationXButton";
-            this.TranslationXButton.Size = new System.Drawing.Size(84, 23);
+            this.TranslationXButton.Size = new System.Drawing.Size(50, 23);
             this.TranslationXButton.TabIndex = 2;
-            this.TranslationXButton.Text = "Translation X";
+            this.TranslationXButton.Text = "T(X)";
             this.TranslationXButton.UseVisualStyleBackColor = true;
             this.TranslationXButton.Click += new System.EventHandler(this.TranslationXButton_Click);
             // 
@@ -353,9 +355,9 @@
             // 
             // ClearButton
             // 
-            this.ClearButton.Location = new System.Drawing.Point(705, 3);
+            this.ClearButton.Location = new System.Drawing.Point(785, 3);
             this.ClearButton.Name = "ClearButton";
-            this.ClearButton.Size = new System.Drawing.Size(75, 23);
+            this.ClearButton.Size = new System.Drawing.Size(50, 23);
             this.ClearButton.TabIndex = 10;
             this.ClearButton.Text = "Clear";
             this.ClearButton.UseVisualStyleBackColor = true;
@@ -363,9 +365,9 @@
             // 
             // SelectionButton
             // 
-            this.SelectionButton.Location = new System.Drawing.Point(624, 3);
+            this.SelectionButton.Location = new System.Drawing.Point(729, 3);
             this.SelectionButton.Name = "SelectionButton";
-            this.SelectionButton.Size = new System.Drawing.Size(75, 23);
+            this.SelectionButton.Size = new System.Drawing.Size(50, 23);
             this.SelectionButton.TabIndex = 9;
             this.SelectionButton.Text = "Select";
             this.SelectionButton.UseVisualStyleBackColor = true;
@@ -373,9 +375,9 @@
             // 
             // ScaleButton
             // 
-            this.ScaleButton.Location = new System.Drawing.Point(543, 3);
+            this.ScaleButton.Location = new System.Drawing.Point(339, 3);
             this.ScaleButton.Name = "ScaleButton";
-            this.ScaleButton.Size = new System.Drawing.Size(75, 23);
+            this.ScaleButton.Size = new System.Drawing.Size(50, 23);
             this.ScaleButton.TabIndex = 8;
             this.ScaleButton.Text = "Scale";
             this.ScaleButton.UseVisualStyleBackColor = true;
@@ -383,51 +385,51 @@
             // 
             // RotationZButton
             // 
-            this.RotationZButton.Location = new System.Drawing.Point(453, 3);
+            this.RotationZButton.Location = new System.Drawing.Point(283, 3);
             this.RotationZButton.Name = "RotationZButton";
-            this.RotationZButton.Size = new System.Drawing.Size(84, 23);
+            this.RotationZButton.Size = new System.Drawing.Size(50, 23);
             this.RotationZButton.TabIndex = 7;
-            this.RotationZButton.Text = "Rotation Z";
+            this.RotationZButton.Text = "R(Z)";
             this.RotationZButton.UseVisualStyleBackColor = true;
             this.RotationZButton.Click += new System.EventHandler(this.RotationZButton_Click);
             // 
             // RotationYButton
             // 
-            this.RotationYButton.Location = new System.Drawing.Point(363, 3);
+            this.RotationYButton.Location = new System.Drawing.Point(227, 3);
             this.RotationYButton.Name = "RotationYButton";
-            this.RotationYButton.Size = new System.Drawing.Size(84, 23);
+            this.RotationYButton.Size = new System.Drawing.Size(50, 23);
             this.RotationYButton.TabIndex = 6;
-            this.RotationYButton.Text = "Rotation Y";
+            this.RotationYButton.Text = "R(Y)";
             this.RotationYButton.UseVisualStyleBackColor = true;
             this.RotationYButton.Click += new System.EventHandler(this.RotationYButton_Click);
             // 
             // RotationXButton
             // 
-            this.RotationXButton.Location = new System.Drawing.Point(273, 3);
+            this.RotationXButton.Location = new System.Drawing.Point(171, 3);
             this.RotationXButton.Name = "RotationXButton";
-            this.RotationXButton.Size = new System.Drawing.Size(84, 23);
+            this.RotationXButton.Size = new System.Drawing.Size(50, 23);
             this.RotationXButton.TabIndex = 5;
-            this.RotationXButton.Text = "Rotation X";
+            this.RotationXButton.Text = "R(X)";
             this.RotationXButton.UseVisualStyleBackColor = true;
             this.RotationXButton.Click += new System.EventHandler(this.RotationXButton_Click);
             // 
             // TranslationZButton
             // 
-            this.TranslationZButton.Location = new System.Drawing.Point(183, 3);
+            this.TranslationZButton.Location = new System.Drawing.Point(115, 3);
             this.TranslationZButton.Name = "TranslationZButton";
-            this.TranslationZButton.Size = new System.Drawing.Size(84, 23);
+            this.TranslationZButton.Size = new System.Drawing.Size(50, 23);
             this.TranslationZButton.TabIndex = 4;
-            this.TranslationZButton.Text = "Translation Z";
+            this.TranslationZButton.Text = "T(Z)";
             this.TranslationZButton.UseVisualStyleBackColor = true;
             this.TranslationZButton.Click += new System.EventHandler(this.TranslationZButton_Click);
             // 
             // TranslationYButton
             // 
-            this.TranslationYButton.Location = new System.Drawing.Point(93, 3);
+            this.TranslationYButton.Location = new System.Drawing.Point(59, 3);
             this.TranslationYButton.Name = "TranslationYButton";
-            this.TranslationYButton.Size = new System.Drawing.Size(84, 23);
+            this.TranslationYButton.Size = new System.Drawing.Size(50, 23);
             this.TranslationYButton.TabIndex = 3;
-            this.TranslationYButton.Text = "Translation Y";
+            this.TranslationYButton.Text = "T(Y)";
             this.TranslationYButton.UseVisualStyleBackColor = true;
             this.TranslationYButton.Click += new System.EventHandler(this.TranslationYButton_Click);
             // 
@@ -693,6 +695,16 @@
             this.panel1.Size = new System.Drawing.Size(674, 29);
             this.panel1.TabIndex = 22;
             // 
+            // BezierCurveC2Button
+            // 
+            this.BezierCurveC2Button.Location = new System.Drawing.Point(327, 3);
+            this.BezierCurveC2Button.Name = "BezierCurveC2Button";
+            this.BezierCurveC2Button.Size = new System.Drawing.Size(75, 23);
+            this.BezierCurveC2Button.TabIndex = 6;
+            this.BezierCurveC2Button.Text = "B. Curve C2";
+            this.BezierCurveC2Button.UseVisualStyleBackColor = true;
+            this.BezierCurveC2Button.Click += new System.EventHandler(this.BezierCurveC2Button_Click);
+            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -788,6 +800,7 @@
         private System.Windows.Forms.RadioButton DeBoorsPointsRadioButton;
         private System.Windows.Forms.RadioButton ControlPointsRadioButton;
         private System.Windows.Forms.CheckBox PolygonalChainCheckBox;
+        private System.Windows.Forms.Button BezierCurveC2Button;
     }
 }
 

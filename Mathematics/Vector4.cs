@@ -60,6 +60,25 @@ namespace Mathematics
             Z = z;
             W = w;
         }
+
+        public Vector4(Vector4 vector)
+        {
+            PointsArray = new double[4];
+            X = vector.X;
+            Y = vector.Y;
+            Z = vector.Z;
+        }
+
+        public static Vector4 Center(Vector4 vector1, Vector4 vector2)
+        {
+            return new Vector4(vector2.X / 2 + vector1.X / 2, vector2.Y / 2 + vector1.Y / 2, vector2.Z / 2 + vector1.Z / 2);
+        }
+
+        public static Vector4 OneThird(Vector4 vector1, Vector4 vector2)
+        {
+            return new Vector4(vector2.X / 3 + vector1.X * 2 / 3, vector2.Y / 3 + vector1.Y * 2 / 3, vector2.Z / 3 + vector1.Z * 2 / 3);
+        }
+
         public static double Distance3(Vector4 vector1, Vector4 vector2)
         {
             return Math.Sqrt((vector1.X - vector2.X)*(vector1.X - vector2.X) + 
@@ -136,6 +155,11 @@ namespace Mathematics
             X /= sum;
             Z /= sum;
             Y /= sum;
+        }
+
+        public Vector4 Clone()
+        {
+            return new Vector4(X, Y, Z, W);
         }
     }
 }

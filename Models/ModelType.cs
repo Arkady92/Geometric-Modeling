@@ -6,6 +6,7 @@
         Ellipsoid,
         Point,
         BezierCurve,
-        Cursor
+        Cursor,
+        BezierCurveC2
     }
 }

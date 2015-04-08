@@ -99,11 +99,11 @@ namespace Models
             foreach (var parent in Parents)
             {
                 parent.RemoveChild(this);
-                parent.RecreateStructure();
+                parent.RecreateStructure(ParentsIndexes[parent]);
             }
         }
 
-        protected virtual void RecreateStructure() { }
+        protected virtual void RecreateStructure(int number = 0) { }
 
         public void SetParentIndex(ParametricGeometricModel parent, int index)
         {
@@ -111,7 +111,7 @@ namespace Models
                 ParentsIndexes[parent] = index;
         }
 
-        public void UpdateVertex(int number)
+        public virtual void UpdateVertex(int number)
         {
             var position = Children[number].GetCurrentPositionWithoutMineTransformations(this);
             Vertices[number].X = position.X;
@@ -122,8 +122,11 @@ namespace Models
         public virtual void DrawStereoscopy(Graphics graphics, Matrix leftMatrix, Matrix rightMatrix,
             bool additiveColorBlending = false)
         {
-            foreach (var geometricModel in Children)
-                geometricModel.DrawStereoscopy(graphics, leftMatrix, rightMatrix, additiveColorBlending);
+            if ((Type != ModelType.BezierCurveC2 && Type != ModelType.BezierCurve) ||
+                (Type == ModelType.BezierCurveC2 && !Parameters.ControlPointsEnabled) ||
+                (Type == ModelType.BezierCurve && Parameters.ControlPointsEnabled))
+                foreach (var geometricModel in Children)
+                    geometricModel.DrawStereoscopy(graphics, leftMatrix, rightMatrix, additiveColorBlending);
             if (!additiveColorBlending)
             {
                 DrawModel(graphics, leftMatrix, Color.Red);
@@ -164,8 +167,11 @@ namespace Models
 
         public override void Draw(Graphics graphics, Matrix currentProjectionMatrix)
         {
-            foreach (var geometricModel in Children)
-                geometricModel.Draw(graphics, currentProjectionMatrix);
+            if ((Type != ModelType.BezierCurveC2 && Type != ModelType.BezierCurve) || 
+                (Type == ModelType.BezierCurveC2 && !Parameters.ControlPointsEnabled) ||
+                (Type == ModelType.BezierCurve && Parameters.ControlPointsEnabled))
+                foreach (var geometricModel in Children)
+                    geometricModel.Draw(graphics, currentProjectionMatrix);
             DrawModel(graphics, currentProjectionMatrix, DefaultColor);
         }
 

@@ -76,7 +76,7 @@ namespace Models
 
         public new static Vector4 GetCurrentPosition()
         {
-            return Instance.CurrentOperationMatrix*_position;
+            return Instance.CurrentOperationMatrix * _position;
         }
 
         public static void AddHandledModel(GeometricModel model)

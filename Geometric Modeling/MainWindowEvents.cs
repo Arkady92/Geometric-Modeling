@@ -26,33 +26,39 @@ namespace Geometric_Modeling
                 return;
             }
 
-            // Try to find appropriate object on the scene
             foreach (var geometricModel in ObjectsList.Items)
             {
-                if (geometricModel is Models.Cursor) continue;
-                var model = geometricModel as GeometricModel;
-                if (model != null)
-                {
-                    var position = model.GetCurrentPosition();
-                    var screenPosition = (_currentProjectionMatrix * position) * Parameters.WorldPanelSizeFactor;
-                    if (!(Vector4.Distance2(
-                        screenPosition.X, screenPosition.Y,
-                        _mousePositionX - Parameters.WorldPanelWidth / 2,
-                        _mousePositionY - Parameters.WorldPanelHeight / 2)
-                          < Parameters.MouseInaccuracy)) continue;
-
-                    Models.Cursor.Instance.TranslateToPosition(position);
-                    //Models.Cursor.XPosition = position.X;
-                    //Models.Cursor.YPosition = position.Y;
-                    //Models.Cursor.ZPosition = position.Z;
-                    Models.Cursor.Instance.UpdateModel();
-                    DrawWorld();
-                    UpdateTextBoxes();
-                    ObjectsList.SelectedItems.Clear();
-                    ObjectsList.SelectedItem = geometricModel;
-                    break;
-                }
+                if (FindAppropriateObjectOnScene(geometricModel))
+                    return;
             }
+
+            foreach (var geometricModel in _hiddenModels)
+            {
+                if (FindAppropriateObjectOnScene(geometricModel))
+                    return;
+            }
+        }
+
+        private bool FindAppropriateObjectOnScene(object geometricModel)
+        {
+            if (geometricModel is Models.Cursor) return false;
+            var model = geometricModel as GeometricModel;
+            if (model == null) return false;
+            var position = model.GetCurrentPosition();
+            var screenPosition = (_currentProjectionMatrix * position) * Parameters.WorldPanelSizeFactor;
+            if (!(Vector4.Distance2(
+                screenPosition.X, screenPosition.Y,
+                _mousePositionX - Parameters.WorldPanelWidth / 2,
+                _mousePositionY - Parameters.WorldPanelHeight / 2)
+                  < Parameters.MouseInaccuracy)) return false;
+
+            Models.Cursor.Instance.TranslateToPosition(position);
+            Models.Cursor.Instance.UpdateModel();
+            DrawWorld();
+            UpdateTextBoxes();
+            ObjectsList.SelectedItems.Clear();
+            ObjectsList.SelectedItem = geometricModel;
+            return true;
         }
 
         private void WorldPanel_MouseMove(object sender, MouseEventArgs e)
@@ -157,6 +163,7 @@ namespace Geometric_Modeling
         {
             var geometricObject = new Torus(Models.Cursor.GetCurrentPosition());
             _models.Add(geometricObject);
+            _hiddenModels.AddRange(geometricObject.GetChildren());
             ObjectsList.Items.Add(geometricObject);
             _enableAnimations = false;
             DrawWorld();
@@ -178,7 +185,12 @@ namespace Geometric_Modeling
             //geometricObject.TranslateToPosition(Models.Cursor.GetCurrentPosition());
             _models.Add(geometricObject);
             ObjectsList.Items.Add(geometricObject);
-            if (ObjectsList.SelectedItem is BezierCurve)
+            if (ObjectsList.SelectedItem is BezierCurveC2)
+            {
+                ObjectsList.SelectedItems.Add(geometricObject);
+                BezierCurveC2Button_Click(null, null);
+            }
+            else if (ObjectsList.SelectedItem is BezierCurve)
             {
                 ObjectsList.SelectedItems.Add(geometricObject);
                 BezierCurveButton_Click(null, null);
@@ -188,13 +200,58 @@ namespace Geometric_Modeling
 
         private void BezierCurveButton_Click(object sender, EventArgs e)
         {
+            var points = CollectPoints();
+            if (points != null && points.Count > 0)
+            {
+                var bezierCurve = new BezierCurve(points.Distinct(), Models.Cursor.GetCurrentPosition());
+                //bezierCurve.TranslateToPosition(Models.Cursor.GetCurrentPosition());
+                _models.Add(bezierCurve);
+                ObjectsList.Items.Add(bezierCurve);
+                ObjectsList.SelectedItems.Clear();
+                ObjectsList.SelectedItem = bezierCurve;
+                DrawWorld();
+                return;
+            }
+            var geometricObject = new BezierCurve(new Vector4(0, 0, 0));
+            geometricObject.TranslateToPosition(Models.Cursor.GetCurrentPosition());
+            foreach (var child in geometricObject.GetChildren())
+                ObjectsList.Items.Add(child);
+            _models.Add(geometricObject);
+            ObjectsList.Items.Add(geometricObject);
+            DrawWorld();
+        }
+
+        private void BezierCurveC2Button_Click(object sender, EventArgs e)
+        {
+            var points = CollectPoints();
+            if (points != null && points.Count > 0)
+            {
+                var bezierCurve = new BezierCurveC2(points.Distinct(), Models.Cursor.GetCurrentPosition(), _hiddenModels);
+                //bezierCurve.TranslateToPosition(Models.Cursor.GetCurrentPosition());
+                _models.Add(bezierCurve);
+                ObjectsList.Items.Add(bezierCurve);
+                ObjectsList.SelectedItems.Clear();
+                ObjectsList.SelectedItem = bezierCurve;
+                DrawWorld();
+                return;
+            }
+            var geometricObject = new BezierCurveC2(new Vector4(0, 0, 0), _hiddenModels);
+            geometricObject.TranslateToPosition(Models.Cursor.GetCurrentPosition());
+            foreach (var child in geometricObject.GetChildren())
+                ObjectsList.Items.Add(child);
+            _models.Add(geometricObject);
+            ObjectsList.Items.Add(geometricObject);
+            DrawWorld();
+        }
+
+        private List<Point> CollectPoints()
+        {
             var count = ObjectsList.SelectedItems.Count;
             if (count > 0)
             {
                 var curves = new List<BezierCurve>();
                 var tmpPoints = new List<Point>();
                 var points = new List<Point>();
-                //int idx = 0;
                 foreach (var element in ObjectsList.SelectedItems)
                 {
                     if (element is Point)
@@ -218,23 +275,9 @@ namespace Geometric_Modeling
                     }
                 }
                 points.AddRange(tmpPoints);
-                if (points.Count > 0)
-                {
-                    var bezierCurve = new BezierCurve(points.Distinct(), Models.Cursor.GetCurrentPosition());
-                    //bezierCurve.TranslateToPosition(Models.Cursor.GetCurrentPosition());
-                    _models.Add(bezierCurve);
-                    ObjectsList.Items.Add(bezierCurve);
-                    ObjectsList.SelectedItems.Clear();
-                    ObjectsList.SelectedItem = bezierCurve;
-                    DrawWorld();
-                    return;
-                }
+                return points;
             }
-            var geometricObject = new BezierCurve(new Vector4(0, 0, 0));
-            geometricObject.TranslateToPosition(Models.Cursor.GetCurrentPosition());
-            _models.Add(geometricObject);
-            ObjectsList.Items.Add(geometricObject);
-            DrawWorld();
+            return null;
         }
 
         private void TranslationXButton_Click(object sender, EventArgs e)
@@ -358,7 +401,14 @@ namespace Geometric_Modeling
             {
                 var parametricModel = model as ParametricGeometricModel;
                 if (parametricModel.ReturnChildrenOnRemove)
+                {
                     _models.AddRange(parametricModel.GetChildren());
+                    foreach (var child in parametricModel.GetChildren())
+                    {
+                        if (!ObjectsList.Items.Contains(child))
+                            ObjectsList.Items.Add(child);
+                    }
+                }
                 parametricModel.RemoveModel();
             }
             _models.Remove(model);
@@ -436,11 +486,24 @@ namespace Geometric_Modeling
                     {
                         var currentItem = ObjectsList.SelectedItem as GeometricModel;
                         if (currentItem != null && TryHandleModel(currentItem)) break;
+                        bool result = false;
                         foreach (var geometricModel in ObjectsList.Items)
                         {
                             if (geometricModel is Models.Cursor) continue;
                             if (TryHandleModel(geometricModel as GeometricModel))
+                            {
+                                result = true;
                                 break;
+                            }
+                        }
+                        if (!result)
+                        {
+                            foreach (var geometricModel in _hiddenModels)
+                            {
+                                if (geometricModel is Models.Cursor) continue;
+                                if (TryHandleModel(geometricModel))
+                                    break;
+                            }
                         }
                     }
                     else
@@ -453,7 +516,25 @@ namespace Geometric_Modeling
                         if (currentItem != null)
                         {
                             currentItem.RemoveModel();
-                            _models.Add(currentItem);
+                            if (!_models.Contains(currentItem))
+                                _models.Add(currentItem);
+                        }
+                        else
+                        {
+                            foreach (var geometricModel in _hiddenModels)
+                            {
+                                if (FindAppropriateObjectOnScene(geometricModel))
+                                {
+                                    currentItem = geometricModel as ParametricGeometricModel;
+                                    if (currentItem != null)
+                                    {
+                                        currentItem.RemoveModel();
+                                        if (!_models.Contains(currentItem))
+                                            _models.Add(currentItem);
+                                    }
+                                    break;
+                                }
+                            }
                         }
                     }
                     break;
