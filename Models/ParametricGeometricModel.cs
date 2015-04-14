@@ -49,7 +49,7 @@ namespace Models
             return CurrentOperationMatrix * parrentsMatrix * SpacePosition;
         }
 
-        private Vector4 GetCurrentPositionWithoutMineTransformations(ParametricGeometricModel model)
+        public Vector4 GetCurrentPositionWithoutMineTransformations(ParametricGeometricModel model)
         {
             Matrix parrentsMatrix = OperationsMatrices.Identity();
             parrentsMatrix = Parents.Where(parent => parent != model).Aggregate(parrentsMatrix, (current, parent) => current * parent.CurrentOperationMatrix);
@@ -123,8 +123,8 @@ namespace Models
             bool additiveColorBlending = false)
         {
             if ((Type != ModelType.BezierCurveC2 && Type != ModelType.BezierCurve) ||
-                (Type == ModelType.BezierCurveC2 && !Parameters.ControlPointsEnabled) ||
-                (Type == ModelType.BezierCurve && Parameters.ControlPointsEnabled))
+                (Type == ModelType.BezierCurveC2 && !(this as BezierCurveC2).ControlPointsEnabled) ||
+                (Type == ModelType.BezierCurve && (this as BezierCurve).ControlPointsEnabled))
                 foreach (var geometricModel in Children)
                     geometricModel.DrawStereoscopy(graphics, leftMatrix, rightMatrix, additiveColorBlending);
             if (!additiveColorBlending)
@@ -167,9 +167,9 @@ namespace Models
 
         public override void Draw(Graphics graphics, Matrix currentProjectionMatrix)
         {
-            if ((Type != ModelType.BezierCurveC2 && Type != ModelType.BezierCurve) || 
-                (Type == ModelType.BezierCurveC2 && !Parameters.ControlPointsEnabled) ||
-                (Type == ModelType.BezierCurve && Parameters.ControlPointsEnabled))
+            if ((Type != ModelType.BezierCurveC2 && Type != ModelType.BezierCurve) ||
+                (Type == ModelType.BezierCurveC2 && !(this as BezierCurveC2).ControlPointsEnabled) ||
+                (Type == ModelType.BezierCurve && (this as BezierCurve).ControlPointsEnabled))
                 foreach (var geometricModel in Children)
                     geometricModel.Draw(graphics, currentProjectionMatrix);
             DrawModel(graphics, currentProjectionMatrix, DefaultColor);

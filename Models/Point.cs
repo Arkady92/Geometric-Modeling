@@ -6,13 +6,21 @@ namespace Models
     public class Point : ParametricGeometricModel
     {
 
-        public double X { get { return SpacePosition.X; } set { SpacePosition.X = value; } }
-        public double Y { get { return SpacePosition.Y; } set { SpacePosition.Y = value; } }
-        public double Z { get { return SpacePosition.Z; } set { SpacePosition.Z = value; } }
+        public double X { get { return SpacePosition.X; } set { SpacePosition.X = value; RecreateStructure();} }
+        public double Y { get { return SpacePosition.Y; } set { SpacePosition.Y = value; RecreateStructure();} }
+        public double Z { get { return SpacePosition.Z; } set { SpacePosition.Z = value; RecreateStructure();} }
 
         private const double CubeSize = 0.003;
 
         private static int _increment = 1;
+
+        protected override void RecreateStructure(int number = 0)
+        {
+            Vertices.Clear();
+            Edges.Clear();
+            CreateVertices();
+            CreateEdges();
+        }
 
         public Point(Vector4 position)
             : base(ModelType.Point, position)

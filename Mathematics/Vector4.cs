@@ -69,6 +69,11 @@ namespace Mathematics
             Z = vector.Z;
         }
 
+        public static Vector4 Zero()
+        {
+            return new Vector4(0,0,0);
+        }
+
         public static Vector4 Center(Vector4 vector1, Vector4 vector2)
         {
             return new Vector4(vector2.X / 2 + vector1.X / 2, vector2.Y / 2 + vector1.Y / 2, vector2.Z / 2 + vector1.Z / 2);
@@ -140,6 +145,14 @@ namespace Mathematics
             double result = 0;
             for (int i = 0; i < 4; i++)
                 result += vector.PointsArray[i] * vector2.PointsArray[i];
+            return result;
+        }
+
+        public static Vector4 LinearMultiply(Vector4 vector, Vector4 vector2)
+        {
+            Vector4 result = Vector4.Zero();
+            for (int i = 0; i < 4; i++)
+                result.PointsArray[i] += vector.PointsArray[i] * vector2.PointsArray[i];
             return result;
         }
 

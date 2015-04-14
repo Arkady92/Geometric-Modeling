@@ -50,8 +50,6 @@ namespace Geometric_Modeling
             _enableWorldDrawing = false;
             _forceStaticGraphics = false;
             _enableAnimations = false;
-            ControlPointsRadioButton.Checked = Parameters.ControlPointsEnabled;
-            PolygonalChainCheckBox.Checked = Parameters.PolygonalChainEnabled;
             _backBuffer = new Bitmap(WorldPanel.Width, WorldPanel.Height);
             _currentOperation = Operation.None;
             _currentProjectionMatrix = OperationsMatrices.Projection(200);

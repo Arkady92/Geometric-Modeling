@@ -10,9 +10,16 @@ namespace Models
     {
         private static int _increment = 1;
 
+        public bool ChainEnabled = true;
+
+        public BezierCurveC2 C2CurveParent = null;
+
+        public bool ControlPointsEnabled { get; protected set; }
+
         public BezierCurve(Vector4 position, ModelType modelType = ModelType.BezierCurve)
             : base(modelType, position, true)
         {
+            ControlPointsEnabled = true;
             CreateVertices();
             CreateEdges();
         }
@@ -20,6 +27,7 @@ namespace Models
         public BezierCurve(IEnumerable<Point> points, Vector4 position, ModelType modelType = ModelType.BezierCurve)
             : base(modelType, position, true)
         {
+            ControlPointsEnabled = true;
             var enumerable = points as Point[] ?? points.ToArray();
             for (int i = 0; i < enumerable.Count(); i++)
             {
@@ -62,7 +70,7 @@ namespace Models
             Edges.Clear();
             for (int i = 0; i < Children.Count(); i++)
             {
-                var vector = Children[i].GetCurrentPosition();
+                var vector = Children[i].GetCurrentPositionWithoutMineTransformations(this);
                 Vertices.Add(vector);
                 Children[i].SetParentIndex(this, i);
             }
@@ -115,7 +123,7 @@ namespace Models
                 DrawBezierSegment(graphics, currentProjectionMatrix, brush, lastPoints, 2 * division);
             }
 
-            if (Parameters.PolygonalChainEnabled && Parameters.ControlPointsEnabled)
+            if (ChainEnabled && ControlPointsEnabled)
             {
                 foreach (var edge in Edges)
                 {
@@ -243,7 +251,7 @@ namespace Models
                     2 * division);
             }
 
-            if (Parameters.PolygonalChainEnabled && Parameters.ControlPointsEnabled)
+            if (ChainEnabled && ControlPointsEnabled)
             {
                 foreach (var edge in Edges)
                 {
@@ -350,7 +358,7 @@ namespace Models
                 screenX, screenY, 1, 1);
         }
 
-        private static Color CombineColor(Color color1, Color color2)
+        protected static Color CombineColor(Color color1, Color color2)
         {
             var a = color1.A + color2.A;
             if (a > 255) a = 255;
@@ -361,6 +369,25 @@ namespace Models
             var b = color1.B + color2.B;
             if (b > 255) b = 255;
             return Color.FromArgb(a, r, g, b);
+        }
+
+        public virtual void TogglePolygonialChain()
+        {
+            ChainEnabled = !ChainEnabled;
+        }
+
+        public virtual void SetControlPointsEnablability(bool state)
+        {
+            ControlPointsEnabled = state;
+        }
+
+        public override void UpdateVertex(int number)
+        {
+            base.UpdateVertex(number);
+            if (C2CurveParent != null)
+            {
+                C2CurveParent.UpdateDeBoorPoints(number, Children[number] as Point);
+            }
         }
     }
 }

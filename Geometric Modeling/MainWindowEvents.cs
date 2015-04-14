@@ -11,6 +11,7 @@ namespace Geometric_Modeling
 {
     public partial class MainWindow
     {
+        private bool _lockChain;
         #region Mouse events
 
         private void WorldPanel_MouseDown(object sender, MouseEventArgs e)
@@ -25,14 +26,13 @@ namespace Geometric_Modeling
                 _operationInProgress = true;
                 return;
             }
-
-            foreach (var geometricModel in ObjectsList.Items)
+            foreach (var geometricModel in _hiddenModels)
             {
                 if (FindAppropriateObjectOnScene(geometricModel))
                     return;
             }
 
-            foreach (var geometricModel in _hiddenModels)
+            foreach (var geometricModel in ObjectsList.Items)
             {
                 if (FindAppropriateObjectOnScene(geometricModel))
                     return;
@@ -58,6 +58,7 @@ namespace Geometric_Modeling
             UpdateTextBoxes();
             ObjectsList.SelectedItems.Clear();
             ObjectsList.SelectedItem = geometricModel;
+            ObjectsList_MouseClick(model, null);
             return true;
         }
 
@@ -200,11 +201,14 @@ namespace Geometric_Modeling
 
         private void BezierCurveButton_Click(object sender, EventArgs e)
         {
-            var points = CollectPoints();
+            bool polygonChainEnabled;
+            var points = CollectPoints(out polygonChainEnabled);
             if (points != null && points.Count > 0)
             {
                 var bezierCurve = new BezierCurve(points.Distinct(), Models.Cursor.GetCurrentPosition());
                 //bezierCurve.TranslateToPosition(Models.Cursor.GetCurrentPosition());
+                if (bezierCurve.ChainEnabled != polygonChainEnabled)
+                    bezierCurve.TogglePolygonialChain();
                 _models.Add(bezierCurve);
                 ObjectsList.Items.Add(bezierCurve);
                 ObjectsList.SelectedItems.Clear();
@@ -223,11 +227,14 @@ namespace Geometric_Modeling
 
         private void BezierCurveC2Button_Click(object sender, EventArgs e)
         {
-            var points = CollectPoints();
+            bool polygonChainEnabled;
+            var points = CollectPoints(out polygonChainEnabled);
             if (points != null && points.Count > 0)
             {
                 var bezierCurve = new BezierCurveC2(points.Distinct(), Models.Cursor.GetCurrentPosition(), _hiddenModels);
                 //bezierCurve.TranslateToPosition(Models.Cursor.GetCurrentPosition());
+                if(bezierCurve.ChainEnabled != polygonChainEnabled)
+                    bezierCurve.TogglePolygonialChain();
                 _models.Add(bezierCurve);
                 ObjectsList.Items.Add(bezierCurve);
                 ObjectsList.SelectedItems.Clear();
@@ -244,8 +251,9 @@ namespace Geometric_Modeling
             DrawWorld();
         }
 
-        private List<Point> CollectPoints()
+        private List<Point> CollectPoints(out bool polygonChainEnabled)
         {
+            polygonChainEnabled = true;
             var count = ObjectsList.SelectedItems.Count;
             if (count > 0)
             {
@@ -267,6 +275,7 @@ namespace Geometric_Modeling
                 }
                 if (curves.Count > 0)
                 {
+                    polygonChainEnabled = curves[0].ChainEnabled;
                     foreach (var curve in curves)
                     {
                         points.AddRange(curve.GetChildren().OfType<Point>().Select(child => child));
@@ -360,7 +369,11 @@ namespace Geometric_Modeling
         {
             if (Models.Cursor.ModelHandled) return;
             var item = ObjectsList.SelectedItem as GeometricModel;
-            if (item == null) return;
+            if (item == null)
+            {
+                item = sender as GeometricModel;
+                if (item == null) return;
+            }
             DisableAllSettings();
             foreach (var parameterBox in _modelsParameters[(item).Type])
             {
@@ -374,6 +387,14 @@ namespace Geometric_Modeling
             //Models.Cursor.YPosition = position.Y;
             //Models.Cursor.ZPosition = position.Z;
             Models.Cursor.Instance.UpdateModel();
+            _lockChain = true;
+            if (ObjectsList.SelectedItem is BezierCurve)
+            {
+                PolygonalChainCheckBox.Checked = (ObjectsList.SelectedItem as BezierCurve).ChainEnabled;
+                ControlPointsRadioButton.Checked = (ObjectsList.SelectedItem as BezierCurve).ControlPointsEnabled;
+                DeBoorsPointsRadioButton.Checked = !(ObjectsList.SelectedItem as BezierCurve).ControlPointsEnabled;
+            }
+            _lockChain = false;
             DrawWorld();
             UpdateTextBoxes();
         }
@@ -434,7 +455,9 @@ namespace Geometric_Modeling
         {
             var radioButton = sender as RadioButton;
             if (radioButton == null || !radioButton.Checked) return;
-            Parameters.ControlPointsEnabled = true;
+            var item = ObjectsList.SelectedItem as BezierCurve;
+            if (!_lockChain && item != null)
+                item.SetControlPointsEnablability(true);
             DrawWorld();
         }
 
@@ -442,7 +465,9 @@ namespace Geometric_Modeling
         {
             var radioButton = sender as RadioButton;
             if (radioButton == null || !radioButton.Checked) return;
-            Parameters.ControlPointsEnabled = false;
+            var item = ObjectsList.SelectedItem as BezierCurve;
+            if (!_lockChain && item != null)
+                item.SetControlPointsEnablability(false);
             DrawWorld();
         }
 
@@ -450,7 +475,9 @@ namespace Geometric_Modeling
         {
             var checkBox = sender as CheckBox;
             if (checkBox == null) return;
-            Parameters.PolygonalChainEnabled = checkBox.Checked;
+            var item = ObjectsList.SelectedItem as BezierCurve;
+            if (!_lockChain && item != null)
+                item.TogglePolygonialChain();
             DrawWorld();
         }
 
@@ -531,6 +558,8 @@ namespace Geometric_Modeling
                                         currentItem.RemoveModel();
                                         if (!_models.Contains(currentItem))
                                             _models.Add(currentItem);
+                                        if (!ObjectsList.Items.Contains(currentItem))
+                                            ObjectsList.Items.Add(currentItem);
                                     }
                                     break;
                                 }
