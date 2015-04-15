@@ -7,7 +7,7 @@ namespace Models
 {
     public class Ellipsoid : ImplicitGeometricModel
     {
-        private Matrix _diagonalMatrix;
+        public Matrix ModelMatrix { get; private set; }
         private readonly Vector4 _lightPosition;
 
         private static int _increment = 1;
@@ -22,14 +22,14 @@ namespace Models
         public override void Draw(Graphics graphics, Matrix currentProjectionMatrix)
         {
             var inverseMatrix = CurrentOperationMatrix.Invert();
-            var resultMatrix = Matrix.Transpose(inverseMatrix) * _diagonalMatrix * inverseMatrix;
+            var resultMatrix = Matrix.Transpose(inverseMatrix) * ModelMatrix * inverseMatrix;
             DrawFrame(graphics, resultMatrix, 1);
         }
 
         public override void Draw(Graphics graphics, int pixelSize, Matrix currentProjectionMatrix = null)
         {
             var inverseMatrix = CurrentOperationMatrix.Invert();
-            var resultMatrix = Matrix.Transpose(inverseMatrix) * _diagonalMatrix * inverseMatrix;
+            var resultMatrix = Matrix.Transpose(inverseMatrix) * ModelMatrix * inverseMatrix;
             DrawFrame(graphics, resultMatrix, pixelSize);
         }
 
@@ -98,7 +98,7 @@ namespace Models
 
         public override void UpdateModel()
         {
-            _diagonalMatrix = OperationsMatrices.Diagonal(Parameters.XAxisFactor, Parameters.YAxisFactor, Parameters.ZAxisFactor, -1);
+            ModelMatrix = OperationsMatrices.Diagonal(Parameters.XAxisFactor, Parameters.YAxisFactor, Parameters.ZAxisFactor, -1);
         }
 
         public override string ToString()

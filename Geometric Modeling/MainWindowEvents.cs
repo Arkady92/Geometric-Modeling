@@ -481,6 +481,17 @@ namespace Geometric_Modeling
             DrawWorld();
         }
 
+
+        private void SaveButton_Click(object sender, System.EventArgs e)
+        {
+            SaveScene();
+        }
+
+        private void LoadButton_Click(object sender, System.EventArgs e)
+        {
+            LoadScene();
+        }
+
         #endregion
 
         #region key evenets
@@ -490,10 +501,10 @@ namespace Geometric_Modeling
             switch (e.KeyCode)
             {
                 case Keys.W:
-                    Models.Cursor.YPosition = Models.Cursor.YPosition - Parameters.CursorMoveValue;
+                    Models.Cursor.YPosition = Models.Cursor.YPosition + Parameters.CursorMoveValue;
                     break;
                 case Keys.S:
-                    Models.Cursor.YPosition = Models.Cursor.YPosition + Parameters.CursorMoveValue;
+                    Models.Cursor.YPosition = Models.Cursor.YPosition - Parameters.CursorMoveValue;
                     break;
                 case Keys.A:
                     Models.Cursor.XPosition = Models.Cursor.XPosition - Parameters.CursorMoveValue;

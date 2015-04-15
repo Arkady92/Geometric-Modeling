@@ -105,7 +105,8 @@ namespace Models
                 knots[knots.Length - 2] = 1;
                 knots[knots.Length - 1] = 1;
                 var divider = (vertices.Count - degree) * knotsDivision / division;
-                for (double t = (degree - 2) * knotsDivision; t <= (vertices.Count - degree + 1) * knotsDivision; t += divider)
+                for (double t = ((degree > 2) ? 1 : 0) * knotsDivision; t <= ((degree > 2) ? vertices.Count - 2 : 1) * knotsDivision; 
+                    t += divider)
                 {
                     var point = Vector4.Zero();
                     for (int i = 0; i < vertices.Count; i++)
@@ -140,37 +141,37 @@ namespace Models
 
             if (!ControlPointsEnabled && vertices.Count > 1)
             {
-                var brush = new SolidBrush(color);
                 var points = new System.Drawing.Point[vertices.Count];
                 int division = 0;
                 for (int i = 0; i < vertices.Count; i++)
                 {
                     points[i] = new System.Drawing.Point((int)(finalVertices[i].X * Parameters.WorldPanelSizeFactor),
                         (int)(finalVertices[i].Y * Parameters.WorldPanelSizeFactor));
-                    if (i < vertices.Count - 1)
+                    if (i > 0)
                         division +=
-                            (int)Math.Sqrt((points[i].X - points[i + 1].X) * (points[i].X - points[i + 1].X) +
-                            (points[i].Y - points[i + 1].Y) * (points[i].Y - points[i + 1].Y));
+                            (int)Math.Sqrt((points[i].X - points[i - 1].X) * (points[i].X - points[i - 1].X) +
+                            (points[i].Y - points[i - 1].Y) * (points[i].Y - points[i - 1].Y));
                 }
-                var count = vertices.Count;
+                var degree = vertices.Count - 1;
                 if (vertices.Count > 4)
-                    count = 4;
-                var knotsDivider = vertices.Count + count - 5;
+                    degree = 3;
+                var knotsDivider = Math.Abs(vertices.Count + degree - 4);
                 var knotsDivision = 1.0 / knotsDivider;
-                var knots = new double[knotsDivider + 5];
+                var knots = new double[vertices.Count + degree + 1];
                 knots[0] = 0;
                 knots[1] = 0;
-                for (int i = 0; i < knots.Length - 2; i++)
-                    knots[i + 2] = i * knotsDivision;
+                for (int i = 2; i < knots.Length - 2; i++)
+                    knots[i] = (i - 2) * knotsDivision;
                 knots[knots.Length - 2] = 1;
                 knots[knots.Length - 1] = 1;
-                var divider = (vertices.Count - count + 1) * knotsDivision / division / 2;
-                for (double t = (count - 3) * knotsDivision; t < (vertices.Count - count + 2) * knotsDivision; t += divider)
+                var divider = (vertices.Count - degree) * knotsDivision / division;
+                for (double t = ((degree > 2) ? 1 : 0) * knotsDivision; t <= ((degree > 2) ? vertices.Count - 2 : 1) * knotsDivision;
+                    t += divider)
                 {
                     var point = Vector4.Zero();
                     for (int i = 0; i < vertices.Count; i++)
                     {
-                        point = point + vertices[i] * CalculateNSplineValues(knots, i + 1, count - 1, t);
+                        point = point + vertices[i] * CalculateNSplineValues(knots, i + 1, degree, t);
                     }
                     point = currentProjectionMatrix * point;
                     int width = Parameters.WorldPanelWidth / 2;
@@ -240,7 +241,7 @@ namespace Models
             _bezierPoints.Clear();
             if (points.Count == 0) return;
             if (points.Count < 4)
-                points.ForEach((item) => _bezierPoints.Add(new Point(item.GetCurrentPosition())));
+                points.ForEach(item => _bezierPoints.Add(new Point(item.GetCurrentPosition())));
             else
             {
                 //_bezierPoints.Add(new Point(points[0].GetCurrentPosition()));

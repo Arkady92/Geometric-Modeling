@@ -49,7 +49,7 @@ namespace Mathematics
         private int[] pi;
         private double detOfP = 1;
 
-        public Matrix() {}
+        public Matrix() { }
 
         public Matrix(int iRows, int iCols)         // Matrix Class constructor
         {
@@ -272,7 +272,8 @@ namespace Mathematics
             for (int i = 0; i < rows; i++)
             {
                 for (int j = 0; j < cols; j++) s += String.Format("{0,5:0.00}", mat[i, j]) + " ";
-                s += "\r\n";
+                if (i < rows - 1)
+                    s += "\r\n";
             }
             return s;
         }
@@ -583,7 +584,7 @@ namespace Mathematics
         { return Matrix.Multiply(n, m); }
     }
 
-//  The class for exceptions
+    //  The class for exceptions
 
     public class MException : Exception
     {

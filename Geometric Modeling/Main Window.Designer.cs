@@ -30,6 +30,7 @@
         {
             this.ObjectsList = new System.Windows.Forms.ListBox();
             this.ObjectsPanel = new System.Windows.Forms.Panel();
+            this.BezierCurveC2Button = new System.Windows.Forms.Button();
             this.BezierCurveButton = new System.Windows.Forms.Button();
             this.PointButton = new System.Windows.Forms.Button();
             this.EllipsoidButton = new System.Windows.Forms.Button();
@@ -51,6 +52,8 @@
             this.GridResolutionXBox = new System.Windows.Forms.TextBox();
             this.TranslationXButton = new System.Windows.Forms.Button();
             this.OperationsPanel = new System.Windows.Forms.Panel();
+            this.SaveButton = new System.Windows.Forms.Button();
+            this.LoadButton = new System.Windows.Forms.Button();
             this.ClearButton = new System.Windows.Forms.Button();
             this.SelectionButton = new System.Windows.Forms.Button();
             this.ScaleButton = new System.Windows.Forms.Button();
@@ -82,7 +85,6 @@
             this.CursorScreenYLabel = new System.Windows.Forms.Label();
             this.CursorScreenYBox = new System.Windows.Forms.TextBox();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.BezierCurveC2Button = new System.Windows.Forms.Button();
             this.ObjectsPanel.SuspendLayout();
             this.OptionsPanel.SuspendLayout();
             this.OperationsPanel.SuspendLayout();
@@ -119,6 +121,16 @@
             this.ObjectsPanel.Name = "ObjectsPanel";
             this.ObjectsPanel.Size = new System.Drawing.Size(840, 31);
             this.ObjectsPanel.TabIndex = 1;
+            // 
+            // BezierCurveC2Button
+            // 
+            this.BezierCurveC2Button.Location = new System.Drawing.Point(327, 3);
+            this.BezierCurveC2Button.Name = "BezierCurveC2Button";
+            this.BezierCurveC2Button.Size = new System.Drawing.Size(75, 23);
+            this.BezierCurveC2Button.TabIndex = 6;
+            this.BezierCurveC2Button.Text = "B. Curve C2";
+            this.BezierCurveC2Button.UseVisualStyleBackColor = true;
+            this.BezierCurveC2Button.Click += new System.EventHandler(this.BezierCurveC2Button_Click);
             // 
             // BezierCurveButton
             // 
@@ -339,6 +351,8 @@
             this.OperationsPanel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.OperationsPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.OperationsPanel.Controls.Add(this.SaveButton);
+            this.OperationsPanel.Controls.Add(this.LoadButton);
             this.OperationsPanel.Controls.Add(this.ClearButton);
             this.OperationsPanel.Controls.Add(this.SelectionButton);
             this.OperationsPanel.Controls.Add(this.ScaleButton);
@@ -353,12 +367,32 @@
             this.OperationsPanel.Size = new System.Drawing.Size(840, 31);
             this.OperationsPanel.TabIndex = 4;
             // 
+            // SaveButton
+            // 
+            this.SaveButton.Location = new System.Drawing.Point(617, 3);
+            this.SaveButton.Name = "SaveButton";
+            this.SaveButton.Size = new System.Drawing.Size(50, 23);
+            this.SaveButton.TabIndex = 9;
+            this.SaveButton.Text = "Save";
+            this.SaveButton.UseVisualStyleBackColor = true;
+            this.SaveButton.Click += new System.EventHandler(this.SaveButton_Click);
+            // 
+            // LoadButton
+            // 
+            this.LoadButton.Location = new System.Drawing.Point(673, 3);
+            this.LoadButton.Name = "LoadButton";
+            this.LoadButton.Size = new System.Drawing.Size(50, 23);
+            this.LoadButton.TabIndex = 10;
+            this.LoadButton.Text = "Load";
+            this.LoadButton.UseVisualStyleBackColor = true;
+            this.LoadButton.Click += new System.EventHandler(this.LoadButton_Click);
+            // 
             // ClearButton
             // 
             this.ClearButton.Location = new System.Drawing.Point(785, 3);
             this.ClearButton.Name = "ClearButton";
             this.ClearButton.Size = new System.Drawing.Size(50, 23);
-            this.ClearButton.TabIndex = 10;
+            this.ClearButton.TabIndex = 12;
             this.ClearButton.Text = "Clear";
             this.ClearButton.UseVisualStyleBackColor = true;
             this.ClearButton.Click += new System.EventHandler(this.ClearButton_Click);
@@ -368,7 +402,7 @@
             this.SelectionButton.Location = new System.Drawing.Point(729, 3);
             this.SelectionButton.Name = "SelectionButton";
             this.SelectionButton.Size = new System.Drawing.Size(50, 23);
-            this.SelectionButton.TabIndex = 9;
+            this.SelectionButton.TabIndex = 11;
             this.SelectionButton.Text = "Select";
             this.SelectionButton.UseVisualStyleBackColor = true;
             this.SelectionButton.Click += new System.EventHandler(this.SelectionButton_Click);
@@ -695,16 +729,6 @@
             this.panel1.Size = new System.Drawing.Size(674, 29);
             this.panel1.TabIndex = 22;
             // 
-            // BezierCurveC2Button
-            // 
-            this.BezierCurveC2Button.Location = new System.Drawing.Point(327, 3);
-            this.BezierCurveC2Button.Name = "BezierCurveC2Button";
-            this.BezierCurveC2Button.Size = new System.Drawing.Size(75, 23);
-            this.BezierCurveC2Button.TabIndex = 6;
-            this.BezierCurveC2Button.Text = "B. Curve C2";
-            this.BezierCurveC2Button.UseVisualStyleBackColor = true;
-            this.BezierCurveC2Button.Click += new System.EventHandler(this.BezierCurveC2Button_Click);
-            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -801,6 +825,8 @@
         private System.Windows.Forms.RadioButton ControlPointsRadioButton;
         private System.Windows.Forms.CheckBox PolygonalChainCheckBox;
         private System.Windows.Forms.Button BezierCurveC2Button;
+        private System.Windows.Forms.Button LoadButton;
+        private System.Windows.Forms.Button SaveButton;
     }
 }
 

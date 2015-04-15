@@ -4,6 +4,7 @@ using Mathematics;
 
 namespace Models
 {
+    [Serializable]
     public abstract class GeometricModel
     {
         public ModelType Type;

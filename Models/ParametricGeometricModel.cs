@@ -11,7 +11,7 @@ namespace Models
 
         protected List<Edge> Edges;
 
-        protected Color DefaultColor;
+        public Color DefaultColor;
 
         protected List<ParametricGeometricModel> Children;
 
