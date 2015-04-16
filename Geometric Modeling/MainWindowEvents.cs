@@ -407,10 +407,10 @@ namespace Geometric_Modeling
 
         private void RemoveSelectedObject()
         {
-            var item = ObjectsList.SelectedItem;
-            if (item != null)
+            var item = ObjectsList.SelectedItem as GeometricModel;
+            if (item != null && item.IsRemovable)
             {
-                RemovedObject(item as GeometricModel);
+                RemovedObject(item);
             }
             DisableAllSettings();
             DrawWorld();
@@ -551,7 +551,7 @@ namespace Geometric_Modeling
                     if (!Models.Cursor.ModelHandled)
                     {
                         var currentItem = ObjectsList.SelectedItem as ParametricGeometricModel;
-                        if (currentItem != null)
+                        if (currentItem != null && currentItem.IsRemovable)
                         {
                             currentItem.RemoveModel();
                             if (!_models.Contains(currentItem))
@@ -564,7 +564,7 @@ namespace Geometric_Modeling
                                 if (FindAppropriateObjectOnScene(geometricModel))
                                 {
                                     currentItem = geometricModel as ParametricGeometricModel;
-                                    if (currentItem != null)
+                                    if (currentItem != null && currentItem.IsRemovable)
                                     {
                                         currentItem.RemoveModel();
                                         if (!_models.Contains(currentItem))

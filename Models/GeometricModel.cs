@@ -7,6 +7,11 @@ namespace Models
     [Serializable]
     public abstract class GeometricModel
     {
+        public bool IsRemovable = true;
+
+        public static int Increment;
+        public int Id;
+
         public ModelType Type;
 
         protected string CustomName;
@@ -84,6 +89,7 @@ namespace Models
 
         protected GeometricModel(ModelType type, Vector4 position)
         {
+            Id = Increment++;
             Type = type;
             SpacePosition = position;
             CurrentOperationMatrix = OperationsMatrices.Identity();
@@ -94,5 +100,6 @@ namespace Models
 
         public abstract void UpdateModel();
         //public abstract void UpdatePositions(Vector4 shift);
+
     }
 }

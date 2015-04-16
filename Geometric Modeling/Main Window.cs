@@ -1,4 +1,5 @@
 ﻿using System.Drawing;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -71,6 +72,7 @@ namespace Geometric_Modeling
                         stringBuilder.AppendLine("Torus");
                         if (torus != null)
                         {
+                            stringBuilder.AppendLine("Id=" + torus.Id);
                             stringBuilder.AppendLine("Name=" + torus);
                             stringBuilder.AppendLine("R=" + torus.BigRadius);
                             stringBuilder.AppendLine("r=" + torus.SmallRadius);
@@ -87,6 +89,7 @@ namespace Geometric_Modeling
                         stringBuilder.AppendLine("Point");
                         if (point != null)
                         {
+                            stringBuilder.AppendLine("Id=" + point.Id);
                             stringBuilder.AppendLine("Name=" + point);
                             stringBuilder.AppendLine("X=" + point.GetBasePosition().X);
                             stringBuilder.AppendLine("Y=" + point.GetBasePosition().Y);
@@ -101,6 +104,7 @@ namespace Geometric_Modeling
                         stringBuilder.AppendLine("Ellipsoid");
                         if (ellipsoid != null)
                         {
+                            stringBuilder.AppendLine("Id=" + ellipsoid.Id);
                             stringBuilder.AppendLine("Name=" + ellipsoid);
                             stringBuilder.AppendLine("X=" + ellipsoid.GetBasePosition().X);
                             stringBuilder.AppendLine("Y=" + ellipsoid.GetBasePosition().Y);
@@ -116,6 +120,7 @@ namespace Geometric_Modeling
                         stringBuilder.AppendLine("BezierCurveC0");
                         if (bezierCurve != null)
                         {
+                            stringBuilder.AppendLine("Id=" + bezierCurve.Id);
                             stringBuilder.AppendLine("Name=" + bezierCurve);
                             stringBuilder.AppendLine("X=" + bezierCurve.GetBasePosition().X);
                             stringBuilder.AppendLine("Y=" + bezierCurve.GetBasePosition().Y);
@@ -124,10 +129,7 @@ namespace Geometric_Modeling
                             stringBuilder.AppendLine("Color=" + bezierCurve.DefaultColor.Name);
                             foreach (var child in bezierCurve.GetChildren().Cast<Models.Point>())
                             {
-                                stringBuilder.AppendLine("CP");
-                                stringBuilder.AppendLine("X=" + child.X);
-                                stringBuilder.AppendLine("Y=" + child.Y);
-                                stringBuilder.AppendLine("Z=" + child.Z);                                
+                                stringBuilder.AppendLine("CP=" + child.Id);
                             }
                             stringBuilder.AppendLine();
                         }
@@ -137,6 +139,7 @@ namespace Geometric_Modeling
                         stringBuilder.AppendLine("BezierCurveC2");
                         if (bezierCurveC2 != null)
                         {
+                            stringBuilder.AppendLine("Id=" + bezierCurveC2.Id);
                             stringBuilder.AppendLine("Name=" + bezierCurveC2);
                             stringBuilder.AppendLine("X=" + bezierCurveC2.GetBasePosition().X);
                             stringBuilder.AppendLine("Y=" + bezierCurveC2.GetBasePosition().Y);
@@ -145,10 +148,7 @@ namespace Geometric_Modeling
                             stringBuilder.AppendLine("Color=" + bezierCurveC2.DefaultColor.Name);
                             foreach (var child in bezierCurveC2.GetChildren().Cast<Models.Point>())
                             {
-                                stringBuilder.AppendLine("CP");
-                                stringBuilder.AppendLine("X=" + child.X);
-                                stringBuilder.AppendLine("Y=" + child.Y);
-                                stringBuilder.AppendLine("Z=" + child.Z);
+                                stringBuilder.AppendLine("CP=" + child.Id);
                             }
                             stringBuilder.AppendLine();
                         }
@@ -158,16 +158,34 @@ namespace Geometric_Modeling
             stringBuilder.AppendLine("Selected");
             foreach (var item in ObjectsList.SelectedItems.Cast<GeometricModel>())
             {
-                stringBuilder.AppendLine(item.ToString());
+                stringBuilder.AppendLine(item.GetHashCode().ToString(CultureInfo.InvariantCulture));
             }
-            var file = new StreamWriter("Scene.mg1");
+            var file = new StreamWriter(Parameters.DefaultFilePath);
             file.Write(stringBuilder.ToString());
             file.Close();
         }
 
         private void LoadScene()
         {
-
+            var file = new StreamReader(Parameters.DefaultFilePath);
+            string line;
+            while ((line = file.ReadLine()) != null)
+            {
+                switch (line)
+                {
+                    case "Torus":
+                        break;
+                    case "Point":
+                        break;
+                    case "Ellipsoid":
+                        break;
+                    case "BezierCurveC0":
+                        break;
+                    case "BezierCurveC2":
+                        break;
+                }
+            }
+            file.Close();
         }
         #endregion
     }

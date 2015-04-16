@@ -16,5 +16,6 @@ namespace Mathematics
         public static float WorldPanelSizeFactor;
         public static double MouseInaccuracy = 5;
         public static double CursorMoveValue = 0.01;
+        public const string DefaultFilePath = "Scene.mg1";
     }
 }

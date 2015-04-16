@@ -266,6 +266,10 @@ namespace Models
                 //_bezierPoints.Add(new Point(points[points.Count - 1].GetCurrentPosition()));
                 //_bezierPoints.Add(new Point(points[points.Count - 1].GetCurrentPosition()));
             }
+            foreach (var bezierPoint in _bezierPoints)
+            {
+                bezierPoint.IsRemovable = false;
+            }
             _hiddenModels.AddRange(_bezierPoints);
             _bezierCurve = new BezierCurve(_bezierPoints, SpacePosition)
             {

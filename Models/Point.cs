@@ -5,10 +5,36 @@ namespace Models
 {
     public class Point : ParametricGeometricModel
     {
-
-        public double X { get { return SpacePosition.X; } set { SpacePosition.X = value; RecreateStructure();} }
-        public double Y { get { return SpacePosition.Y; } set { SpacePosition.Y = value; RecreateStructure();} }
-        public double Z { get { return SpacePosition.Z; } set { SpacePosition.Z = value; RecreateStructure();} }
+        public double X
+        {
+            get { return SpacePosition.X; }
+            set
+            {
+                SpacePosition.X = value;
+                RecreateStructure();
+                PropagateTransformation();
+            }
+        }
+        public double Y
+        {
+            get { return SpacePosition.Y; }
+            set
+            {
+                SpacePosition.Y = value;
+                RecreateStructure();
+                PropagateTransformation();
+            }
+        }
+        public double Z
+        {
+            get { return SpacePosition.Z; }
+            set
+            {
+                SpacePosition.Z = value; 
+                RecreateStructure();
+                PropagateTransformation();
+            }
+        }
 
         private const double CubeSize = 0.003;
 
