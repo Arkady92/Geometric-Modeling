@@ -30,6 +30,7 @@
         {
             this.ObjectsList = new System.Windows.Forms.ListBox();
             this.ObjectsPanel = new System.Windows.Forms.Panel();
+            this.InterpolationCurveButton = new System.Windows.Forms.Button();
             this.BezierCurveC2Button = new System.Windows.Forms.Button();
             this.BezierCurveButton = new System.Windows.Forms.Button();
             this.PointButton = new System.Windows.Forms.Button();
@@ -69,6 +70,8 @@
             this.WorldPanel = new System.Windows.Forms.PictureBox();
             this.EffectsLabel = new System.Windows.Forms.Label();
             this.EffectsPanel = new System.Windows.Forms.Panel();
+            this.ChordParametrizationRadioButton = new System.Windows.Forms.RadioButton();
+            this.NormalParametrizationRadioButton = new System.Windows.Forms.RadioButton();
             this.PolygonalChainCheckBox = new System.Windows.Forms.CheckBox();
             this.DeBoorsPointsRadioButton = new System.Windows.Forms.RadioButton();
             this.ControlPointsRadioButton = new System.Windows.Forms.RadioButton();
@@ -112,6 +115,7 @@
             this.ObjectsPanel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.ObjectsPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.ObjectsPanel.Controls.Add(this.InterpolationCurveButton);
             this.ObjectsPanel.Controls.Add(this.BezierCurveC2Button);
             this.ObjectsPanel.Controls.Add(this.BezierCurveButton);
             this.ObjectsPanel.Controls.Add(this.PointButton);
@@ -122,11 +126,21 @@
             this.ObjectsPanel.Size = new System.Drawing.Size(840, 31);
             this.ObjectsPanel.TabIndex = 1;
             // 
+            // InterpolationCurveButton
+            // 
+            this.InterpolationCurveButton.Location = new System.Drawing.Point(423, 3);
+            this.InterpolationCurveButton.Name = "InterpolationCurveButton";
+            this.InterpolationCurveButton.Size = new System.Drawing.Size(78, 23);
+            this.InterpolationCurveButton.TabIndex = 7;
+            this.InterpolationCurveButton.Text = "Interp. Curve";
+            this.InterpolationCurveButton.UseVisualStyleBackColor = true;
+            this.InterpolationCurveButton.Click += new System.EventHandler(this.InterpolationCurveButton_Click);
+            // 
             // BezierCurveC2Button
             // 
-            this.BezierCurveC2Button.Location = new System.Drawing.Point(327, 3);
+            this.BezierCurveC2Button.Location = new System.Drawing.Point(339, 3);
             this.BezierCurveC2Button.Name = "BezierCurveC2Button";
-            this.BezierCurveC2Button.Size = new System.Drawing.Size(75, 23);
+            this.BezierCurveC2Button.Size = new System.Drawing.Size(78, 23);
             this.BezierCurveC2Button.TabIndex = 6;
             this.BezierCurveC2Button.Text = "B. Curve C2";
             this.BezierCurveC2Button.UseVisualStyleBackColor = true;
@@ -134,9 +148,9 @@
             // 
             // BezierCurveButton
             // 
-            this.BezierCurveButton.Location = new System.Drawing.Point(246, 3);
+            this.BezierCurveButton.Location = new System.Drawing.Point(255, 3);
             this.BezierCurveButton.Name = "BezierCurveButton";
-            this.BezierCurveButton.Size = new System.Drawing.Size(75, 23);
+            this.BezierCurveButton.Size = new System.Drawing.Size(78, 23);
             this.BezierCurveButton.TabIndex = 5;
             this.BezierCurveButton.Text = "B. Curve C0";
             this.BezierCurveButton.UseVisualStyleBackColor = true;
@@ -144,9 +158,9 @@
             // 
             // PointButton
             // 
-            this.PointButton.Location = new System.Drawing.Point(165, 3);
+            this.PointButton.Location = new System.Drawing.Point(171, 3);
             this.PointButton.Name = "PointButton";
-            this.PointButton.Size = new System.Drawing.Size(75, 23);
+            this.PointButton.Size = new System.Drawing.Size(78, 23);
             this.PointButton.TabIndex = 4;
             this.PointButton.Text = "Point";
             this.PointButton.UseVisualStyleBackColor = true;
@@ -154,9 +168,9 @@
             // 
             // EllipsoidButton
             // 
-            this.EllipsoidButton.Location = new System.Drawing.Point(84, 3);
+            this.EllipsoidButton.Location = new System.Drawing.Point(87, 3);
             this.EllipsoidButton.Name = "EllipsoidButton";
-            this.EllipsoidButton.Size = new System.Drawing.Size(75, 23);
+            this.EllipsoidButton.Size = new System.Drawing.Size(78, 23);
             this.EllipsoidButton.TabIndex = 3;
             this.EllipsoidButton.Text = "Ellipsoid";
             this.EllipsoidButton.UseVisualStyleBackColor = true;
@@ -166,7 +180,7 @@
             // 
             this.TorusButton.Location = new System.Drawing.Point(3, 3);
             this.TorusButton.Name = "TorusButton";
-            this.TorusButton.Size = new System.Drawing.Size(75, 23);
+            this.TorusButton.Size = new System.Drawing.Size(78, 23);
             this.TorusButton.TabIndex = 2;
             this.TorusButton.Text = "Torus";
             this.TorusButton.UseVisualStyleBackColor = true;
@@ -176,7 +190,9 @@
             // 
             this.OptionsPanel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.OptionsPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.OptionsPanel.Controls.Add(this.ChordParametrizationRadioButton);
             this.OptionsPanel.Controls.Add(this.PixelMaxSizeLabel);
+            this.OptionsPanel.Controls.Add(this.NormalParametrizationRadioButton);
             this.OptionsPanel.Controls.Add(this.PixelMaxSizeBox);
             this.OptionsPanel.Controls.Add(this.ZAxisFactorLabel);
             this.OptionsPanel.Controls.Add(this.ZAxisFactorBox);
@@ -550,6 +566,32 @@
             this.EffectsPanel.Size = new System.Drawing.Size(150, 144);
             this.EffectsPanel.TabIndex = 10;
             // 
+            // ChordParametrizationRadioButton
+            // 
+            this.ChordParametrizationRadioButton.AutoSize = true;
+            this.ChordParametrizationRadioButton.Checked = true;
+            this.ChordParametrizationRadioButton.Location = new System.Drawing.Point(10, 32);
+            this.ChordParametrizationRadioButton.Name = "ChordParametrizationRadioButton";
+            this.ChordParametrizationRadioButton.Size = new System.Drawing.Size(128, 17);
+            this.ChordParametrizationRadioButton.TabIndex = 6;
+            this.ChordParametrizationRadioButton.TabStop = true;
+            this.ChordParametrizationRadioButton.Text = "Chord Parametrization";
+            this.ChordParametrizationRadioButton.UseVisualStyleBackColor = true;
+            this.ChordParametrizationRadioButton.Visible = false;
+            this.ChordParametrizationRadioButton.CheckedChanged += new System.EventHandler(this.ChordParametrizationRadioButton_CheckedChanged);
+            // 
+            // NormalParametrizationRadioButton
+            // 
+            this.NormalParametrizationRadioButton.AutoSize = true;
+            this.NormalParametrizationRadioButton.Location = new System.Drawing.Point(10, 9);
+            this.NormalParametrizationRadioButton.Name = "NormalParametrizationRadioButton";
+            this.NormalParametrizationRadioButton.Size = new System.Drawing.Size(133, 17);
+            this.NormalParametrizationRadioButton.TabIndex = 5;
+            this.NormalParametrizationRadioButton.Text = "Normal Parametrization";
+            this.NormalParametrizationRadioButton.UseVisualStyleBackColor = true;
+            this.NormalParametrizationRadioButton.Visible = false;
+            this.NormalParametrizationRadioButton.CheckedChanged += new System.EventHandler(this.NormalParametrizationRadioButton_CheckedChanged);
+            // 
             // PolygonalChainCheckBox
             // 
             this.PolygonalChainCheckBox.AutoSize = true;
@@ -579,12 +621,10 @@
             // ControlPointsRadioButton
             // 
             this.ControlPointsRadioButton.AutoSize = true;
-            this.ControlPointsRadioButton.Checked = true;
             this.ControlPointsRadioButton.Location = new System.Drawing.Point(10, 73);
             this.ControlPointsRadioButton.Name = "ControlPointsRadioButton";
             this.ControlPointsRadioButton.Size = new System.Drawing.Size(90, 17);
             this.ControlPointsRadioButton.TabIndex = 3;
-            this.ControlPointsRadioButton.TabStop = true;
             this.ControlPointsRadioButton.Text = "Control Points";
             this.ControlPointsRadioButton.UseVisualStyleBackColor = true;
             this.ControlPointsRadioButton.Visible = false;
@@ -827,6 +867,9 @@
         private System.Windows.Forms.Button BezierCurveC2Button;
         private System.Windows.Forms.Button LoadButton;
         private System.Windows.Forms.Button SaveButton;
+        private System.Windows.Forms.Button InterpolationCurveButton;
+        private System.Windows.Forms.RadioButton ChordParametrizationRadioButton;
+        private System.Windows.Forms.RadioButton NormalParametrizationRadioButton;
     }
 }
 

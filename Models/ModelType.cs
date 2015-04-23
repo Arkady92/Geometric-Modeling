@@ -7,6 +7,7 @@
         Point,
         BezierCurve,
         Cursor,
-        BezierCurveC2
+        BezierCurveC2,
+        InterpolationCurve
     }
 }

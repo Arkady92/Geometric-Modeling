@@ -11,7 +11,7 @@ namespace Geometric_Modeling
 {
     public partial class MainWindow
     {
-        private bool _lockChain;
+        private bool _lockModification;
         #region Mouse events
 
         private void WorldPanel_MouseDown(object sender, MouseEventArgs e)
@@ -83,11 +83,11 @@ namespace Geometric_Modeling
                 case Operation.TranslationY:
                     if (ObjectsList.SelectedItem == null)
                         foreach (var geometricModel in _models)
-                            geometricModel.Translate(0, deltaY, 0);
+                            geometricModel.Translate(0, -deltaY, 0);
                     else
                     {
                         var model = ObjectsList.SelectedItem as GeometricModel;
-                        if (model != null) model.Translate(0, deltaY, 0);
+                        if (model != null) model.Translate(0, -deltaY, 0);
                     }
                     DrawWorld();
                     break;
@@ -191,24 +191,34 @@ namespace Geometric_Modeling
                 ObjectsList.SelectedItems.Add(geometricObject);
                 BezierCurveC2Button_Click(null, null);
             }
+            else if (ObjectsList.SelectedItem is InterpolationCurve)
+            {
+                ObjectsList.SelectedItems.Add(geometricObject);
+                InterpolationCurveButton_Click(null, null);
+            }
             else if (ObjectsList.SelectedItem is BezierCurve)
             {
                 ObjectsList.SelectedItems.Add(geometricObject);
                 BezierCurveButton_Click(null, null);
             }
-            DrawWorld();
+            else
+                DrawWorld();
         }
 
         private void BezierCurveButton_Click(object sender, EventArgs e)
         {
             bool polygonChainEnabled;
-            var points = CollectPoints(out polygonChainEnabled);
+            bool controlPointsEnabled;
+            var points = CollectPoints(out polygonChainEnabled, out controlPointsEnabled);
             if (points != null && points.Count > 0)
             {
-                var bezierCurve = new BezierCurve(points.Distinct(), Models.Cursor.GetCurrentPosition());
-                //bezierCurve.TranslateToPosition(Models.Cursor.GetCurrentPosition());
-                if (bezierCurve.ChainEnabled != polygonChainEnabled)
-                    bezierCurve.TogglePolygonialChain();
+                var bezierCurve = new BezierCurve(points.Distinct(), Models.Cursor.GetCurrentPosition(),
+                    polygonialChainEnabled: polygonChainEnabled);
+                bezierCurve.ControlPointsEnabled = true;
+                _lockModification = true;
+                PolygonalChainCheckBox.Checked = polygonChainEnabled;
+                ControlPointsRadioButton.Checked = true;
+                _lockModification = false;
                 _models.Add(bezierCurve);
                 ObjectsList.Items.Add(bezierCurve);
                 ObjectsList.SelectedItems.Clear();
@@ -228,13 +238,16 @@ namespace Geometric_Modeling
         private void BezierCurveC2Button_Click(object sender, EventArgs e)
         {
             bool polygonChainEnabled;
-            var points = CollectPoints(out polygonChainEnabled);
+            bool controlPointsEnabled;
+            var points = CollectPoints(out polygonChainEnabled, out controlPointsEnabled);
             if (points != null && points.Count > 0)
             {
-                var bezierCurve = new BezierCurveC2(points.Distinct(), Models.Cursor.GetCurrentPosition(), _hiddenModels);
-                //bezierCurve.TranslateToPosition(Models.Cursor.GetCurrentPosition());
-                if(bezierCurve.ChainEnabled != polygonChainEnabled)
-                    bezierCurve.TogglePolygonialChain();
+                var bezierCurve = new BezierCurveC2(points.Distinct(), Models.Cursor.GetCurrentPosition(), _hiddenModels, 
+                    polygonChainEnabled, controlPointsEnabled);
+                _lockModification = true;
+                PolygonalChainCheckBox.Checked = polygonChainEnabled;
+                ControlPointsRadioButton.Checked = controlPointsEnabled;
+                _lockModification = false;
                 _models.Add(bezierCurve);
                 ObjectsList.Items.Add(bezierCurve);
                 ObjectsList.SelectedItems.Clear();
@@ -251,9 +264,51 @@ namespace Geometric_Modeling
             DrawWorld();
         }
 
-        private List<Point> CollectPoints(out bool polygonChainEnabled)
+        private void InterpolationCurveButton_Click(object sender, EventArgs e)
+        {
+            bool chordParametrizationEnabled;
+            var points = CollectPoints(out chordParametrizationEnabled);
+            if (points != null && points.Count > 0)
+            {
+                var curve = new InterpolationCurve(points.Distinct(), Models.Cursor.GetCurrentPosition(), chordParametrizationEnabled);
+                _models.Add(curve);
+                ObjectsList.Items.Add(curve);
+                _lockModification = true;
+                ChordParametrizationRadioButton.Checked = chordParametrizationEnabled;
+                NormalParametrizationRadioButton.Checked = !chordParametrizationEnabled;
+                _lockModification = false;
+                ObjectsList.SelectedItems.Clear();
+                ObjectsList.SelectedItem = curve;
+                DrawWorld();
+                return;
+            }
+            var geometricObject = new InterpolationCurve(new Vector4(0, 0, 0));
+            geometricObject.TranslateToPosition(Models.Cursor.GetCurrentPosition());
+            foreach (var child in geometricObject.GetChildren())
+                ObjectsList.Items.Add(child);
+            _models.Add(geometricObject);
+            ObjectsList.Items.Add(geometricObject);
+            DrawWorld();
+        }
+
+        private List<Point> CollectPoints(out bool chordParametrizationEnabled)
+        {
+            bool dummy;
+            return CollectPoints(out dummy, out dummy, out chordParametrizationEnabled);
+        }
+
+        private List<Point> CollectPoints(out bool polygonChainEnabled, out bool controlsPointsEnabled)
+        {
+            bool dummy;
+            return CollectPoints(out polygonChainEnabled, out controlsPointsEnabled, out dummy);
+        }
+
+        private List<Point> CollectPoints(out bool polygonChainEnabled, out bool controlsPointsEnabled, 
+            out bool chordParametrizationEnabled)
         {
             polygonChainEnabled = true;
+            controlsPointsEnabled = false;
+            chordParametrizationEnabled = false;
             var count = ObjectsList.SelectedItems.Count;
             if (count > 0)
             {
@@ -276,6 +331,9 @@ namespace Geometric_Modeling
                 if (curves.Count > 0)
                 {
                     polygonChainEnabled = curves[0].ChainEnabled;
+                    controlsPointsEnabled = curves[0].ControlPointsEnabled;
+                    if (curves[0] is InterpolationCurve)
+                        chordParametrizationEnabled = (curves[0] as InterpolationCurve).ChordParametrizationEnabled;
                     foreach (var curve in curves)
                     {
                         points.AddRange(curve.GetChildren().OfType<Point>().Select(child => child));
@@ -332,6 +390,13 @@ namespace Geometric_Modeling
         private void ClearButton_Click(object sender, EventArgs e)
         {
             _enableStereoscopy = false;
+            _enableAdditiveColorBlending = false;
+            _lockModification = true;
+            StereoscopyCheckBox.Checked = false;
+            AdditiveColorBlendingCheckBox.Checked = false;
+            ChordParametrizationRadioButton.Checked = true;
+            ControlPointsRadioButton.Checked = true;
+            _lockModification = false;
             _forceStaticGraphics = false;
             _enableAnimations = false;
             DisableAllSettings();
@@ -387,14 +452,14 @@ namespace Geometric_Modeling
             //Models.Cursor.YPosition = position.Y;
             //Models.Cursor.ZPosition = position.Z;
             Models.Cursor.Instance.UpdateModel();
-            _lockChain = true;
+            _lockModification = true;
             if (ObjectsList.SelectedItem is BezierCurve)
             {
                 PolygonalChainCheckBox.Checked = (ObjectsList.SelectedItem as BezierCurve).ChainEnabled;
                 ControlPointsRadioButton.Checked = (ObjectsList.SelectedItem as BezierCurve).ControlPointsEnabled;
                 DeBoorsPointsRadioButton.Checked = !(ObjectsList.SelectedItem as BezierCurve).ControlPointsEnabled;
             }
-            _lockChain = false;
+            _lockModification = false;
             DrawWorld();
             UpdateTextBoxes();
         }
@@ -451,43 +516,12 @@ namespace Geometric_Modeling
             }
         }
 
-        private void ControlPointsRadioButton_CheckedChanged(object sender, EventArgs e)
-        {
-            var radioButton = sender as RadioButton;
-            if (radioButton == null || !radioButton.Checked) return;
-            var item = ObjectsList.SelectedItem as BezierCurve;
-            if (!_lockChain && item != null)
-                item.SetControlPointsEnablability(true);
-            DrawWorld();
-        }
-
-        private void DeBoorsPointsRadioButton_CheckedChanged(object sender, EventArgs e)
-        {
-            var radioButton = sender as RadioButton;
-            if (radioButton == null || !radioButton.Checked) return;
-            var item = ObjectsList.SelectedItem as BezierCurve;
-            if (!_lockChain && item != null)
-                item.SetControlPointsEnablability(false);
-            DrawWorld();
-        }
-
-        private void PolygonalChainCheckBox_CheckedChanged(object sender, EventArgs e)
-        {
-            var checkBox = sender as CheckBox;
-            if (checkBox == null) return;
-            var item = ObjectsList.SelectedItem as BezierCurve;
-            if (!_lockChain && item != null)
-                item.TogglePolygonialChain();
-            DrawWorld();
-        }
-
-
-        private void SaveButton_Click(object sender, System.EventArgs e)
+        private void SaveButton_Click(object sender, EventArgs e)
         {
             SaveScene();
         }
 
-        private void LoadButton_Click(object sender, System.EventArgs e)
+        private void LoadButton_Click(object sender, EventArgs e)
         {
             LoadScene();
         }

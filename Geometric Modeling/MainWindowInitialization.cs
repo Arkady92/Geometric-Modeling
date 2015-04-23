@@ -78,7 +78,9 @@ namespace Geometric_Modeling
                     {ModelType.BezierCurve, new List<Control>{StereoscopyCheckBox, AdditiveColorBlendingCheckBox, PolygonalChainCheckBox,}},
                     {ModelType.BezierCurveC2, new List<Control>{StereoscopyCheckBox, AdditiveColorBlendingCheckBox, PolygonalChainCheckBox,
                         ControlPointsRadioButton, DeBoorsPointsRadioButton}},
-                    {ModelType.Cursor, new List<Control>{StereoscopyCheckBox, AdditiveColorBlendingCheckBox}}
+                    {ModelType.Cursor, new List<Control>{StereoscopyCheckBox, AdditiveColorBlendingCheckBox}},
+                    {ModelType.InterpolationCurve, new List<Control>{StereoscopyCheckBox, AdditiveColorBlendingCheckBox, 
+                        NormalParametrizationRadioButton, ChordParametrizationRadioButton}}
             };
             DisableAllSettings();
 

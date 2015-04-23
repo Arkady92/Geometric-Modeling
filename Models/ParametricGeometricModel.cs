@@ -123,7 +123,8 @@ namespace Models
             bool additiveColorBlending = false)
         {
             if ((Type != ModelType.BezierCurveC2 && Type != ModelType.BezierCurve) ||
-                (Type == ModelType.BezierCurveC2 && !(this as BezierCurveC2).ControlPointsEnabled) ||
+                (Type == ModelType.BezierCurveC2 && !((this as BezierCurveC2).CurveParent is InterpolationCurve) 
+                && !(this as BezierCurveC2).ControlPointsEnabled) ||
                 (Type == ModelType.BezierCurve && (this as BezierCurve).ControlPointsEnabled))
                 foreach (var geometricModel in Children)
                     geometricModel.DrawStereoscopy(graphics, leftMatrix, rightMatrix, additiveColorBlending);
@@ -168,7 +169,8 @@ namespace Models
         public override void Draw(Graphics graphics, Matrix currentProjectionMatrix)
         {
             if ((Type != ModelType.BezierCurveC2 && Type != ModelType.BezierCurve) ||
-                (Type == ModelType.BezierCurveC2 && !(this as BezierCurveC2).ControlPointsEnabled) ||
+                (Type == ModelType.BezierCurveC2 && !((this as BezierCurveC2).CurveParent is InterpolationCurve)
+                && !(this as BezierCurveC2).ControlPointsEnabled) ||
                 (Type == ModelType.BezierCurve && (this as BezierCurve).ControlPointsEnabled))
                 foreach (var geometricModel in Children)
                     geometricModel.Draw(graphics, currentProjectionMatrix);
@@ -192,11 +194,11 @@ namespace Models
             }
         }
 
-        public virtual void PropagateTransformation()
+        public virtual void PropagateTransformation(ParametricGeometricModel geometricModel = null)
         {
             foreach (var child in Children)
             {
-                child.PropagateTransformation();
+                child.PropagateTransformation(this);
             }
         }
 

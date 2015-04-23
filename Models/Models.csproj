@@ -31,6 +31,9 @@
     <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="MathNet.Numerics">
+      <HintPath>..\Mathematics\MathNet.Numerics.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
@@ -47,6 +50,7 @@
     <Compile Include="Ellipsoid.cs" />
     <Compile Include="GeometricModel.cs" />
     <Compile Include="ImplicitGeometricModel.cs" />
+    <Compile Include="InterpolationCurve.cs" />
     <Compile Include="ModelType.cs" />
     <Compile Include="ParametricGeometricModel.cs" />
     <Compile Include="Point.cs" />

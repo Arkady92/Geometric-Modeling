@@ -12,9 +12,9 @@ namespace Models
 
         public bool ChainEnabled = true;
 
-        public BezierCurveC2 C2CurveParent = null;
+        public BezierCurve CurveParent = null;
 
-        public bool ControlPointsEnabled { get; protected set; }
+        public bool ControlPointsEnabled { get; set; }
 
         public BezierCurve(Vector4 position, ModelType modelType = ModelType.BezierCurve)
             : base(modelType, position, true)
@@ -24,9 +24,11 @@ namespace Models
             CreateEdges();
         }
 
-        public BezierCurve(IEnumerable<Point> points, Vector4 position, ModelType modelType = ModelType.BezierCurve)
+        public BezierCurve(IEnumerable<Point> points, Vector4 position, ModelType modelType = ModelType.BezierCurve,
+            bool polygonialChainEnabled = true)
             : base(modelType, position, true)
         {
+            ChainEnabled = polygonialChainEnabled;
             ControlPointsEnabled = true;
             var enumerable = points as Point[] ?? points.ToArray();
             for (int i = 0; i < enumerable.Count(); i++)
@@ -384,10 +386,8 @@ namespace Models
         public override void UpdateVertex(int number)
         {
             base.UpdateVertex(number);
-            if (C2CurveParent != null)
-            {
-                C2CurveParent.UpdateDeBoorPoints(number, Children[number] as Point);
-            }
+            if (CurveParent is BezierCurveC2)
+                (CurveParent as BezierCurveC2).UpdateDeBoorPoints(number, Children[number] as Point);
         }
     }
 }

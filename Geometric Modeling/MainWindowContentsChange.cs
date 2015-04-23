@@ -2,6 +2,7 @@
 using System.Globalization;
 using System.Windows.Forms;
 using Mathematics;
+using Models;
 
 namespace Geometric_Modeling
 {
@@ -218,7 +219,7 @@ namespace Geometric_Modeling
         private void StereoscopyCheckBox_CheckedChanged(object sender, EventArgs e)
         {
             var checkBox = sender as CheckBox;
-            if (checkBox == null) return;
+            if (checkBox == null || _lockModification) return;
             _enableStereoscopy = checkBox.Checked;
             DrawWorld();
         }
@@ -226,9 +227,65 @@ namespace Geometric_Modeling
         private void AdditiveColorBlendingCheckBox_CheckedChanged(object sender, EventArgs e)
         {
             var checkBox = sender as CheckBox;
-            if (checkBox == null) return;
+            if (checkBox == null || _lockModification) return;
             _enableAdditiveColorBlending = checkBox.Checked;
             DrawWorld();
+        }
+
+        private void ControlPointsRadioButton_CheckedChanged(object sender, EventArgs e)
+        {
+            var radioButton = sender as RadioButton;
+            if (radioButton == null || !radioButton.Checked) return;
+            var item = ObjectsList.SelectedItem as BezierCurve;
+            if (!_lockModification && item != null)
+                item.SetControlPointsEnablability(true);
+            DrawWorld();
+        }
+
+        private void DeBoorsPointsRadioButton_CheckedChanged(object sender, EventArgs e)
+        {
+            var radioButton = sender as RadioButton;
+            if (radioButton == null || !radioButton.Checked) return;
+            var item = ObjectsList.SelectedItem as BezierCurve;
+            if (!_lockModification && item != null)
+                item.SetControlPointsEnablability(false);
+            DrawWorld();
+        }
+
+        private void PolygonalChainCheckBox_CheckedChanged(object sender, EventArgs e)
+        {
+            var checkBox = sender as CheckBox;
+            if (checkBox == null) return;
+            var item = ObjectsList.SelectedItem as BezierCurve;
+            if (!_lockModification && item != null)
+                item.TogglePolygonialChain();
+            DrawWorld();
+        }
+
+        private void NormalParametrizationRadioButton_CheckedChanged(object sender, EventArgs e)
+        {
+            var radioButton = sender as RadioButton;
+            if (radioButton == null || !radioButton.Checked) return;
+            var item = ObjectsList.SelectedItem as InterpolationCurve;
+            if (!_lockModification && item != null)
+            {
+                item.ChordParametrizationEnabled = false;
+                item.UpdateModel();
+                DrawWorld();
+            }
+        }
+
+        private void ChordParametrizationRadioButton_CheckedChanged(object sender, EventArgs e)
+        {
+            var radioButton = sender as RadioButton;
+            if (radioButton == null || !radioButton.Checked) return;
+            var item = ObjectsList.SelectedItem as InterpolationCurve;
+            if (!_lockModification && item != null)
+            {
+                item.ChordParametrizationEnabled = true;
+                item.UpdateModel();
+                DrawWorld();
+            }
         }
 
         private void MainWindow_Resize(object sender, EventArgs e)

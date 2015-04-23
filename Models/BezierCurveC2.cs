@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.Linq;
 using Mathematics;
+using Matrix = Mathematics.Matrix;
 
 namespace Models
 {
@@ -23,10 +25,11 @@ namespace Models
             CalculateBezierPoints();
         }
 
-        public BezierCurveC2(IEnumerable<Point> points, Vector4 position, List<GeometricModel> hiddenModels = null)
-            : base(points, position, ModelType.BezierCurveC2)
+        public BezierCurveC2(IEnumerable<Point> points, Vector4 position, List<GeometricModel> hiddenModels = null,
+            bool polygonialChainEnabled = true, bool controlPointsEnabled = false)
+            : base(points, position, ModelType.BezierCurveC2, polygonialChainEnabled)
         {
-            ControlPointsEnabled = false;
+            ControlPointsEnabled = controlPointsEnabled;
             _hiddenModels = hiddenModels;
             _bezierPoints = new List<Point>();
             CalculateBezierPoints();
@@ -80,7 +83,9 @@ namespace Models
 
             if (!ControlPointsEnabled && vertices.Count > 1)
             {
-                var brush = new SolidBrush(color);
+                Vector4 lastPoint = Vector4.Zero();
+                var first = true;
+                var pen = new Pen(color, 2f);
                 var points = new System.Drawing.Point[vertices.Count];
                 int division = 0;
                 for (int i = 0; i < vertices.Count; i++)
@@ -92,9 +97,29 @@ namespace Models
                             (int)Math.Sqrt((points[i].X - points[i - 1].X) * (points[i].X - points[i - 1].X) +
                             (points[i].Y - points[i - 1].Y) * (points[i].Y - points[i - 1].Y));
                 }
+                division *= 2;
                 var degree = vertices.Count - 1;
                 if (vertices.Count > 4)
                     degree = 3;
+                //var knotsDivider = Math.Abs(vertices.Count + degree - 2);
+                //var knotsDivision = 1.0 / knotsDivider;
+                //var knots = new double[vertices.Count + degree + 1];
+                //knots[0] = 0;
+                //knots[1] = 0;
+                //for (int i = 2; i < knots.Length - 2; i++)
+                //    knots[i] = (i - 1) * knotsDivision;
+                //knots[knots.Length - 2] = 1;
+                //knots[knots.Length - 1] = 1;
+                //var divider = (vertices.Count - degree) * knotsDivision / division;
+                //for (double t = (degree - 1) * knotsDivision; t <= (vertices.Count - 1) * knotsDivision;
+                //    t += divider)
+                //{
+                //    var point = Vector4.Zero();
+                //    for (int i = 0; i < vertices.Count; i++)
+                //    {
+                //        point = point + vertices[i] * Splines.CalculateNSplineValues(knots, i + 1, degree, t);
+                //    }
+                //    point = currentProjectionMatrix * point;
                 var knotsDivider = Math.Abs(vertices.Count + degree - 4);
                 var knotsDivision = 1.0 / knotsDivider;
                 var knots = new double[vertices.Count + degree + 1];
@@ -105,17 +130,26 @@ namespace Models
                 knots[knots.Length - 2] = 1;
                 knots[knots.Length - 1] = 1;
                 var divider = (vertices.Count - degree) * knotsDivision / division;
-                for (double t = ((degree > 2) ? 1 : 0) * knotsDivision; t <= ((degree > 2) ? vertices.Count - 2 : 1) * knotsDivision; 
+                for (double t = ((degree > 2) ? 1 : 0) * knotsDivision; t <= ((degree > 2) ? vertices.Count - 2 : 1) * knotsDivision;
                     t += divider)
                 {
                     var point = Vector4.Zero();
                     for (int i = 0; i < vertices.Count; i++)
                     {
-                        point = point + vertices[i] * CalculateNSplineValues(knots, i + 1, degree, t);
+                        point = point + vertices[i] * Splines.CalculateNSplineValues(knots, i + 1, degree, t);
                     }
                     point = currentProjectionMatrix * point;
-                    graphics.FillRectangle(brush, (float)(point.X * Parameters.WorldPanelSizeFactor),
-                        (float)(point.Y * Parameters.WorldPanelSizeFactor), 1, 1);
+                    if (first)
+                    {
+                        first = false;
+                        lastPoint = point;
+                        continue;
+                    }
+                    graphics.DrawLine(pen, (float)(lastPoint.X * Parameters.WorldPanelSizeFactor),
+                        (float)(lastPoint.Y * Parameters.WorldPanelSizeFactor),
+                        (float)(point.X * Parameters.WorldPanelSizeFactor),
+                        (float)(point.Y * Parameters.WorldPanelSizeFactor));
+                    lastPoint = point;
                 }
             }
 
@@ -141,6 +175,8 @@ namespace Models
 
             if (!ControlPointsEnabled && vertices.Count > 1)
             {
+                Vector4 lastPoint = Vector4.Zero();
+                var first = true;
                 var points = new System.Drawing.Point[vertices.Count];
                 int division = 0;
                 for (int i = 0; i < vertices.Count; i++)
@@ -152,6 +188,7 @@ namespace Models
                             (int)Math.Sqrt((points[i].X - points[i - 1].X) * (points[i].X - points[i - 1].X) +
                             (points[i].Y - points[i - 1].Y) * (points[i].Y - points[i - 1].Y));
                 }
+                division *= 2;
                 var degree = vertices.Count - 1;
                 if (vertices.Count > 4)
                     degree = 3;
@@ -171,16 +208,31 @@ namespace Models
                     var point = Vector4.Zero();
                     for (int i = 0; i < vertices.Count; i++)
                     {
-                        point = point + vertices[i] * CalculateNSplineValues(knots, i + 1, degree, t);
+                        point = point + vertices[i] * Splines.CalculateNSplineValues(knots, i + 1, degree, t);
                     }
                     point = currentProjectionMatrix * point;
-                    int width = Parameters.WorldPanelWidth / 2;
+                    if (first)
+                    {
+                        first = false;
+                        lastPoint = point;
+                        continue;
+                    }
+                    var customLine = new CustomLine(
+                        new System.Drawing.Point(
+                            (int)(lastPoint.X * Parameters.WorldPanelSizeFactor),
+                            (int)(lastPoint.Y * Parameters.WorldPanelSizeFactor)),
+                        new System.Drawing.Point(
+                            (int)(point.X * Parameters.WorldPanelSizeFactor),
+                            (int)(point.Y * Parameters.WorldPanelSizeFactor)));
+                    customLine.Draw(bitmap, graphics, color, 1);
+                    lastPoint = point;
+                    /*int width = Parameters.WorldPanelWidth / 2;
                     int height = Parameters.WorldPanelHeight / 2;
                     var screenX = (int)(point.X * Parameters.WorldPanelSizeFactor);
                     var screenY = (int)(point.Y * Parameters.WorldPanelSizeFactor);
                     if (screenX + width >= bitmap.Width || screenX + width < 0 || screenY + height >= bitmap.Height || screenY + height < 0) continue;
                     graphics.FillRectangle(new SolidBrush(CombineColor(bitmap.GetPixel(screenX + width, screenY + height), color)),
-                        screenX, screenY, 1, 1);
+                        screenX, screenY, 1, 1);*/
                 }
             }
 
@@ -200,44 +252,14 @@ namespace Models
             }
         }
 
-        private double CalculateZeroSplineValues(double[] knots, int i, double t)
-        {
-            var result = 0.0;
-            if (i <= 0 || i >= knots.Length) return result;
-            if (knots[i - 1] <= t && knots[i] > t)
-                result = 1;
-            return result;
-        }
-
-        private double CalculateNSplineValues(double[] knots, int i, int n, double t)
-        {
-            if (n == 0)
-                return CalculateZeroSplineValues(knots, i, t);
-            var result = 0.0;
-            if (i > 0 && i + n - 1 < knots.Length)
-            {
-                var fun = CalculateNSplineValues(knots, i, n - 1, t);
-                var factor = knots[i + n - 1] - knots[i - 1];
-                if (Math.Abs(factor) > Double.Epsilon)
-                    result += (t - knots[i - 1]) / factor * fun;
-            }
-            if (i >= 0 && i + n < knots.Length - 1)
-            {
-                var fun = CalculateNSplineValues(knots, i + 1, n - 1, t);
-                var factor = knots[i + n] - knots[i];
-                if (Math.Abs(factor) > Double.Epsilon)
-                    result += (knots[i + n] - t) / factor * fun;
-            }
-            return result;
-        }
-
         public void CalculateBezierPoints()
         {
             var points = Children.Cast<Point>().ToList();
-            foreach (var bezierPoint in _bezierPoints)
-            {
-                _hiddenModels.Remove(bezierPoint);
-            }
+            if (_hiddenModels != null)
+                foreach (var bezierPoint in _bezierPoints)
+                {
+                    _hiddenModels.Remove(bezierPoint);
+                }
             _bezierPoints.Clear();
             if (points.Count == 0) return;
             if (points.Count < 4)
@@ -270,11 +292,12 @@ namespace Models
             {
                 bezierPoint.IsRemovable = false;
             }
-            _hiddenModels.AddRange(_bezierPoints);
+            if (_hiddenModels != null)
+                _hiddenModels.AddRange(_bezierPoints);
             _bezierCurve = new BezierCurve(_bezierPoints, SpacePosition)
             {
                 ChainEnabled = ChainEnabled,
-                C2CurveParent = this
+                CurveParent = this
             };
             _bezierCurve.SetControlPointsEnablability(ControlPointsEnabled);
         }
@@ -288,12 +311,6 @@ namespace Models
         protected override void RecreateStructure(int number = 0)
         {
             base.RecreateStructure(number);
-            CalculateBezierPoints();
-        }
-
-        public override void UpdateVertex(int number)
-        {
-            base.UpdateVertex(number);
             CalculateBezierPoints();
         }
 

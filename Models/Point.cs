@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using Mathematics;
+﻿using Mathematics;
 
 namespace Models
 {
@@ -30,7 +29,7 @@ namespace Models
             get { return SpacePosition.Z; }
             set
             {
-                SpacePosition.Z = value; 
+                SpacePosition.Z = value;
                 RecreateStructure();
                 PropagateTransformation();
             }
@@ -104,12 +103,13 @@ namespace Models
             return "Point <" + _increment++ + ">";
         }
 
-        public override void PropagateTransformation()
+        public override void PropagateTransformation(ParametricGeometricModel geometricModel = null)
         {
-            base.PropagateTransformation();
+            base.PropagateTransformation(geometricModel);
             foreach (var parent in Parents)
             {
-                parent.UpdateVertex(ParentsIndexes[parent]);
+                if (parent != geometricModel)
+                    parent.UpdateVertex(ParentsIndexes[parent]);
             }
         }
     }
