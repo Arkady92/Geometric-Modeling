@@ -41,6 +41,11 @@ namespace Models
             CalculateBSplineCurve();
         }
 
+        public BezierCurve ExtractBezierCurve()
+        {
+            return _bezierCurve;
+        }
+
         public override void PropagateTransformation(ParametricGeometricModel geometricModel = null)
         {
             base.PropagateTransformation(geometricModel);

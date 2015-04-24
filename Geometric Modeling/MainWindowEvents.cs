@@ -242,7 +242,7 @@ namespace Geometric_Modeling
             var points = CollectPoints(out polygonChainEnabled, out controlPointsEnabled);
             if (points != null && points.Count > 0)
             {
-                var bezierCurve = new BezierCurveC2(points.Distinct(), Models.Cursor.GetCurrentPosition(), _hiddenModels, 
+                var bezierCurve = new BezierCurveC2(points.Distinct(), Models.Cursor.GetCurrentPosition(), _hiddenModels,
                     polygonChainEnabled, controlPointsEnabled);
                 _lockModification = true;
                 PolygonalChainCheckBox.Checked = polygonChainEnabled;
@@ -303,7 +303,7 @@ namespace Geometric_Modeling
             return CollectPoints(out polygonChainEnabled, out controlsPointsEnabled, out dummy);
         }
 
-        private List<Point> CollectPoints(out bool polygonChainEnabled, out bool controlsPointsEnabled, 
+        private List<Point> CollectPoints(out bool polygonChainEnabled, out bool controlsPointsEnabled,
             out bool chordParametrizationEnabled)
         {
             polygonChainEnabled = true;
@@ -551,6 +551,28 @@ namespace Geometric_Modeling
                     break;
                 case Keys.Z:
                     Models.Cursor.ZPosition = Models.Cursor.ZPosition + Parameters.CursorMoveValue;
+                    break;
+                case Keys.E:
+                    var extractionItem = ObjectsList.SelectedItem as InterpolationCurve;
+                    if (extractionItem != null)
+                    {
+                        var curve = extractionItem.ExtractBezierCurve();
+                        var bezierCurve = new BezierCurveC2(curve.GetChildren().OfType<Point>().Select(
+                            point => new Point(point.GetCurrentPosition())), curve.GetCurrentPosition(), _hiddenModels,
+                            curve.ChainEnabled, curve.ControlPointsEnabled);
+                        _lockModification = true;
+                        PolygonalChainCheckBox.Checked = curve.ChainEnabled;
+                        ControlPointsRadioButton.Checked = curve.ControlPointsEnabled;
+                        _lockModification = false;
+                        if (!_models.Contains(bezierCurve))
+                            _models.Add(bezierCurve);
+                        foreach (var child in bezierCurve.GetChildren().OfType<Point>())
+                            ObjectsList.Items.Add(child);
+                        if (!ObjectsList.Items.Contains(bezierCurve))
+                            ObjectsList.Items.Add(bezierCurve);
+                        ObjectsList.SelectedItems.Clear();
+                        ObjectsList.SelectedItem = bezierCurve;
+                    }
                     break;
                 case Keys.Space:
                     e.Handled = true;

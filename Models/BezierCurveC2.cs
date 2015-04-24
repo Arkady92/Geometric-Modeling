@@ -85,7 +85,7 @@ namespace Models
             {
                 Vector4 lastPoint = Vector4.Zero();
                 var first = true;
-                var pen = new Pen(color, 2f);
+                var pen = new Pen(color);
                 var points = new System.Drawing.Point[vertices.Count];
                 int division = 0;
                 for (int i = 0; i < vertices.Count; i++)
@@ -324,6 +324,7 @@ namespace Models
         public override void SetControlPointsEnablability(bool state)
         {
             base.SetControlPointsEnablability(state);
+            CalculateBezierPoints();
             if (_bezierCurve != null)
                 _bezierCurve.SetControlPointsEnablability(state);
         }

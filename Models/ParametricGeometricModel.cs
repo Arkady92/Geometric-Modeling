@@ -65,7 +65,7 @@ namespace Models
             CreateEdges();
         }
 
-        public List<ParametricGeometricModel> GetChildren()
+        public virtual List<ParametricGeometricModel> GetChildren()
         {
             return Children;
         }

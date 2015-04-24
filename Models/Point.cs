@@ -35,7 +35,7 @@ namespace Models
             }
         }
 
-        private const double CubeSize = 0.003;
+        private const double CubeSize = 0.004;
 
         private static int _increment = 1;
 
