@@ -291,9 +291,13 @@ namespace Geometric_Modeling
             DrawWorld();
         }
 
-        private void BezierPatchC0Button_Click(object sender, EventArgs e)
+        private void BezierSurfaceC0Button_Click(object sender, EventArgs e)
         {
-            var geometricObject = new BezierPatch(Vector4.Zero(), Parameters.DefaultSurfaceWidth, Parameters.DefaultSurfaceHeight, false);
+            var form = new SurfaceInitWindow();
+            var result = form.ShowDialog();
+            if (result != DialogResult.OK) return;
+            var geometricObject = new BezierSurface(Vector4.Zero(), form.SurfaceWidth, form.SurfaceHeight,
+                form.SurfacePatchesLengthCount, form.SurfacePatchesBreadthCount, form.IsSurfaceCylindrical);
             geometricObject.TranslateToPosition(Models.Cursor.GetCurrentPosition());
             foreach (var child in geometricObject.GetChildren())
                 ObjectsList.Items.Add(child);
@@ -302,7 +306,7 @@ namespace Geometric_Modeling
             DrawWorld();
         }
 
-        private void BezierPatchC2Button_Click(object sender, EventArgs e)
+        private void BezierSurfaceC2Button_Click(object sender, EventArgs e)
         {
 
         }

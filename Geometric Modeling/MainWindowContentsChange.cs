@@ -289,9 +289,12 @@ namespace Geometric_Modeling
         {
             var checkBox = sender as CheckBox;
             if (checkBox == null) return;
-            var item = ObjectsList.SelectedItem as BezierCurve;
-            if (!_lockModification && item != null)
-                item.TogglePolygonialChain();
+            var cItem = ObjectsList.SelectedItem as BezierCurve;
+            if (!_lockModification && cItem != null)
+                cItem.TogglePolygonialChain();
+            var sItem = ObjectsList.SelectedItem as BezierSurface;
+            if (!_lockModification && sItem != null)
+                sItem.TogglePolygonialChain();
             DrawWorld();
         }
 

@@ -81,7 +81,7 @@ namespace Geometric_Modeling
                     {ModelType.Cursor, new List<Control>{StereoscopyCheckBox, AdditiveColorBlendingCheckBox}},
                     {ModelType.InterpolationCurve, new List<Control>{StereoscopyCheckBox, AdditiveColorBlendingCheckBox, 
                         NormalParametrizationRadioButton, ChordParametrizationRadioButton}},
-                        {ModelType.BezierPatch, new List<Control>{SurfaceGridResolutionXBox, SurfaceGridResolutionYBox, GridResolutionXLabel, 
+                        {ModelType.BezierSurface, new List<Control>{SurfaceGridResolutionXBox, SurfaceGridResolutionYBox, GridResolutionXLabel, 
                     GridResolutionYLabel, StereoscopyCheckBox, AdditiveColorBlendingCheckBox, PolygonalChainCheckBox}}
             };
             DisableAllSettings();

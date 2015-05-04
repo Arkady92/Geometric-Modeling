@@ -9,6 +9,6 @@
         Cursor,
         BezierCurveC2,
         InterpolationCurve,
-        BezierPatch
+        BezierSurface
     }
 }

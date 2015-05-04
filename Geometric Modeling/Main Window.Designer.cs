@@ -30,8 +30,8 @@
         {
             this.ObjectsList = new System.Windows.Forms.ListBox();
             this.ObjectsPanel = new System.Windows.Forms.Panel();
-            this.BezierPatchC2Button = new System.Windows.Forms.Button();
-            this.BezierPatchC0Button = new System.Windows.Forms.Button();
+            this.BezierSurfaceC2Button = new System.Windows.Forms.Button();
+            this.BezierSurfaceC0Button = new System.Windows.Forms.Button();
             this.InterpolationCurveButton = new System.Windows.Forms.Button();
             this.BezierCurveC2Button = new System.Windows.Forms.Button();
             this.BezierCurveButton = new System.Windows.Forms.Button();
@@ -119,8 +119,8 @@
             this.ObjectsPanel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.ObjectsPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.ObjectsPanel.Controls.Add(this.BezierPatchC2Button);
-            this.ObjectsPanel.Controls.Add(this.BezierPatchC0Button);
+            this.ObjectsPanel.Controls.Add(this.BezierSurfaceC2Button);
+            this.ObjectsPanel.Controls.Add(this.BezierSurfaceC0Button);
             this.ObjectsPanel.Controls.Add(this.InterpolationCurveButton);
             this.ObjectsPanel.Controls.Add(this.BezierCurveC2Button);
             this.ObjectsPanel.Controls.Add(this.BezierCurveButton);
@@ -132,25 +132,25 @@
             this.ObjectsPanel.Size = new System.Drawing.Size(840, 31);
             this.ObjectsPanel.TabIndex = 1;
             // 
-            // BezierPatchC2Button
+            // BezierSurfaceC2Button
             // 
-            this.BezierPatchC2Button.Location = new System.Drawing.Point(591, 3);
-            this.BezierPatchC2Button.Name = "BezierPatchC2Button";
-            this.BezierPatchC2Button.Size = new System.Drawing.Size(78, 23);
-            this.BezierPatchC2Button.TabIndex = 9;
-            this.BezierPatchC2Button.Text = "B. Patch C2";
-            this.BezierPatchC2Button.UseVisualStyleBackColor = true;
-            this.BezierPatchC2Button.Click += new System.EventHandler(this.BezierPatchC2Button_Click);
+            this.BezierSurfaceC2Button.Location = new System.Drawing.Point(591, 3);
+            this.BezierSurfaceC2Button.Name = "BezierSurfaceC2Button";
+            this.BezierSurfaceC2Button.Size = new System.Drawing.Size(78, 23);
+            this.BezierSurfaceC2Button.TabIndex = 9;
+            this.BezierSurfaceC2Button.Text = "Surface C2";
+            this.BezierSurfaceC2Button.UseVisualStyleBackColor = true;
+            this.BezierSurfaceC2Button.Click += new System.EventHandler(this.BezierSurfaceC2Button_Click);
             // 
-            // BezierPatchC0Button
+            // BezierSurfaceC0Button
             // 
-            this.BezierPatchC0Button.Location = new System.Drawing.Point(507, 3);
-            this.BezierPatchC0Button.Name = "BezierPatchC0Button";
-            this.BezierPatchC0Button.Size = new System.Drawing.Size(78, 23);
-            this.BezierPatchC0Button.TabIndex = 8;
-            this.BezierPatchC0Button.Text = "B. Patch C0";
-            this.BezierPatchC0Button.UseVisualStyleBackColor = true;
-            this.BezierPatchC0Button.Click += new System.EventHandler(this.BezierPatchC0Button_Click);
+            this.BezierSurfaceC0Button.Location = new System.Drawing.Point(507, 3);
+            this.BezierSurfaceC0Button.Name = "BezierSurfaceC0Button";
+            this.BezierSurfaceC0Button.Size = new System.Drawing.Size(78, 23);
+            this.BezierSurfaceC0Button.TabIndex = 8;
+            this.BezierSurfaceC0Button.Text = "Surface C0";
+            this.BezierSurfaceC0Button.UseVisualStyleBackColor = true;
+            this.BezierSurfaceC0Button.Click += new System.EventHandler(this.BezierSurfaceC0Button_Click);
             // 
             // InterpolationCurveButton
             // 
@@ -918,8 +918,8 @@
         private System.Windows.Forms.Button InterpolationCurveButton;
         private System.Windows.Forms.RadioButton ChordParametrizationRadioButton;
         private System.Windows.Forms.RadioButton NormalParametrizationRadioButton;
-        private System.Windows.Forms.Button BezierPatchC2Button;
-        private System.Windows.Forms.Button BezierPatchC0Button;
+        private System.Windows.Forms.Button BezierSurfaceC2Button;
+        private System.Windows.Forms.Button BezierSurfaceC0Button;
         private System.Windows.Forms.TextBox SurfaceGridResolutionYBox;
         private System.Windows.Forms.TextBox SurfaceGridResolutionXBox;
     }
