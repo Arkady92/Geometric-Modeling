@@ -291,6 +291,22 @@ namespace Geometric_Modeling
             DrawWorld();
         }
 
+        private void BezierPatchC0Button_Click(object sender, EventArgs e)
+        {
+            var geometricObject = new BezierPatch(Vector4.Zero(), Parameters.DefaultSurfaceWidth, Parameters.DefaultSurfaceHeight, false);
+            geometricObject.TranslateToPosition(Models.Cursor.GetCurrentPosition());
+            foreach (var child in geometricObject.GetChildren())
+                ObjectsList.Items.Add(child);
+            _models.Add(geometricObject);
+            ObjectsList.Items.Add(geometricObject);
+            DrawWorld();
+        }
+
+        private void BezierPatchC2Button_Click(object sender, EventArgs e)
+        {
+
+        }
+
         private List<Point> CollectPoints(out bool chordParametrizationEnabled)
         {
             bool dummy;

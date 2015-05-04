@@ -8,6 +8,7 @@
         BezierCurve,
         Cursor,
         BezierCurveC2,
-        InterpolationCurve
+        InterpolationCurve,
+        BezierPatch
     }
 }

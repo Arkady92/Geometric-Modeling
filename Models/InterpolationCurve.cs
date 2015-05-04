@@ -3,7 +3,6 @@ using System.Drawing;
 using System.Linq;
 using Mathematics;
 using System;
-using MathNet.Numerics.LinearAlgebra.Double;
 using Matrix = Mathematics.Matrix;
 
 namespace Models
@@ -65,7 +64,7 @@ namespace Models
 
         private void CalculateBSplineCurve()
         {
-            var points = Children.Cast<Point>().ToList();
+            List<Point> points = FilterPoints();
             var degree = points.Count - 1;
             if (points.Count > 4)
                 degree = 3;
@@ -116,8 +115,36 @@ namespace Models
             };
         }
 
+        private List<Point> FilterPoints()
+        {
+            List<Point> points;
+            if (ChordParametrizationEnabled)
+            {
+                var tmpPoints = Children.Cast<Point>().ToList();
+                points = new List<Point>();
+                for (int i = 0; i < tmpPoints.Count; i++)
+                {
+                    var p1 = tmpPoints[i].GetCurrentPosition();
+                    var repeat = false;
+                    for (int j = 0; j < points.Count; j++)
+                    {
+                        var p2 = points[j].GetCurrentPosition();
+                        if (Math.Abs(p1.X - p2.X) < Double.Epsilon &&
+                            Math.Abs(p1.Y - p2.Y) < Double.Epsilon &&
+                            Math.Abs(p1.Z - p2.Z) < Double.Epsilon)
+                            repeat = true;
+                    }
+                    if (!repeat)
+                        points.Add(tmpPoints[i]);
+                }
+            }
+            else points = Children.Cast<Point>().ToList();
+            return points;
+        }
+
         private List<Point> FindDeBoorsPoints(double[] knots, int degree, double[] taus, List<Point> points)
         {
+            const double factor = 1.25;
             var size = points.Count - 2;
             //var interpolationMatrix = new Matrix(size, size);
             //for (int i = 0; i < size; i++)
@@ -135,7 +162,6 @@ namespace Models
                     if (k < 0 || k >= size) continue;
                     interpolationMatrix[i, j] = Splines.CalculateNSplineValues(knots, k + 2, degree, taus[i]);
                 }
-            var factor = 1.25;
             interpolationMatrix[0, degree / 2] *= factor;
             interpolationMatrix[size - 1, degree / 2] *= factor;
 

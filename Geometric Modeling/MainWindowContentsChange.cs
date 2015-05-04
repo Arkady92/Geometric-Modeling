@@ -9,6 +9,39 @@ namespace Geometric_Modeling
     public partial class MainWindow
     {
         #region Contents change events
+
+        private void SurfaceGridResolutionXBox_TextChanged(object sender, EventArgs e)
+        {
+            if (!_enableWorldDrawing) return;
+            var textBox = sender as TextBox;
+            int result;
+            if (textBox == null) return;
+            if (int.TryParse(textBox.Text, out result) && result >= 0 && result < 1000)
+            {
+                Parameters.SurfaceGridResolutionX = result;
+                UpdateCurrentModel();
+                DrawWorld();
+            }
+            else if (textBox.Text != string.Empty)
+                textBox.Text = Parameters.SurfaceGridResolutionX.ToString(CultureInfo.InvariantCulture);
+        }
+
+        private void SurfaceGridResolutionYBox_TextChanged(object sender, EventArgs e)
+        {
+            if (!_enableWorldDrawing) return;
+            var textBox = sender as TextBox;
+            int result;
+            if (textBox == null) return;
+            if (int.TryParse(textBox.Text, out result) && result >= 0 && result < 1000)
+            {
+                Parameters.SurfaceGridResolutionY = result;
+                UpdateCurrentModel();
+                DrawWorld();
+            }
+            else if (textBox.Text != string.Empty)
+                textBox.Text = Parameters.SurfaceGridResolutionY.ToString(CultureInfo.InvariantCulture);
+        }
+        
         private void GridResolutionXBox_TextChanged(object sender, EventArgs e)
         {
             if(!_enableWorldDrawing) return;

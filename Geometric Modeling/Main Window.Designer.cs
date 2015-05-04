@@ -30,6 +30,8 @@
         {
             this.ObjectsList = new System.Windows.Forms.ListBox();
             this.ObjectsPanel = new System.Windows.Forms.Panel();
+            this.BezierPatchC2Button = new System.Windows.Forms.Button();
+            this.BezierPatchC0Button = new System.Windows.Forms.Button();
             this.InterpolationCurveButton = new System.Windows.Forms.Button();
             this.BezierCurveC2Button = new System.Windows.Forms.Button();
             this.BezierCurveButton = new System.Windows.Forms.Button();
@@ -37,7 +39,11 @@
             this.EllipsoidButton = new System.Windows.Forms.Button();
             this.TorusButton = new System.Windows.Forms.Button();
             this.OptionsPanel = new System.Windows.Forms.Panel();
+            this.SurfaceGridResolutionYBox = new System.Windows.Forms.TextBox();
+            this.SurfaceGridResolutionXBox = new System.Windows.Forms.TextBox();
+            this.ChordParametrizationRadioButton = new System.Windows.Forms.RadioButton();
             this.PixelMaxSizeLabel = new System.Windows.Forms.Label();
+            this.NormalParametrizationRadioButton = new System.Windows.Forms.RadioButton();
             this.PixelMaxSizeBox = new System.Windows.Forms.TextBox();
             this.ZAxisFactorLabel = new System.Windows.Forms.Label();
             this.ZAxisFactorBox = new System.Windows.Forms.TextBox();
@@ -70,8 +76,6 @@
             this.WorldPanel = new System.Windows.Forms.PictureBox();
             this.EffectsLabel = new System.Windows.Forms.Label();
             this.EffectsPanel = new System.Windows.Forms.Panel();
-            this.ChordParametrizationRadioButton = new System.Windows.Forms.RadioButton();
-            this.NormalParametrizationRadioButton = new System.Windows.Forms.RadioButton();
             this.PolygonalChainCheckBox = new System.Windows.Forms.CheckBox();
             this.DeBoorsPointsRadioButton = new System.Windows.Forms.RadioButton();
             this.ControlPointsRadioButton = new System.Windows.Forms.RadioButton();
@@ -115,6 +119,8 @@
             this.ObjectsPanel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.ObjectsPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.ObjectsPanel.Controls.Add(this.BezierPatchC2Button);
+            this.ObjectsPanel.Controls.Add(this.BezierPatchC0Button);
             this.ObjectsPanel.Controls.Add(this.InterpolationCurveButton);
             this.ObjectsPanel.Controls.Add(this.BezierCurveC2Button);
             this.ObjectsPanel.Controls.Add(this.BezierCurveButton);
@@ -125,6 +131,26 @@
             this.ObjectsPanel.Name = "ObjectsPanel";
             this.ObjectsPanel.Size = new System.Drawing.Size(840, 31);
             this.ObjectsPanel.TabIndex = 1;
+            // 
+            // BezierPatchC2Button
+            // 
+            this.BezierPatchC2Button.Location = new System.Drawing.Point(591, 3);
+            this.BezierPatchC2Button.Name = "BezierPatchC2Button";
+            this.BezierPatchC2Button.Size = new System.Drawing.Size(78, 23);
+            this.BezierPatchC2Button.TabIndex = 9;
+            this.BezierPatchC2Button.Text = "B. Patch C2";
+            this.BezierPatchC2Button.UseVisualStyleBackColor = true;
+            this.BezierPatchC2Button.Click += new System.EventHandler(this.BezierPatchC2Button_Click);
+            // 
+            // BezierPatchC0Button
+            // 
+            this.BezierPatchC0Button.Location = new System.Drawing.Point(507, 3);
+            this.BezierPatchC0Button.Name = "BezierPatchC0Button";
+            this.BezierPatchC0Button.Size = new System.Drawing.Size(78, 23);
+            this.BezierPatchC0Button.TabIndex = 8;
+            this.BezierPatchC0Button.Text = "B. Patch C0";
+            this.BezierPatchC0Button.UseVisualStyleBackColor = true;
+            this.BezierPatchC0Button.Click += new System.EventHandler(this.BezierPatchC0Button_Click);
             // 
             // InterpolationCurveButton
             // 
@@ -190,6 +216,8 @@
             // 
             this.OptionsPanel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.OptionsPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.OptionsPanel.Controls.Add(this.SurfaceGridResolutionYBox);
+            this.OptionsPanel.Controls.Add(this.SurfaceGridResolutionXBox);
             this.OptionsPanel.Controls.Add(this.ChordParametrizationRadioButton);
             this.OptionsPanel.Controls.Add(this.PixelMaxSizeLabel);
             this.OptionsPanel.Controls.Add(this.NormalParametrizationRadioButton);
@@ -211,6 +239,40 @@
             this.OptionsPanel.Size = new System.Drawing.Size(150, 139);
             this.OptionsPanel.TabIndex = 2;
             // 
+            // SurfaceGridResolutionYBox
+            // 
+            this.SurfaceGridResolutionYBox.Location = new System.Drawing.Point(97, 33);
+            this.SurfaceGridResolutionYBox.Name = "SurfaceGridResolutionYBox";
+            this.SurfaceGridResolutionYBox.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.SurfaceGridResolutionYBox.Size = new System.Drawing.Size(46, 20);
+            this.SurfaceGridResolutionYBox.TabIndex = 13;
+            this.SurfaceGridResolutionYBox.Tag = "";
+            this.SurfaceGridResolutionYBox.TextChanged += new System.EventHandler(this.SurfaceGridResolutionYBox_TextChanged);
+            // 
+            // SurfaceGridResolutionXBox
+            // 
+            this.SurfaceGridResolutionXBox.Location = new System.Drawing.Point(99, 6);
+            this.SurfaceGridResolutionXBox.Name = "SurfaceGridResolutionXBox";
+            this.SurfaceGridResolutionXBox.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.SurfaceGridResolutionXBox.Size = new System.Drawing.Size(46, 20);
+            this.SurfaceGridResolutionXBox.TabIndex = 12;
+            this.SurfaceGridResolutionXBox.Tag = "";
+            this.SurfaceGridResolutionXBox.TextChanged += new System.EventHandler(this.SurfaceGridResolutionXBox_TextChanged);
+            // 
+            // ChordParametrizationRadioButton
+            // 
+            this.ChordParametrizationRadioButton.AutoSize = true;
+            this.ChordParametrizationRadioButton.Checked = true;
+            this.ChordParametrizationRadioButton.Location = new System.Drawing.Point(10, 32);
+            this.ChordParametrizationRadioButton.Name = "ChordParametrizationRadioButton";
+            this.ChordParametrizationRadioButton.Size = new System.Drawing.Size(128, 17);
+            this.ChordParametrizationRadioButton.TabIndex = 6;
+            this.ChordParametrizationRadioButton.TabStop = true;
+            this.ChordParametrizationRadioButton.Text = "Chord Parametrization";
+            this.ChordParametrizationRadioButton.UseVisualStyleBackColor = true;
+            this.ChordParametrizationRadioButton.Visible = false;
+            this.ChordParametrizationRadioButton.CheckedChanged += new System.EventHandler(this.ChordParametrizationRadioButton_CheckedChanged);
+            // 
             // PixelMaxSizeLabel
             // 
             this.PixelMaxSizeLabel.AutoSize = true;
@@ -220,6 +282,18 @@
             this.PixelMaxSizeLabel.TabIndex = 11;
             this.PixelMaxSizeLabel.Text = "Pixel Max Size";
             this.PixelMaxSizeLabel.Visible = false;
+            // 
+            // NormalParametrizationRadioButton
+            // 
+            this.NormalParametrizationRadioButton.AutoSize = true;
+            this.NormalParametrizationRadioButton.Location = new System.Drawing.Point(10, 9);
+            this.NormalParametrizationRadioButton.Name = "NormalParametrizationRadioButton";
+            this.NormalParametrizationRadioButton.Size = new System.Drawing.Size(133, 17);
+            this.NormalParametrizationRadioButton.TabIndex = 5;
+            this.NormalParametrizationRadioButton.Text = "Normal Parametrization";
+            this.NormalParametrizationRadioButton.UseVisualStyleBackColor = true;
+            this.NormalParametrizationRadioButton.Visible = false;
+            this.NormalParametrizationRadioButton.CheckedChanged += new System.EventHandler(this.NormalParametrizationRadioButton_CheckedChanged);
             // 
             // PixelMaxSizeBox
             // 
@@ -566,32 +640,6 @@
             this.EffectsPanel.Size = new System.Drawing.Size(150, 144);
             this.EffectsPanel.TabIndex = 10;
             // 
-            // ChordParametrizationRadioButton
-            // 
-            this.ChordParametrizationRadioButton.AutoSize = true;
-            this.ChordParametrizationRadioButton.Checked = true;
-            this.ChordParametrizationRadioButton.Location = new System.Drawing.Point(10, 32);
-            this.ChordParametrizationRadioButton.Name = "ChordParametrizationRadioButton";
-            this.ChordParametrizationRadioButton.Size = new System.Drawing.Size(128, 17);
-            this.ChordParametrizationRadioButton.TabIndex = 6;
-            this.ChordParametrizationRadioButton.TabStop = true;
-            this.ChordParametrizationRadioButton.Text = "Chord Parametrization";
-            this.ChordParametrizationRadioButton.UseVisualStyleBackColor = true;
-            this.ChordParametrizationRadioButton.Visible = false;
-            this.ChordParametrizationRadioButton.CheckedChanged += new System.EventHandler(this.ChordParametrizationRadioButton_CheckedChanged);
-            // 
-            // NormalParametrizationRadioButton
-            // 
-            this.NormalParametrizationRadioButton.AutoSize = true;
-            this.NormalParametrizationRadioButton.Location = new System.Drawing.Point(10, 9);
-            this.NormalParametrizationRadioButton.Name = "NormalParametrizationRadioButton";
-            this.NormalParametrizationRadioButton.Size = new System.Drawing.Size(133, 17);
-            this.NormalParametrizationRadioButton.TabIndex = 5;
-            this.NormalParametrizationRadioButton.Text = "Normal Parametrization";
-            this.NormalParametrizationRadioButton.UseVisualStyleBackColor = true;
-            this.NormalParametrizationRadioButton.Visible = false;
-            this.NormalParametrizationRadioButton.CheckedChanged += new System.EventHandler(this.NormalParametrizationRadioButton_CheckedChanged);
-            // 
             // PolygonalChainCheckBox
             // 
             this.PolygonalChainCheckBox.AutoSize = true;
@@ -870,6 +918,10 @@
         private System.Windows.Forms.Button InterpolationCurveButton;
         private System.Windows.Forms.RadioButton ChordParametrizationRadioButton;
         private System.Windows.Forms.RadioButton NormalParametrizationRadioButton;
+        private System.Windows.Forms.Button BezierPatchC2Button;
+        private System.Windows.Forms.Button BezierPatchC0Button;
+        private System.Windows.Forms.TextBox SurfaceGridResolutionYBox;
+        private System.Windows.Forms.TextBox SurfaceGridResolutionXBox;
     }
 }
 

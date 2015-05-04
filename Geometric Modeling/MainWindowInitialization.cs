@@ -80,7 +80,9 @@ namespace Geometric_Modeling
                         ControlPointsRadioButton, DeBoorsPointsRadioButton}},
                     {ModelType.Cursor, new List<Control>{StereoscopyCheckBox, AdditiveColorBlendingCheckBox}},
                     {ModelType.InterpolationCurve, new List<Control>{StereoscopyCheckBox, AdditiveColorBlendingCheckBox, 
-                        NormalParametrizationRadioButton, ChordParametrizationRadioButton}}
+                        NormalParametrizationRadioButton, ChordParametrizationRadioButton}},
+                        {ModelType.BezierPatch, new List<Control>{SurfaceGridResolutionXBox, SurfaceGridResolutionYBox, GridResolutionXLabel, 
+                    GridResolutionYLabel, StereoscopyCheckBox, AdditiveColorBlendingCheckBox, PolygonalChainCheckBox}}
             };
             DisableAllSettings();
 
@@ -98,6 +100,8 @@ namespace Geometric_Modeling
             _enableWorldDrawing = false;
             GridResolutionXBox.Text = Parameters.GridResolutionX.ToString(CultureInfo.InvariantCulture);
             GridResolutionYBox.Text = Parameters.GridResolutionY.ToString(CultureInfo.InvariantCulture);
+            SurfaceGridResolutionXBox.Text = Parameters.SurfaceGridResolutionX.ToString(CultureInfo.InvariantCulture);
+            SurfaceGridResolutionYBox.Text = Parameters.SurfaceGridResolutionY.ToString(CultureInfo.InvariantCulture);
             IlluminanceBox.Text = Parameters.Illuminance.ToString(CultureInfo.InvariantCulture);
             XAxisFactorBox.Text = Parameters.XAxisFactor.ToString(CultureInfo.InvariantCulture);
             YAxisFactorBox.Text = Parameters.YAxisFactor.ToString(CultureInfo.InvariantCulture);
