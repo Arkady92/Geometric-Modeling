@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Drawing.Drawing2D;
 using System.Linq;
 using Mathematics;
 using Matrix = Mathematics.Matrix;
@@ -290,7 +289,7 @@ namespace Models
             }
             foreach (var bezierPoint in _bezierPoints)
             {
-                bezierPoint.IsRemovable = false;
+                bezierPoint.IsRemovableFromScene = false;
             }
             if (_hiddenModels != null)
                 _hiddenModels.AddRange(_bezierPoints);

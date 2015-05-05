@@ -299,6 +299,7 @@ namespace Geometric_Modeling
             var geometricObject = new BezierSurface(Vector4.Zero(), form.SurfaceWidth, form.SurfaceHeight,
                 form.SurfacePatchesLengthCount, form.SurfacePatchesBreadthCount, form.IsSurfaceCylindrical);
             geometricObject.TranslateToPosition(Models.Cursor.GetCurrentPosition());
+            geometricObject.ChainEnabled = PolygonalChainCheckBox.Checked;
             foreach (var child in geometricObject.GetChildren())
                 ObjectsList.Items.Add(child);
             _models.Add(geometricObject);
@@ -493,9 +494,12 @@ namespace Geometric_Modeling
         private void RemoveSelectedObject()
         {
             var item = ObjectsList.SelectedItem as GeometricModel;
-            if (item != null && item.IsRemovable)
+            if (item != null && item.IsRemovableFromScene)
             {
-                RemovedObject(item);
+                if (item.IsRemovableFromModel)
+                    RemovedObject(item);
+                else
+                    ObjectsList.Items.Remove(item);
             }
             DisableAllSettings();
             DrawWorld();
@@ -506,6 +510,11 @@ namespace Geometric_Modeling
             if (model is ParametricGeometricModel)
             {
                 var parametricModel = model as ParametricGeometricModel;
+                foreach (var child in parametricModel.GetChildren())
+                {
+                    child.IsRemovableFromScene = true;
+                    child.IsRemovableFromModel = true;
+                }
                 if (parametricModel.ReturnChildrenOnRemove)
                 {
                     _models.AddRange(parametricModel.GetChildren());
@@ -627,7 +636,7 @@ namespace Geometric_Modeling
                     if (!Models.Cursor.ModelHandled)
                     {
                         var currentItem = ObjectsList.SelectedItem as ParametricGeometricModel;
-                        if (currentItem != null && currentItem.IsRemovable)
+                        if (currentItem != null && currentItem.IsRemovableFromScene)
                         {
                             currentItem.RemoveModel();
                             if (!_models.Contains(currentItem))
@@ -640,7 +649,7 @@ namespace Geometric_Modeling
                                 if (FindAppropriateObjectOnScene(geometricModel))
                                 {
                                     currentItem = geometricModel as ParametricGeometricModel;
-                                    if (currentItem != null && currentItem.IsRemovable)
+                                    if (currentItem != null && currentItem.IsRemovableFromScene)
                                     {
                                         currentItem.RemoveModel();
                                         if (!_models.Contains(currentItem))

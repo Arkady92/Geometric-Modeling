@@ -6,10 +6,12 @@ namespace Geometric_Modeling
     public partial class SurfaceInitWindow : Form
     {
         public bool IsSurfaceCylindrical = false;
-        public double SurfaceWidth = 0.5;
-        public double SurfaceHeight = 0.4;
-        public int SurfacePatchesLengthCount = 10;
-        public int SurfacePatchesBreadthCount = 10;
+        public double SurfaceWidth = 1;
+        public double SurfaceHeight = 0.75;
+        public double DefaultWidth = 0.1;
+        public double DefaultRadius = 0.5;
+        public int SurfacePatchesLengthCount = 5;
+        public int SurfacePatchesBreadthCount = 5;
 
         public SurfaceInitWindow()
         {
@@ -24,12 +26,16 @@ namespace Geometric_Modeling
         {
             var radioButton = sender as RadioButton;
             if (radioButton != null) IsSurfaceCylindrical = !radioButton.Checked;
+            WidthLabel.Text = @"Width";
+            WidthTextBox.Text = DefaultWidth.ToString(CultureInfo.InvariantCulture);
         }
 
         private void CylindricalPatchRadioButton_CheckedChanged(object sender, System.EventArgs e)
         {
             var radioButton = sender as RadioButton;
             if (radioButton != null) IsSurfaceCylindrical = radioButton.Checked;
+            WidthLabel.Text = @"Radius";
+            WidthTextBox.Text = DefaultRadius.ToString(CultureInfo.InvariantCulture);
         }
 
         private void LengthTextBox_TextChanged(object sender, System.EventArgs e)

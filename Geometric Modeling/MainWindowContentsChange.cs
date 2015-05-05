@@ -16,13 +16,13 @@ namespace Geometric_Modeling
             var textBox = sender as TextBox;
             int result;
             if (textBox == null) return;
-            if (int.TryParse(textBox.Text, out result) && result >= 0 && result < 1000)
+            if (int.TryParse(textBox.Text, out result) && result > 1 && result < 1000)
             {
                 Parameters.SurfaceGridResolutionX = result;
                 UpdateCurrentModel();
                 DrawWorld();
             }
-            else if (textBox.Text != string.Empty)
+            else if (textBox.Text != string.Empty && textBox.Text[0] != '0' && textBox.Text[0] != '1')
                 textBox.Text = Parameters.SurfaceGridResolutionX.ToString(CultureInfo.InvariantCulture);
         }
 
@@ -32,13 +32,13 @@ namespace Geometric_Modeling
             var textBox = sender as TextBox;
             int result;
             if (textBox == null) return;
-            if (int.TryParse(textBox.Text, out result) && result >= 0 && result < 1000)
+            if (int.TryParse(textBox.Text, out result) && result > 1 && result < 1000)
             {
                 Parameters.SurfaceGridResolutionY = result;
                 UpdateCurrentModel();
                 DrawWorld();
             }
-            else if (textBox.Text != string.Empty)
+            else if (textBox.Text != string.Empty && textBox.Text[0] != '0' && textBox.Text[0] != '1')
                 textBox.Text = Parameters.SurfaceGridResolutionY.ToString(CultureInfo.InvariantCulture);
         }
         

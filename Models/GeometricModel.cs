@@ -7,7 +7,9 @@ namespace Models
     [Serializable]
     public abstract class GeometricModel
     {
-        public bool IsRemovable = true;
+        public bool IsRemovableFromScene = true;
+
+        public bool IsRemovableFromModel = true;
 
         public static int Increment;
         public int Id;
@@ -99,7 +101,6 @@ namespace Models
         public abstract void Draw(Graphics graphics, Matrix currentProjectionMatrix);
 
         public abstract void UpdateModel();
-        //public abstract void UpdatePositions(Vector4 shift);
 
     }
 }
