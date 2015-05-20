@@ -47,6 +47,7 @@
     <Compile Include="BezierCurve.cs" />
     <Compile Include="BezierCurveC2.cs" />
     <Compile Include="BezierSurface.cs" />
+    <Compile Include="BezierSurfaceC2.cs" />
     <Compile Include="Cursor.cs" />
     <Compile Include="Ellipsoid.cs" />
     <Compile Include="GeometricModel.cs" />

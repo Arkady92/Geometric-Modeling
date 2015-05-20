@@ -28,6 +28,15 @@ namespace Models
             CalculateBSplineCurve();
         }
 
+        public InterpolationCurve(IEnumerable<Point> points, Vector4 position, Matrix operationsMatrix, bool chordParametrizationEnabled = true) :
+            base(points, position, ModelType.InterpolationCurve)
+        {
+            ControlPointsEnabled = false;
+            ChordParametrizationEnabled = chordParametrizationEnabled;
+            OperationMatrix = operationsMatrix;
+            CalculateBSplineCurve();
+        }
+
         protected override void RecreateStructure(int number = 0)
         {
             Vertices.Clear();
@@ -107,7 +116,7 @@ namespace Models
                 taus[i] = knots[i + (knots.Length - points.Count + 2) / 2];
 
             var deBoorsPoints = FindDeBoorsPoints(knots, 3, taus, points);
-            _bezierCurve = new BezierCurveC2(deBoorsPoints, SpacePosition)
+            _bezierCurve = new BezierCurveC2(deBoorsPoints, GetCurrentPosition())
             {
                 ControlPointsEnabled = false,
                 ChainEnabled = false,

@@ -81,13 +81,15 @@ namespace Geometric_Modeling
                     {ModelType.Cursor, new List<Control>{StereoscopyCheckBox, AdditiveColorBlendingCheckBox}},
                     {ModelType.InterpolationCurve, new List<Control>{StereoscopyCheckBox, AdditiveColorBlendingCheckBox, 
                         NormalParametrizationRadioButton, ChordParametrizationRadioButton}},
-                        {ModelType.BezierSurface, new List<Control>{SurfaceGridResolutionXBox, SurfaceGridResolutionYBox, GridResolutionXLabel, 
-                    GridResolutionYLabel, StereoscopyCheckBox, AdditiveColorBlendingCheckBox, PolygonalChainCheckBox}}
+                    {ModelType.BezierSurface, new List<Control>{SurfaceGridResolutionXBox, SurfaceGridResolutionYBox, GridResolutionXLabel, 
+                        GridResolutionYLabel, StereoscopyCheckBox, AdditiveColorBlendingCheckBox, PolygonalChainCheckBox}},
+                    {ModelType.BezierSurfaceC2, new List<Control>{SurfaceGridResolutionXBox, SurfaceGridResolutionYBox, GridResolutionXLabel, 
+                        GridResolutionYLabel, StereoscopyCheckBox, AdditiveColorBlendingCheckBox, PolygonalChainCheckBox}}
             };
             DisableAllSettings();
 
             _models.Add(Models.Cursor.Instance);
-            
+
             Parameters.WorldPanelSizeFactor = (Parameters.WorldPanelWidth < Parameters.WorldPanelHeight) ?
                 Parameters.WorldPanelWidth * 0.25f : Parameters.WorldPanelHeight * 0.25f;
 
@@ -108,9 +110,9 @@ namespace Geometric_Modeling
             ZAxisFactorBox.Text = Parameters.ZAxisFactor.ToString(CultureInfo.InvariantCulture);
             PixelMaxSizeBox.Text = Parameters.PixelMaxSize.ToString(CultureInfo.InvariantCulture);
             var position = Models.Cursor.GetCurrentPosition();
-            CursorXBox.Text = Math.Round(position.X,2).ToString(CultureInfo.InvariantCulture);
-            CursorYBox.Text = Math.Round(position.Y,2).ToString(CultureInfo.InvariantCulture);
-            CursorZBox.Text = Math.Round(position.Z,2).ToString(CultureInfo.InvariantCulture);
+            CursorXBox.Text = Math.Round(position.X, 2).ToString(CultureInfo.InvariantCulture);
+            CursorYBox.Text = Math.Round(position.Y, 2).ToString(CultureInfo.InvariantCulture);
+            CursorZBox.Text = Math.Round(position.Z, 2).ToString(CultureInfo.InvariantCulture);
             CursorScreenXBox.Text = Models.Cursor.ScreenXPosition.ToString(CultureInfo.InvariantCulture);
             CursorScreenYBox.Text = Models.Cursor.ScreenYPosition.ToString(CultureInfo.InvariantCulture);
             _enableWorldDrawing = true;

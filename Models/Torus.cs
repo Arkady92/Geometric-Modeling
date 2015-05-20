@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Drawing;
 using System.Drawing.Drawing2D;
+using System.Globalization;
 using System.Linq;
 using Mathematics;
 using Matrix = Mathematics.Matrix;
@@ -21,6 +22,7 @@ namespace Models
             SmallRadius = smallRadius;
             CreateVertices();
             CreateEdges();
+            CustomName = (_increment++).ToString(CultureInfo.InvariantCulture);
         }
 
         protected override void CreateEdges()
@@ -79,8 +81,8 @@ namespace Models
         protected override void DrawModel(Graphics graphics, Matrix currentProjectionMatrix, Color color)
         {
             Matrix currentMatrix = OperationsMatrices.Identity();
-            currentMatrix = Parents.Aggregate(currentMatrix, (current, parent) => current * parent.CurrentOperationMatrix);
-            currentMatrix = currentProjectionMatrix * currentMatrix * CurrentOperationMatrix;
+            currentMatrix = Parents.Aggregate(currentMatrix, (current, parent) => current * parent.OperationMatrix);
+            currentMatrix = currentProjectionMatrix * currentMatrix * OperationMatrix;
 
             var pen = new Pen(color);
             var vertices = Vertices.Select(vertex => currentMatrix * vertex).ToList();
@@ -95,12 +97,6 @@ namespace Models
                     (float)vertices[edge.EndVertex].Y * Parameters.WorldPanelSizeFactor);
             }
             //graphics.DrawPath(pen, graphicsPath);
-        }
-        public override string ToString()
-        {
-            if (CustomName != null)
-                return "Torus <" + CustomName + ">";
-            return "Torus <" + _increment++ + ">";
         }
 
         protected override void RecreateStructure(int number = 0)

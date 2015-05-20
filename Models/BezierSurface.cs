@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Globalization;
 using System.Linq;
 using Mathematics;
 
@@ -8,63 +9,102 @@ namespace Models
 {
     public class BezierSurface : ParametricGeometricModel
     {
-        private readonly double _width;
-        private readonly double _height;
-        private readonly int _patchesLengthCount;
-        private readonly int _patchesBreadthCount;
-        private readonly bool _isCylindrical;
-        private List<Vector4[,]> _patchesVertices;
+        public readonly double Width;
+        public readonly double Height;
+        public readonly int PatchesLengthCount;
+        public readonly int PatchesBreadthCount;
+        public readonly bool IsCylindrical;
+        protected List<Point[,]> PatchesPoints;
 
-        private const int Degree = 3;
+        protected readonly int GridBreadthCount;
+        protected readonly int GridLengthFlatCount;
+        protected readonly int GridLengthCylindricalCount;
+
+        protected const int Degree = 3;
+        private static int _increment = 1;
 
         public bool ChainEnabled { get; set; }
 
         public BezierSurface(Vector4 position, double width, double height, int patchesLengthCount, int patchesBreadthCount,
-            bool isCylindrical)
-            : base(ModelType.BezierSurface, position)
+            bool isCylindrical, ModelType modelType = ModelType.BezierSurface)
+            : base(modelType, position)
         {
-            _width = width;
-            _height = height;
-            _patchesLengthCount = patchesLengthCount;
-            _patchesBreadthCount = patchesBreadthCount;
-            _isCylindrical = isCylindrical;
+            Width = width;
+            Height = height;
+            PatchesLengthCount = patchesLengthCount;
+            PatchesBreadthCount = patchesBreadthCount;
+            IsCylindrical = isCylindrical;
+            GridBreadthCount = (Type == ModelType.BezierSurface) ? PatchesBreadthCount * Degree : PatchesBreadthCount + Degree - 1;
+            GridLengthCylindricalCount = (Type == ModelType.BezierSurface) ? PatchesLengthCount * Degree :
+                PatchesLengthCount + Degree - 3;
+            GridLengthFlatCount = (Type == ModelType.BezierSurface) ? PatchesLengthCount * Degree : PatchesLengthCount + Degree - 1;
             CreateVertices();
             CreateEdges();
             CreatePatches();
+            CustomName = (_increment++).ToString(CultureInfo.InvariantCulture);
         }
 
-        private void CreatePatches()
+        public BezierSurface(IEnumerable<Point> points, Vector4 position, double width, double height, int patchesLengthCount,
+            int patchesBreadthCount, bool isCylindrical, ModelType modelType = ModelType.BezierSurface)
+            : base(modelType, position)
         {
-            if (_isCylindrical)
+            Width = width;
+            Height = height;
+            PatchesLengthCount = patchesLengthCount;
+            PatchesBreadthCount = patchesBreadthCount;
+            IsCylindrical = isCylindrical;
+            GridBreadthCount = (Type == ModelType.BezierSurface) ? PatchesBreadthCount * Degree : PatchesBreadthCount + Degree - 1;
+            GridLengthCylindricalCount = (Type == ModelType.BezierSurface) ? PatchesLengthCount * Degree :
+                PatchesLengthCount + Degree - 3;
+            GridLengthFlatCount = (Type == ModelType.BezierSurface) ? PatchesLengthCount * Degree : PatchesLengthCount + Degree -1;
+            var enumerable = points as Point[] ?? points.ToArray();
+            for (int i = 0; i < enumerable.Count(); i++)
             {
-                _patchesVertices = new List<Vector4[,]>();
+                var vector = enumerable[i].GetCurrentPosition();
+                Vertices.Add(vector);
+                enumerable[i].AddParent(this, i);
+                enumerable[i].IsRemovableFromModel = false;
+                Children.Add(enumerable[i]);
+            }
+            CreateEdges();
+            CreatePatches();
+            CustomName = (_increment++).ToString(CultureInfo.InvariantCulture);
+            ChainEnabled = true;
+        }
 
-                for (var i = 0; i < _patchesBreadthCount; i++)
+        protected virtual void CreatePatches()
+        {
+            if (IsCylindrical)
+            {
+                PatchesPoints = new List<Point[,]>();
+
+                for (var i = 0; i < PatchesBreadthCount; i++)
                 {
-                    for (var j = 0; j < _patchesLengthCount; j++)
+                    for (var j = 0; j < PatchesLengthCount; j++)
                     {
-                        var vertices = new Vector4[Degree + 1, Degree + 1];
+                        var vertices = new Point[Degree + 1, Degree + 1];
                         for (int k = i * Degree; k < (i + 1) * Degree + 1; k++)
                             for (int l = j * Degree; l < (j + 1) * Degree + 1; l++)
-                                vertices[k - i * Degree, l - j * Degree] = Vertices[k * (_patchesLengthCount * Degree)
-                                    + (l % (_patchesLengthCount * Degree))];
-                        _patchesVertices.Add(vertices);
+                                vertices[k - i * Degree, l - j * Degree] = Children[k * (GridLengthCylindricalCount)
+                                    + (l % (GridLengthCylindricalCount))] as Point;
+                        PatchesPoints.Add(vertices);
                     }
                 }
             }
             else
             {
-                _patchesVertices = new List<Vector4[,]>();
+                PatchesPoints = new List<Point[,]>();
 
-                for (var i = 0; i < _patchesBreadthCount; i++)
+                for (var i = 0; i < PatchesBreadthCount; i++)
                 {
-                    for (var j = 0; j < _patchesLengthCount; j++)
+                    for (var j = 0; j < PatchesLengthCount; j++)
                     {
-                        var vertices = new Vector4[Degree + 1, Degree + 1];
+                        var vertices = new Point[Degree + 1, Degree + 1];
                         for (int k = i * Degree; k < (i + 1) * Degree + 1; k++)
                             for (int l = j * Degree; l < (j + 1) * Degree + 1; l++)
-                                vertices[k - i * Degree, l - j * Degree] = Vertices[k * (_patchesLengthCount * Degree + 1) + l];
-                        _patchesVertices.Add(vertices);
+                                vertices[k - i * Degree, l - j * Degree] =
+                                    Children[k * (GridLengthFlatCount + 1) + l] as Point;
+                        PatchesPoints.Add(vertices);
                     }
                 }
             }
@@ -73,42 +113,42 @@ namespace Models
         protected override void CreateEdges()
         {
 
-            if (_isCylindrical)
+            if (IsCylindrical)
             {
                 int idx;
-                for (var i = 0; i < _patchesBreadthCount * Degree; i++)
+                for (var i = 0; i < GridBreadthCount; i++)
                 {
-                    for (var j = 0; j < _patchesLengthCount * Degree; j++)
+                    for (var j = 0; j < GridLengthCylindricalCount; j++)
                     {
-                        idx = i * (_patchesLengthCount * Degree) + j;
-                        Edges.Add(new Edge(idx, i * (_patchesLengthCount * Degree) + ((j + 1) % (_patchesLengthCount * Degree))));
-                        Edges.Add(new Edge(idx, (i + 1) * (_patchesLengthCount * Degree) + j));
+                        idx = i * (GridLengthCylindricalCount) + j;
+                        Edges.Add(new Edge(idx, i * (GridLengthCylindricalCount) + ((j + 1) % (GridLengthCylindricalCount))));
+                        Edges.Add(new Edge(idx, (i + 1) * (GridLengthCylindricalCount) + j));
                     }
                 }
-                idx = (_patchesLengthCount * Degree) * _patchesBreadthCount * Degree;
-                for (int i = 0; i < _patchesLengthCount * Degree - 1; i++)
+                idx = (GridLengthCylindricalCount) * GridBreadthCount;
+                for (int i = 0; i < GridLengthCylindricalCount - 1; i++)
                     Edges.Add(new Edge(idx, ++idx));
-                Edges.Add(new Edge(idx, (_patchesLengthCount * Degree) * _patchesBreadthCount * Degree));
+                Edges.Add(new Edge(idx, (GridLengthCylindricalCount) * GridBreadthCount));
             }
             else
             {
                 int idx;
-                for (var i = 0; i < _patchesBreadthCount * Degree; i++)
+                for (var i = 0; i < GridBreadthCount; i++)
                 {
-                    for (var j = 0; j < _patchesLengthCount * Degree; j++)
+                    for (var j = 0; j < GridLengthFlatCount; j++)
                     {
-                        idx = i * (_patchesLengthCount * Degree + 1) + j;
+                        idx = i * (GridLengthFlatCount + 1) + j;
                         Edges.Add(new Edge(idx, idx + 1));
-                        Edges.Add(new Edge(idx, (i + 1) * (_patchesLengthCount * Degree + 1) + j));
+                        Edges.Add(new Edge(idx, (i + 1) * (GridLengthFlatCount + 1) + j));
                     }
                 }
-                idx = (_patchesLengthCount * Degree + 1) * _patchesBreadthCount * Degree;
-                for (int i = 0; i < _patchesLengthCount * Degree; i++)
+                idx = (GridLengthFlatCount + 1) * GridBreadthCount;
+                for (int i = 0; i < GridLengthFlatCount; i++)
                     Edges.Add(new Edge(idx, ++idx));
-                for (int i = 0; i < _patchesBreadthCount * Degree; i++)
+                for (int i = 0; i < GridBreadthCount; i++)
                 {
-                    idx = (_patchesLengthCount * Degree + 1) * i + _patchesLengthCount * Degree;
-                    Edges.Add(new Edge(idx, idx + _patchesLengthCount * Degree + 1));
+                    idx = (GridLengthFlatCount + 1) * i + GridLengthFlatCount;
+                    Edges.Add(new Edge(idx, idx + GridLengthFlatCount + 1));
 
                 }
             }
@@ -116,17 +156,17 @@ namespace Models
 
         protected override void CreateVertices()
         {
-            if (_isCylindrical)
+            if (IsCylindrical)
             {
-                var stepAlpha = 2 * Math.PI / (_patchesLengthCount * Degree);
-                var stepY = _height / (_patchesBreadthCount * Degree);
-                for (var i = 0; i < _patchesBreadthCount * Degree + 1; i++)
+                var stepAlpha = 2 * Math.PI / (GridLengthCylindricalCount);
+                var stepY = Height / (GridBreadthCount);
+                for (var i = 0; i < GridBreadthCount + 1; i++)
                 {
-                    var posY = -_height / 2 + i * stepY;
-                    for (var j = 0; j < _patchesLengthCount * Degree; j++)
+                    var posY = -Height / 2 + i * stepY;
+                    for (var j = 0; j < GridLengthCylindricalCount; j++)
                     {
-                        var posX = _width * Math.Cos(j *stepAlpha);
-                        var posZ = _width * Math.Sin(j * stepAlpha);
+                        var posX = Width * Math.Cos(j * stepAlpha);
+                        var posZ = Width * Math.Sin(j * stepAlpha);
                         Vertices.Add(new Vector4(posX, posY, posZ));
                     }
                 }
@@ -137,14 +177,14 @@ namespace Models
             }
             else
             {
-                var stepX = _width / (_patchesLengthCount * Degree);
-                var stepY = _height / (_patchesBreadthCount * Degree);
-                for (var i = 0; i < _patchesBreadthCount * Degree + 1; i++)
+                var stepX = Width / (GridLengthFlatCount);
+                var stepY = Height / (GridBreadthCount);
+                for (var i = 0; i < GridBreadthCount + 1; i++)
                 {
-                    var posY = -_height / 2 + i * stepY;
-                    for (var j = 0; j < _patchesLengthCount * Degree + 1; j++)
+                    var posY = -Height / 2 + i * stepY;
+                    for (var j = 0; j < GridLengthFlatCount + 1; j++)
                     {
-                        var posX = -_width / 2 + j * stepX;
+                        var posX = -Width / 2 + j * stepX;
                         Vertices.Add(new Vector4(posX, posY, 0));
                     }
                 }
@@ -162,16 +202,16 @@ namespace Models
 
         public override void UpdateModel() { }
 
-        private void DrawPatches(Graphics graphics, Matrix currentProjectionMatrix, Color color, Bitmap bitmap = null, bool blendingEnabled = false)
+        protected virtual void DrawPatches(Graphics graphics, Matrix currentProjectionMatrix, Color color, Bitmap bitmap = null, bool blendingEnabled = false)
         {
             Matrix currentMatrix = OperationsMatrices.Identity();
-            currentMatrix = Parents.Aggregate(currentMatrix, (current, parent) => current * parent.CurrentOperationMatrix);
-            currentMatrix = currentMatrix * CurrentOperationMatrix;
+            currentMatrix = Parents.Aggregate(currentMatrix, (current, parent) => current * parent.OperationMatrix);
+            currentMatrix = currentMatrix * OperationMatrix;
             var pen = new Pen(color);
 
             var uStep = 1.0 / (Parameters.SurfaceGridResolutionX - 1);
             var vStep = 1.0 / (Parameters.SurfaceGridResolutionY - 1);
-            foreach (var points in _patchesVertices)
+            foreach (var points in PatchesPoints)
             {
                 var xMatrix = new Matrix(Degree + 1, Degree + 1);
                 var yMatrix = new Matrix(Degree + 1, Degree + 1);
@@ -180,7 +220,7 @@ namespace Models
                 {
                     for (int j = 0; j < Degree + 1; j++)
                     {
-                        var point = currentMatrix * points[i, j];
+                        var point = currentMatrix * points[i, j].GetCurrentPositionWithoutMineTransformations(this);
                         xMatrix[i, j] = point.X;
                         yMatrix[i, j] = point.Y;
                         zMatrix[i, j] = point.Z;
@@ -274,8 +314,8 @@ namespace Models
         protected override void DrawModel(Graphics graphics, Matrix currentProjectionMatrix, Color color)
         {
             Matrix currentMatrix = OperationsMatrices.Identity();
-            currentMatrix = Parents.Aggregate(currentMatrix, (current, parent) => current * parent.CurrentOperationMatrix);
-            currentMatrix = currentProjectionMatrix * currentMatrix * CurrentOperationMatrix;
+            currentMatrix = Parents.Aggregate(currentMatrix, (current, parent) => current * parent.OperationMatrix);
+            currentMatrix = currentProjectionMatrix * currentMatrix * OperationMatrix;
 
             if (ChainEnabled)
             {
@@ -295,8 +335,8 @@ namespace Models
         protected override void DrawWithAdditiveBlending(Bitmap bitmap, Graphics graphics, Matrix currentProjectionMatrix, Color color)
         {
             Matrix currentMatrix = OperationsMatrices.Identity();
-            currentMatrix = Parents.Aggregate(currentMatrix, (current, parent) => current * parent.CurrentOperationMatrix);
-            currentMatrix = currentProjectionMatrix * currentMatrix * CurrentOperationMatrix;
+            currentMatrix = Parents.Aggregate(currentMatrix, (current, parent) => current * parent.OperationMatrix);
+            currentMatrix = currentProjectionMatrix * currentMatrix * OperationMatrix;
 
             if (ChainEnabled)
             {
@@ -314,6 +354,11 @@ namespace Models
                 }
             }
             DrawPatches(graphics, currentProjectionMatrix, color, bitmap, true);
+        }
+
+        public List<Point[,]> GetPatches()
+        {
+            return PatchesPoints;
         }
     }
 }

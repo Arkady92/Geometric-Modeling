@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Globalization;
 using System.Linq;
 using Mathematics;
 using Matrix = Mathematics.Matrix;
@@ -22,6 +23,7 @@ namespace Models
             _hiddenModels = hiddenModels;
             _bezierPoints = new List<Point>();
             CalculateBezierPoints();
+            CustomName = (_increment++).ToString(CultureInfo.InvariantCulture);
         }
 
         public BezierCurveC2(IEnumerable<Point> points, Vector4 position, List<GeometricModel> hiddenModels = null,
@@ -32,6 +34,7 @@ namespace Models
             _hiddenModels = hiddenModels;
             _bezierPoints = new List<Point>();
             CalculateBezierPoints();
+            CustomName = (_increment++).ToString(CultureInfo.InvariantCulture);
         }
 
         protected override void CreateVertices()
@@ -51,13 +54,6 @@ namespace Models
             }
         }
 
-        public override string ToString()
-        {
-            if (CustomName != null)
-                return "Bezier Curve C2 <" + CustomName + ">";
-            return "Bezier Curve C2 <" + _increment++ + ">";
-        }
-
         public override void Draw(Graphics graphics, Matrix currentProjectionMatrix)
         {
             base.Draw(graphics, currentProjectionMatrix);
@@ -75,8 +71,8 @@ namespace Models
         protected override void DrawModel(Graphics graphics, Matrix currentProjectionMatrix, Color color)
         {
             Matrix currentMatrix = OperationsMatrices.Identity();
-            currentMatrix = Parents.Aggregate(currentMatrix, (current, parent) => current * parent.CurrentOperationMatrix);
-            currentMatrix = currentMatrix * CurrentOperationMatrix;
+            currentMatrix = Parents.Aggregate(currentMatrix, (current, parent) => current * parent.OperationMatrix);
+            currentMatrix = currentMatrix * OperationMatrix;
             var vertices = Vertices.Select(vertex => currentMatrix * vertex).ToList();
             var finalVertices = vertices.Select(vertex => currentProjectionMatrix * vertex).ToList();
 
@@ -167,8 +163,8 @@ namespace Models
         protected override void DrawWithAdditiveBlending(Bitmap bitmap, Graphics graphics, Matrix currentProjectionMatrix, Color color)
         {
             Matrix currentMatrix = OperationsMatrices.Identity();
-            currentMatrix = Parents.Aggregate(currentMatrix, (current, parent) => current * parent.CurrentOperationMatrix);
-            currentMatrix = currentMatrix * CurrentOperationMatrix;
+            currentMatrix = Parents.Aggregate(currentMatrix, (current, parent) => current * parent.OperationMatrix);
+            currentMatrix = currentMatrix * OperationMatrix;
             var vertices = Vertices.Select(vertex => currentMatrix * vertex).ToList();
             var finalVertices = vertices.Select(vertex => currentProjectionMatrix * vertex).ToList();
 

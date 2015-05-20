@@ -11,8 +11,6 @@ namespace Models
 
         protected List<Edge> Edges;
 
-        public Color DefaultColor;
-
         protected List<ParametricGeometricModel> Children;
 
         protected List<ParametricGeometricModel> Parents;
@@ -34,7 +32,7 @@ namespace Models
             RotationFactor = 0.01;
             ScaleFactor = 1.02;
             MaximumScaleFactor = 20;
-            DefaultColor = Color.White;
+            Color = Color.White;
             ReturnChildrenOnRemove = returnChildrenOnRemove;
         }
 
@@ -45,15 +43,15 @@ namespace Models
         public override Vector4 GetCurrentPosition()
         {
             Matrix parrentsMatrix = OperationsMatrices.Identity();
-            parrentsMatrix = Parents.Aggregate(parrentsMatrix, (current, parent) => current * parent.CurrentOperationMatrix);
-            return CurrentOperationMatrix * parrentsMatrix * SpacePosition;
+            parrentsMatrix = Parents.Aggregate(parrentsMatrix, (current, parent) => current * parent.OperationMatrix);
+            return OperationMatrix * parrentsMatrix * SpacePosition;
         }
 
         public Vector4 GetCurrentPositionWithoutMineTransformations(ParametricGeometricModel model)
         {
             Matrix parrentsMatrix = OperationsMatrices.Identity();
-            parrentsMatrix = Parents.Where(parent => parent != model).Aggregate(parrentsMatrix, (current, parent) => current * parent.CurrentOperationMatrix);
-            return CurrentOperationMatrix * parrentsMatrix * SpacePosition;
+            parrentsMatrix = Parents.Where(parent => parent != model).Aggregate(parrentsMatrix, (current, parent) => current * parent.OperationMatrix);
+            return OperationMatrix * parrentsMatrix * SpacePosition;
         }
 
         public override void UpdateModel()
@@ -82,7 +80,7 @@ namespace Models
 
         public void RemoveParent(ParametricGeometricModel parent)
         {
-            CurrentOperationMatrix = parent.CurrentOperationMatrix * CurrentOperationMatrix;
+            OperationMatrix = parent.OperationMatrix * OperationMatrix;
             Parents.Remove(parent);
         }
         public void RemoveChild(ParametricGeometricModel child)
@@ -149,8 +147,8 @@ namespace Models
         protected virtual void DrawWithAdditiveBlending(Bitmap bitmap, Graphics graphics, Matrix currentProjectionMatrix, Color color)
         {
             Matrix currentMatrix = OperationsMatrices.Identity();
-            currentMatrix = Parents.Aggregate(currentMatrix, (current, parent) => current * parent.CurrentOperationMatrix);
-            currentMatrix = currentProjectionMatrix * currentMatrix * CurrentOperationMatrix;
+            currentMatrix = Parents.Aggregate(currentMatrix, (current, parent) => current * parent.OperationMatrix);
+            currentMatrix = currentProjectionMatrix * currentMatrix * OperationMatrix;
 
             var vertices = Vertices.Select(vertex => currentMatrix * vertex).ToList();
             foreach (var edge in Edges)
@@ -174,14 +172,14 @@ namespace Models
                 (Type == ModelType.BezierCurve && (this as BezierCurve).ControlPointsEnabled))
                 foreach (var geometricModel in Children)
                     geometricModel.Draw(graphics, currentProjectionMatrix);
-            DrawModel(graphics, currentProjectionMatrix, DefaultColor);
+            DrawModel(graphics, currentProjectionMatrix, Color);
         }
 
         protected virtual void DrawModel(Graphics graphics, Matrix currentProjectionMatrix, Color color)
         {
             Matrix currentMatrix = OperationsMatrices.Identity();
-            currentMatrix = Parents.Aggregate(currentMatrix, (current, parent) => current * parent.CurrentOperationMatrix);
-            currentMatrix = currentProjectionMatrix * currentMatrix * CurrentOperationMatrix;
+            currentMatrix = Parents.Aggregate(currentMatrix, (current, parent) => current * parent.OperationMatrix);
+            currentMatrix = currentProjectionMatrix * currentMatrix * OperationMatrix;
 
             var pen = new Pen(color);
             var vertices = Vertices.Select(vertex => currentMatrix * vertex).ToList();
@@ -212,7 +210,7 @@ namespace Models
         {
             var shift = GetCurrentPosition();
             shift = position - shift;
-            CurrentOperationMatrix = OperationsMatrices.Translation(shift.X, shift.Y, shift.Z) * CurrentOperationMatrix;
+            OperationMatrix = OperationsMatrices.Translation(shift.X, shift.Y, shift.Z) * OperationMatrix;
             PropagateTransformation();
         }
 

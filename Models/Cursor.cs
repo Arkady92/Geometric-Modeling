@@ -76,20 +76,20 @@ namespace Models
 
         public new static Vector4 GetCurrentPosition()
         {
-            return Instance.CurrentOperationMatrix * _position;
+            return Instance.OperationMatrix * _position;
         }
 
         public static void AddHandledModel(GeometricModel model)
         {
             _handledModel = model;
             ModelHandled = true;
-            Instance.DefaultColor = Color.Yellow;
+            Instance.Color = Color.Yellow;
         }
         public static void RemoveHandledModel()
         {
             _handledModel = null;
             ModelHandled = false;
-            Instance.DefaultColor = Color.White;
+            Instance.Color = Color.White;
         }
 
         protected override void CreateEdges()
@@ -112,7 +112,7 @@ namespace Models
         public override void Draw(Graphics graphics, Matrix currentProjectionMatrix)
         {
             base.Draw(graphics, currentProjectionMatrix);
-            var position = currentProjectionMatrix * CurrentOperationMatrix * _position;
+            var position = currentProjectionMatrix * OperationMatrix * _position;
             _screenPosition.X = (int)(position.X * Parameters.WorldPanelSizeFactor);
             _screenPosition.Y = -(int)(position.Y * Parameters.WorldPanelSizeFactor);
         }
@@ -120,8 +120,8 @@ namespace Models
         public override void DrawStereoscopy(Graphics graphics, Matrix leftMatrix, Matrix rightMatrix, bool additiveColorBlending = false)
         {
             base.DrawStereoscopy(graphics, leftMatrix, rightMatrix, additiveColorBlending);
-            var lPos = leftMatrix * CurrentOperationMatrix * _position;
-            var rPos = rightMatrix * CurrentOperationMatrix * _position;
+            var lPos = leftMatrix * OperationMatrix * _position;
+            var rPos = rightMatrix * OperationMatrix * _position;
             _screenPosition.X = (int)((lPos.X + rPos.X) * 0.5 * Parameters.WorldPanelSizeFactor);
             _screenPosition.Y = -(int)((lPos.Y + rPos.Y) * 0.5 * Parameters.WorldPanelSizeFactor);
         }

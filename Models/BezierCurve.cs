@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Globalization;
 using System.Linq;
 using Mathematics;
 
@@ -22,6 +23,7 @@ namespace Models
             ControlPointsEnabled = true;
             CreateVertices();
             CreateEdges();
+            CustomName = (_increment++).ToString(CultureInfo.InvariantCulture);
         }
 
         public BezierCurve(IEnumerable<Point> points, Vector4 position, ModelType modelType = ModelType.BezierCurve,
@@ -39,6 +41,7 @@ namespace Models
                 Children.Add(enumerable[i]);
             }
             CreateEdges();
+            CustomName = (_increment++).ToString(CultureInfo.InvariantCulture);
         }
 
         protected override void CreateEdges()
@@ -59,13 +62,6 @@ namespace Models
             }
         }
 
-        public override string ToString()
-        {
-            if (CustomName != null)
-                return "Bezier Curve C0 <" + CustomName + ">";
-            return "Bezier Curve C0 <" + _increment++ + ">";
-        }
-
         protected override void RecreateStructure(int number = 0)
         {
             Vertices.Clear();
@@ -83,8 +79,8 @@ namespace Models
         {
             var brush = new SolidBrush(color);
             Matrix currentMatrix = OperationsMatrices.Identity();
-            currentMatrix = Parents.Aggregate(currentMatrix, (current, parent) => current * parent.CurrentOperationMatrix);
-            currentMatrix = currentMatrix * CurrentOperationMatrix;
+            currentMatrix = Parents.Aggregate(currentMatrix, (current, parent) => current * parent.OperationMatrix);
+            currentMatrix = currentMatrix * OperationMatrix;
 
             var vertices = Vertices.Select(vertex => currentMatrix * vertex).ToList();
             var finalVertices = vertices.Select(vertex => currentProjectionMatrix * vertex).ToList();
@@ -210,8 +206,8 @@ namespace Models
         protected override void DrawWithAdditiveBlending(Bitmap bitmap, Graphics graphics, Matrix currentProjectionMatrix, Color color)
         {
             Matrix currentMatrix = OperationsMatrices.Identity();
-            currentMatrix = Parents.Aggregate(currentMatrix, (current, parent) => current * parent.CurrentOperationMatrix);
-            currentMatrix = currentMatrix * CurrentOperationMatrix;
+            currentMatrix = Parents.Aggregate(currentMatrix, (current, parent) => current * parent.OperationMatrix);
+            currentMatrix = currentMatrix * OperationMatrix;
 
             var vertices = Vertices.Select(vertex => currentMatrix * vertex).ToList();
             var finalVertices = vertices.Select(vertex => currentProjectionMatrix * vertex).ToList();

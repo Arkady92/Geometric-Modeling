@@ -9,6 +9,7 @@
         Cursor,
         BezierCurveC2,
         InterpolationCurve,
-        BezierSurface
+        BezierSurface,
+        BezierSurfaceC2
     }
 }

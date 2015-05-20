@@ -1,4 +1,5 @@
-﻿using Mathematics;
+﻿using System.Globalization;
+using Mathematics;
 
 namespace Models
 {
@@ -52,6 +53,7 @@ namespace Models
         {
             CreateVertices();
             CreateEdges();
+            CustomName = (_increment++).ToString(CultureInfo.InvariantCulture);
         }
 
         public Point(Vector4 position, ParametricGeometricModel parent, int vertexIndex)
@@ -60,6 +62,7 @@ namespace Models
             AddParent(parent, vertexIndex);
             CreateVertices();
             CreateEdges();
+            CustomName = (_increment++).ToString(CultureInfo.InvariantCulture);
         }
 
         public void AddParent(ParametricGeometricModel parent, int vertexIndex)
@@ -94,13 +97,6 @@ namespace Models
             Vertices.Add(new Vector4(X + CubeSize, Y + CubeSize, Z - CubeSize));
             Vertices.Add(new Vector4(X + CubeSize, Y + CubeSize, Z + CubeSize));
             Vertices.Add(new Vector4(X - CubeSize, Y + CubeSize, Z + CubeSize));
-        }
-
-        public override string ToString()
-        {
-            if (CustomName != null)
-                return "Point <" + CustomName + ">";
-            return "Point <" + _increment++ + ">";
         }
 
         public override void PropagateTransformation(ParametricGeometricModel geometricModel = null)

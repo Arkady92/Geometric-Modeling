@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Drawing;
+using System.Globalization;
 using Mathematics;
 using Matrix = Mathematics.Matrix;
 
@@ -7,28 +8,27 @@ namespace Models
 {
     public class Ellipsoid : ImplicitGeometricModel
     {
-        public Matrix ModelMatrix { get; private set; }
         private readonly Vector4 _lightPosition;
 
         private static int _increment = 1;
-
 
         public Ellipsoid(Vector4 position)
             : base(ModelType.Ellipsoid, position)
         {
             UpdateModel();
             _lightPosition = new Vector4(500, 500, 500, 0);
+            CustomName = (_increment++).ToString(CultureInfo.InvariantCulture);
         }
         public override void Draw(Graphics graphics, Matrix currentProjectionMatrix)
         {
-            var inverseMatrix = CurrentOperationMatrix.Invert();
+            var inverseMatrix = OperationMatrix.Invert();
             var resultMatrix = Matrix.Transpose(inverseMatrix) * ModelMatrix * inverseMatrix;
             DrawFrame(graphics, resultMatrix, 1);
         }
 
         public override void Draw(Graphics graphics, int pixelSize, Matrix currentProjectionMatrix = null)
         {
-            var inverseMatrix = CurrentOperationMatrix.Invert();
+            var inverseMatrix = OperationMatrix.Invert();
             var resultMatrix = Matrix.Transpose(inverseMatrix) * ModelMatrix * inverseMatrix;
             DrawFrame(graphics, resultMatrix, pixelSize);
         }
@@ -65,16 +65,16 @@ namespace Models
             var factor = normal * light;
             if (factor < 0) factor = 0;
             factor = Math.Pow(factor, Parameters.Illuminance);
-            var r = (int)(factor * Parameters.DefaultModelColor.R);
-            var g = (int)(factor * Parameters.DefaultModelColor.G);
-            var b = (int)(factor * Parameters.DefaultModelColor.B);
+            var r = (int)(factor * Color.R);
+            var g = (int)(factor * Color.G);
+            var b = (int)(factor * Color.B);
             if (r < 0) r = 0;
             if (r > 255) r = 255;
             if (g < 0) g = 0;
             if (g > 255) g = 255;
             if (b < 0) b = 0;
             if (b > 255) b = 255;
-            graphics.FillRectangle(new SolidBrush(Color.FromArgb(Parameters.DefaultModelColor.A, r, g, b)),
+            graphics.FillRectangle(new SolidBrush(Color.FromArgb(Color.A, r, g, b)),
                 x - pixelSize / 2,
                 y - pixelSize / 2,
                 pixelSize,
@@ -99,13 +99,6 @@ namespace Models
         public override void UpdateModel()
         {
             ModelMatrix = OperationsMatrices.Diagonal(Parameters.XAxisFactor, Parameters.YAxisFactor, Parameters.ZAxisFactor, -1);
-        }
-
-        public override string ToString()
-        {
-            if (CustomName != null)
-                return "Ellipsoid <" + CustomName + ">";
-            return "Ellipsoid <" + _increment++ + ">";
         }
     }
 }

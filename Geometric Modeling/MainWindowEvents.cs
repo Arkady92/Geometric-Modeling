@@ -71,7 +71,7 @@ namespace Geometric_Modeling
             {
                 case Operation.TranslationX:
                     if (ObjectsList.SelectedItem == null)
-                        foreach (var geometricModel in _models)
+                        foreach (var geometricModel in _models.Where(model => model.IsRemovableFromModel))
                             geometricModel.Translate(deltaX, 0, 0);
                     else
                     {
@@ -82,7 +82,7 @@ namespace Geometric_Modeling
                     break;
                 case Operation.TranslationY:
                     if (ObjectsList.SelectedItem == null)
-                        foreach (var geometricModel in _models)
+                        foreach (var geometricModel in _models.Where(model => model.IsRemovableFromModel))
                             geometricModel.Translate(0, -deltaY, 0);
                     else
                     {
@@ -93,7 +93,7 @@ namespace Geometric_Modeling
                     break;
                 case Operation.TranslationZ:
                     if (ObjectsList.SelectedItem == null)
-                        foreach (var geometricModel in _models)
+                        foreach (var geometricModel in _models.Where(model => model.IsRemovableFromModel))
                             geometricModel.Translate(0, 0, deltaY);
                     else
                     {
@@ -104,7 +104,7 @@ namespace Geometric_Modeling
                     break;
                 case Operation.RotationX:
                     if (ObjectsList.SelectedItem == null)
-                        foreach (var geometricModel in _models)
+                        foreach (var geometricModel in _models.Where(model => model.IsRemovableFromModel))
                             geometricModel.Rotate(-deltaY, 0, 0);
                     else
                     {
@@ -115,7 +115,7 @@ namespace Geometric_Modeling
                     break;
                 case Operation.RotationY:
                     if (ObjectsList.SelectedItem == null)
-                        foreach (var geometricModel in _models)
+                        foreach (var geometricModel in _models.Where(model => model.IsRemovableFromModel))
                             geometricModel.Rotate(0, deltaX, 0);
                     else
                     {
@@ -126,7 +126,7 @@ namespace Geometric_Modeling
                     break;
                 case Operation.RotationZ:
                     if (ObjectsList.SelectedItem == null)
-                        foreach (var geometricModel in _models)
+                        foreach (var geometricModel in _models.Where(model => model.IsRemovableFromModel))
                             geometricModel.Rotate(0, 0, deltaX);
                     else
                     {
@@ -137,7 +137,7 @@ namespace Geometric_Modeling
                     break;
                 case Operation.Scale:
                     if (ObjectsList.SelectedItem == null)
-                        foreach (var geometricModel in _models)
+                        foreach (var geometricModel in _models.Where(model => model.IsRemovableFromModel))
                             geometricModel.Scale(deltaY);
                     else
                     {
@@ -309,6 +309,18 @@ namespace Geometric_Modeling
 
         private void BezierSurfaceC2Button_Click(object sender, EventArgs e)
         {
+            var form = new SurfaceInitWindow();
+            var result = form.ShowDialog();
+            if (result != DialogResult.OK) return;
+            var geometricObject = new BezierSurfaceC2(Vector4.Zero(), form.SurfaceWidth, form.SurfaceHeight,
+                form.SurfacePatchesLengthCount, form.SurfacePatchesBreadthCount, form.IsSurfaceCylindrical);
+            geometricObject.TranslateToPosition(Models.Cursor.GetCurrentPosition());
+            geometricObject.ChainEnabled = PolygonalChainCheckBox.Checked;
+            foreach (var child in geometricObject.GetChildren())
+                ObjectsList.Items.Add(child);
+            _models.Add(geometricObject);
+            ObjectsList.Items.Add(geometricObject);
+            DrawWorld();
 
         }
 
@@ -423,6 +435,8 @@ namespace Geometric_Modeling
             DisableAllSettings();
             ObjectsList.Items.Clear();
             _models.Clear();
+            Models.Cursor.RemoveHandledModel();
+            Models.Cursor.Instance.ResetOperationMatrix();
             Models.Cursor.Instance.TranslateToPosition(new Vector4(0, 0, 0));
             Models.Cursor.Instance.UpdateModel();
             _models.Add(Models.Cursor.Instance);
@@ -510,11 +524,12 @@ namespace Geometric_Modeling
             if (model is ParametricGeometricModel)
             {
                 var parametricModel = model as ParametricGeometricModel;
-                foreach (var child in parametricModel.GetChildren())
-                {
-                    child.IsRemovableFromScene = true;
-                    child.IsRemovableFromModel = true;
-                }
+                if(parametricModel is BezierSurface)
+                    foreach (var child in parametricModel.GetChildren())
+                    {
+                        ObjectsList.Items.Remove(child);
+                        _models.Remove(child);
+                    }
                 if (parametricModel.ReturnChildrenOnRemove)
                 {
                     _models.AddRange(parametricModel.GetChildren());
@@ -695,7 +710,7 @@ namespace Geometric_Modeling
                     var result = form.ShowDialog();
                     if (result == DialogResult.OK)
                     {
-                        item.SetCustomName(form.EnteredText);
+                        item.CustomName = form.EnteredText;
                         ObjectsList.Items[ObjectsList.SelectedIndex] = ObjectsList.SelectedItem;
                     }
                     break;

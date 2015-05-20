@@ -34,6 +34,7 @@
 */
 
 using System;
+using System.Globalization;
 using System.Text.RegularExpressions;
 
 namespace Mathematics
@@ -271,7 +272,7 @@ namespace Mathematics
             string s = "";
             for (int i = 0; i < rows; i++)
             {
-                for (int j = 0; j < cols; j++) s += String.Format("{0,5:0.00}", mat[i, j]) + " ";
+                for (int j = 0; j < cols; j++) s += String.Format("{0,5:0.000000000}", mat[i, j]) + " ";
                 if (i < rows - 1)
                     s += "\r\n";
             }

@@ -35,26 +35,17 @@ namespace Mathematics
             return result;
         }
 
-
-        //public static Matrix GenerateInterpolationSplineLinearCostMatrix(double[] knots, int degree, double[] taus)
-        //{
-        //    var bandSize = degree + 1;
-        //    var matrix = new Matrix(taus.Length, bandSize);
-        //    for (int i = 0; i < taus.Length; i++)
-        //        for (int j = 0; j < bandSize; j++)
-        //        {
-        //            var k = i + j - 1;
-        //            if (k < 0 || k >= taus.Length) continue;
-        //            matrix[i, j] = CalculateNSplineValues(knots, k + 1, degree, taus[i]);
-        //        }
-        //    return matrix;
-        //}
-
-        //public static List<Vector4> SolveSystemOfEquationsInLinearCost(double[] knots, int degree, double[] taus, List<Vector4> points)
-        //{
-        //    var result = new List<Vector4>();
-
-        //    return result;
-        //}
+        public static double[] GetKnotsDoubledEnds(int count)
+        {
+            var step = 1.0 / (count - 3);
+            var result = new double[count];
+            result[0] = 0;
+            result[1] = 0;
+            for (int i = 2; i < count - 2; i++)
+                result[i] = (i - 1)*step;
+            result[count - 2] = 1;
+            result[count - 1] = 1;
+            return result;
+        }
     }
 }

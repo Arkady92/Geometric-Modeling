@@ -50,7 +50,7 @@
             this.SurfaceTypeLabel.Location = new System.Drawing.Point(12, 9);
             this.SurfaceTypeLabel.Name = "SurfaceTypeLabel";
             this.SurfaceTypeLabel.Size = new System.Drawing.Size(106, 13);
-            this.SurfaceTypeLabel.TabIndex = 0;
+            this.SurfaceTypeLabel.TabIndex = 999;
             this.SurfaceTypeLabel.Text = "Specify surface type:";
             // 
             // FlatPatchRadioButton
@@ -83,7 +83,7 @@
             this.SurfaceDimentionsLabel.Location = new System.Drawing.Point(12, 150);
             this.SurfaceDimentionsLabel.Name = "SurfaceDimentionsLabel";
             this.SurfaceDimentionsLabel.Size = new System.Drawing.Size(136, 13);
-            this.SurfaceDimentionsLabel.TabIndex = 3;
+            this.SurfaceDimentionsLabel.TabIndex = 999;
             this.SurfaceDimentionsLabel.Text = "Specify surface dimentions:";
             // 
             // WidthLabel
@@ -108,7 +108,7 @@
             this.HeightTextBox.Location = new System.Drawing.Point(56, 190);
             this.HeightTextBox.Name = "HeightTextBox";
             this.HeightTextBox.Size = new System.Drawing.Size(50, 20);
-            this.HeightTextBox.TabIndex = 7;
+            this.HeightTextBox.TabIndex = 6;
             this.HeightTextBox.TextChanged += new System.EventHandler(this.HeightTextBox_TextChanged);
             // 
             // HeightLabel
@@ -125,7 +125,7 @@
             this.GenerateButton.Location = new System.Drawing.Point(26, 224);
             this.GenerateButton.Name = "GenerateButton";
             this.GenerateButton.Size = new System.Drawing.Size(102, 23);
-            this.GenerateButton.TabIndex = 8;
+            this.GenerateButton.TabIndex = 7;
             this.GenerateButton.Text = "Generate surface";
             this.GenerateButton.UseVisualStyleBackColor = true;
             this.GenerateButton.Click += new System.EventHandler(this.GenerateButton_Click);
@@ -135,7 +135,7 @@
             this.BreadthTextBox.Location = new System.Drawing.Point(62, 120);
             this.BreadthTextBox.Name = "BreadthTextBox";
             this.BreadthTextBox.Size = new System.Drawing.Size(50, 20);
-            this.BreadthTextBox.TabIndex = 13;
+            this.BreadthTextBox.TabIndex = 4;
             this.BreadthTextBox.TextChanged += new System.EventHandler(this.BreadthTextBox_TextChanged);
             // 
             // BreadthLabel
@@ -152,7 +152,7 @@
             this.LengthTextBox.Location = new System.Drawing.Point(62, 94);
             this.LengthTextBox.Name = "LengthTextBox";
             this.LengthTextBox.Size = new System.Drawing.Size(50, 20);
-            this.LengthTextBox.TabIndex = 11;
+            this.LengthTextBox.TabIndex = 3;
             this.LengthTextBox.TextChanged += new System.EventHandler(this.LengthTextBox_TextChanged);
             // 
             // LengthLabel
@@ -170,7 +170,7 @@
             this.SurfacePatchCountLabel.Location = new System.Drawing.Point(12, 78);
             this.SurfacePatchCountLabel.Name = "SurfacePatchCountLabel";
             this.SurfacePatchCountLabel.Size = new System.Drawing.Size(116, 13);
-            this.SurfacePatchCountLabel.TabIndex = 9;
+            this.SurfacePatchCountLabel.TabIndex = 999;
             this.SurfacePatchCountLabel.Text = "Specify patches count:";
             // 
             // SurfaceInitWindow
