@@ -6,12 +6,12 @@ namespace Geometric_Modeling
     public partial class SurfaceInitWindow : Form
     {
         public bool IsSurfaceCylindrical = false;
-        public double SurfaceWidth = 1;
-        public double SurfaceHeight = 0.75;
-        public double DefaultWidth = 0.1;
-        public double DefaultRadius = 0.5;
-        public int SurfacePatchesLengthCount = 5;
-        public int SurfacePatchesBreadthCount = 5;
+        public double SurfaceWidth = 0.5;
+        public double SurfaceHeight = 0.5;
+        public double DefaultWidth = 0.5;
+        public double DefaultRadius = 0.25;
+        public int SurfacePatchesLengthCount = 1;
+        public int SurfacePatchesBreadthCount = 1;
 
         public SurfaceInitWindow()
         {

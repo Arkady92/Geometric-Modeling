@@ -73,9 +73,24 @@ namespace Models
             Parents.Add(parent);
         }
 
+        public void AddParent(ParametricGeometricModel parent, int parentChildIndex)
+        {
+            Parents.Add(parent);
+            ParentsIndexes.Add(parent, parentChildIndex);
+        }
+
         public void AddChild(ParametricGeometricModel child)
         {
             Children.Add(child);
+        }
+
+        public void ChangeChild(ParametricGeometricModel oldChild, ParametricGeometricModel newChild)
+        {
+            var index = Children.IndexOf(oldChild);
+            if (index < 0) return;
+            Children[index] = newChild;
+            newChild.AddParent(this,index);
+            RecreateStructure();
         }
 
         public void RemoveParent(ParametricGeometricModel parent)

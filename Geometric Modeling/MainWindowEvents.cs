@@ -56,8 +56,15 @@ namespace Geometric_Modeling
             Models.Cursor.Instance.UpdateModel();
             DrawWorld();
             UpdateTextBoxes();
-            ObjectsList.SelectedItems.Clear();
-            ObjectsList.SelectedItem = geometricModel;
+            if (_multiselectEnabled)
+            {
+                ObjectsList.SelectedItems.Add(geometricModel);
+            }
+            else
+            {
+                ObjectsList.SelectedItems.Clear();
+                ObjectsList.SelectedItem = geometricModel;
+            }
             ObjectsList_MouseClick(model, null);
             return true;
         }
@@ -324,6 +331,16 @@ namespace Geometric_Modeling
 
         }
 
+        private void IntersectionButton_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void GregorySurfaceButton_Click(object sender, EventArgs e)
+        {
+
+        }
+
         private List<Point> CollectPoints(out bool chordParametrizationEnabled)
         {
             bool dummy;
@@ -524,7 +541,7 @@ namespace Geometric_Modeling
             if (model is ParametricGeometricModel)
             {
                 var parametricModel = model as ParametricGeometricModel;
-                if(parametricModel is BezierSurface)
+                if (parametricModel is BezierSurface)
                     foreach (var child in parametricModel.GetChildren())
                     {
                         ObjectsList.Items.Remove(child);
@@ -568,6 +585,22 @@ namespace Geometric_Modeling
         private void LoadButton_Click(object sender, EventArgs e)
         {
             LoadScene();
+        }
+
+        private void CollapseButton_Click(object sender, EventArgs e)
+        {
+            var points = ObjectsList.SelectedItems.OfType<Point>().ToList();
+            if (points.Count != 2) return;
+            var parent0 = points[0].GetOnlyParent();
+            var parent1 = points[1].GetOnlyParent();
+            if (parent0 == parent1) return;
+            if (parent0.Type != parent1.Type) return;
+
+            var position = points[0].SetCenterPosition(points[1]);
+            points[1].ChangePoint(points[0]);
+            points[0].CorrectPosition(position);
+            ObjectsList.Items[ObjectsList.Items.IndexOf(points[1])] = points[0];
+            DrawWorld();
         }
 
         #endregion
@@ -678,12 +711,27 @@ namespace Geometric_Modeling
                         }
                     }
                     break;
+                case Keys.ControlKey:
+                    _multiselectEnabled = true;
+                    break;
                 default:
                     return;
             }
             Models.Cursor.Instance.UpdateModel();
             DrawWorld();
             UpdateTextBoxes();
+        }
+
+        private void MainWindow_KeyUp(object sender, KeyEventArgs e)
+        {
+            switch (e.KeyCode)
+            {
+                case Keys.ControlKey:
+                    _multiselectEnabled = false;
+                    break;
+                default:
+                    return;
+            }
         }
 
         private bool TryHandleModel(GeometricModel model)

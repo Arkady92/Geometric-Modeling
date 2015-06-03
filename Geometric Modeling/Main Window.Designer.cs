@@ -30,6 +30,8 @@
         {
             this.ObjectsList = new System.Windows.Forms.ListBox();
             this.ObjectsPanel = new System.Windows.Forms.Panel();
+            this.GregorySurfaceButton = new System.Windows.Forms.Button();
+            this.IntersectionButton = new System.Windows.Forms.Button();
             this.BezierSurfaceC2Button = new System.Windows.Forms.Button();
             this.BezierSurfaceC0Button = new System.Windows.Forms.Button();
             this.InterpolationCurveButton = new System.Windows.Forms.Button();
@@ -59,6 +61,7 @@
             this.GridResolutionXBox = new System.Windows.Forms.TextBox();
             this.TranslationXButton = new System.Windows.Forms.Button();
             this.OperationsPanel = new System.Windows.Forms.Panel();
+            this.CollapseButton = new System.Windows.Forms.Button();
             this.SaveButton = new System.Windows.Forms.Button();
             this.LoadButton = new System.Windows.Forms.Button();
             this.ClearButton = new System.Windows.Forms.Button();
@@ -119,6 +122,8 @@
             this.ObjectsPanel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.ObjectsPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.ObjectsPanel.Controls.Add(this.GregorySurfaceButton);
+            this.ObjectsPanel.Controls.Add(this.IntersectionButton);
             this.ObjectsPanel.Controls.Add(this.BezierSurfaceC2Button);
             this.ObjectsPanel.Controls.Add(this.BezierSurfaceC0Button);
             this.ObjectsPanel.Controls.Add(this.InterpolationCurveButton);
@@ -132,61 +137,82 @@
             this.ObjectsPanel.Size = new System.Drawing.Size(840, 31);
             this.ObjectsPanel.TabIndex = 1;
             // 
+            // GregorySurfaceButton
+            // 
+            this.GregorySurfaceButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.GregorySurfaceButton.Location = new System.Drawing.Point(741, 3);
+            this.GregorySurfaceButton.Name = "GregorySurfaceButton";
+            this.GregorySurfaceButton.Size = new System.Drawing.Size(94, 23);
+            this.GregorySurfaceButton.TabIndex = 11;
+            this.GregorySurfaceButton.Text = "Gregory Surface";
+            this.GregorySurfaceButton.UseVisualStyleBackColor = true;
+            this.GregorySurfaceButton.Click += new System.EventHandler(this.GregorySurfaceButton_Click);
+            // 
+            // IntersectionButton
+            // 
+            this.IntersectionButton.Location = new System.Drawing.Point(495, 3);
+            this.IntersectionButton.Name = "IntersectionButton";
+            this.IntersectionButton.Size = new System.Drawing.Size(76, 23);
+            this.IntersectionButton.TabIndex = 8;
+            this.IntersectionButton.Text = "Intersection";
+            this.IntersectionButton.UseVisualStyleBackColor = true;
+            this.IntersectionButton.Click += new System.EventHandler(this.IntersectionButton_Click);
+            // 
             // BezierSurfaceC2Button
             // 
-            this.BezierSurfaceC2Button.Location = new System.Drawing.Point(591, 3);
+            this.BezierSurfaceC2Button.Location = new System.Drawing.Point(659, 3);
             this.BezierSurfaceC2Button.Name = "BezierSurfaceC2Button";
-            this.BezierSurfaceC2Button.Size = new System.Drawing.Size(78, 23);
-            this.BezierSurfaceC2Button.TabIndex = 9;
+            this.BezierSurfaceC2Button.Size = new System.Drawing.Size(76, 23);
+            this.BezierSurfaceC2Button.TabIndex = 10;
             this.BezierSurfaceC2Button.Text = "Surface C2";
             this.BezierSurfaceC2Button.UseVisualStyleBackColor = true;
             this.BezierSurfaceC2Button.Click += new System.EventHandler(this.BezierSurfaceC2Button_Click);
             // 
             // BezierSurfaceC0Button
             // 
-            this.BezierSurfaceC0Button.Location = new System.Drawing.Point(507, 3);
+            this.BezierSurfaceC0Button.Location = new System.Drawing.Point(577, 3);
             this.BezierSurfaceC0Button.Name = "BezierSurfaceC0Button";
-            this.BezierSurfaceC0Button.Size = new System.Drawing.Size(78, 23);
-            this.BezierSurfaceC0Button.TabIndex = 8;
+            this.BezierSurfaceC0Button.Size = new System.Drawing.Size(76, 23);
+            this.BezierSurfaceC0Button.TabIndex = 9;
             this.BezierSurfaceC0Button.Text = "Surface C0";
             this.BezierSurfaceC0Button.UseVisualStyleBackColor = true;
             this.BezierSurfaceC0Button.Click += new System.EventHandler(this.BezierSurfaceC0Button_Click);
             // 
             // InterpolationCurveButton
             // 
-            this.InterpolationCurveButton.Location = new System.Drawing.Point(423, 3);
+            this.InterpolationCurveButton.Location = new System.Drawing.Point(413, 3);
             this.InterpolationCurveButton.Name = "InterpolationCurveButton";
-            this.InterpolationCurveButton.Size = new System.Drawing.Size(78, 23);
+            this.InterpolationCurveButton.Size = new System.Drawing.Size(76, 23);
             this.InterpolationCurveButton.TabIndex = 7;
-            this.InterpolationCurveButton.Text = "Interp. Curve";
+            this.InterpolationCurveButton.Text = "Interpolation";
             this.InterpolationCurveButton.UseVisualStyleBackColor = true;
             this.InterpolationCurveButton.Click += new System.EventHandler(this.InterpolationCurveButton_Click);
             // 
             // BezierCurveC2Button
             // 
-            this.BezierCurveC2Button.Location = new System.Drawing.Point(339, 3);
+            this.BezierCurveC2Button.Location = new System.Drawing.Point(331, 3);
             this.BezierCurveC2Button.Name = "BezierCurveC2Button";
-            this.BezierCurveC2Button.Size = new System.Drawing.Size(78, 23);
+            this.BezierCurveC2Button.Size = new System.Drawing.Size(76, 23);
             this.BezierCurveC2Button.TabIndex = 6;
-            this.BezierCurveC2Button.Text = "B. Curve C2";
+            this.BezierCurveC2Button.Text = "Curve C2";
             this.BezierCurveC2Button.UseVisualStyleBackColor = true;
             this.BezierCurveC2Button.Click += new System.EventHandler(this.BezierCurveC2Button_Click);
             // 
             // BezierCurveButton
             // 
-            this.BezierCurveButton.Location = new System.Drawing.Point(255, 3);
+            this.BezierCurveButton.Location = new System.Drawing.Point(249, 3);
             this.BezierCurveButton.Name = "BezierCurveButton";
-            this.BezierCurveButton.Size = new System.Drawing.Size(78, 23);
+            this.BezierCurveButton.Size = new System.Drawing.Size(76, 23);
             this.BezierCurveButton.TabIndex = 5;
-            this.BezierCurveButton.Text = "B. Curve C0";
+            this.BezierCurveButton.Text = "Curve C0";
             this.BezierCurveButton.UseVisualStyleBackColor = true;
             this.BezierCurveButton.Click += new System.EventHandler(this.BezierCurveButton_Click);
             // 
             // PointButton
             // 
-            this.PointButton.Location = new System.Drawing.Point(171, 3);
+            this.PointButton.Location = new System.Drawing.Point(167, 3);
             this.PointButton.Name = "PointButton";
-            this.PointButton.Size = new System.Drawing.Size(78, 23);
+            this.PointButton.Size = new System.Drawing.Size(76, 23);
             this.PointButton.TabIndex = 4;
             this.PointButton.Text = "Point";
             this.PointButton.UseVisualStyleBackColor = true;
@@ -194,9 +220,9 @@
             // 
             // EllipsoidButton
             // 
-            this.EllipsoidButton.Location = new System.Drawing.Point(87, 3);
+            this.EllipsoidButton.Location = new System.Drawing.Point(85, 3);
             this.EllipsoidButton.Name = "EllipsoidButton";
-            this.EllipsoidButton.Size = new System.Drawing.Size(78, 23);
+            this.EllipsoidButton.Size = new System.Drawing.Size(76, 23);
             this.EllipsoidButton.TabIndex = 3;
             this.EllipsoidButton.Text = "Ellipsoid";
             this.EllipsoidButton.UseVisualStyleBackColor = true;
@@ -206,7 +232,7 @@
             // 
             this.TorusButton.Location = new System.Drawing.Point(3, 3);
             this.TorusButton.Name = "TorusButton";
-            this.TorusButton.Size = new System.Drawing.Size(78, 23);
+            this.TorusButton.Size = new System.Drawing.Size(76, 23);
             this.TorusButton.TabIndex = 2;
             this.TorusButton.Text = "Torus";
             this.TorusButton.UseVisualStyleBackColor = true;
@@ -441,6 +467,7 @@
             this.OperationsPanel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.OperationsPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.OperationsPanel.Controls.Add(this.CollapseButton);
             this.OperationsPanel.Controls.Add(this.SaveButton);
             this.OperationsPanel.Controls.Add(this.LoadButton);
             this.OperationsPanel.Controls.Add(this.ClearButton);
@@ -457,13 +484,24 @@
             this.OperationsPanel.Size = new System.Drawing.Size(840, 31);
             this.OperationsPanel.TabIndex = 4;
             // 
+            // CollapseButton
+            // 
+            this.CollapseButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.CollapseButton.Location = new System.Drawing.Point(534, 3);
+            this.CollapseButton.Name = "CollapseButton";
+            this.CollapseButton.Size = new System.Drawing.Size(55, 23);
+            this.CollapseButton.TabIndex = 9;
+            this.CollapseButton.Text = "Collapse";
+            this.CollapseButton.UseVisualStyleBackColor = true;
+            this.CollapseButton.Click += new System.EventHandler(this.CollapseButton_Click);
+            // 
             // SaveButton
             // 
             this.SaveButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.SaveButton.Location = new System.Drawing.Point(617, 3);
+            this.SaveButton.Location = new System.Drawing.Point(656, 3);
             this.SaveButton.Name = "SaveButton";
-            this.SaveButton.Size = new System.Drawing.Size(50, 23);
-            this.SaveButton.TabIndex = 9;
+            this.SaveButton.Size = new System.Drawing.Size(55, 23);
+            this.SaveButton.TabIndex = 11;
             this.SaveButton.Text = "Save";
             this.SaveButton.UseVisualStyleBackColor = true;
             this.SaveButton.Click += new System.EventHandler(this.SaveButton_Click);
@@ -471,10 +509,10 @@
             // LoadButton
             // 
             this.LoadButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.LoadButton.Location = new System.Drawing.Point(673, 3);
+            this.LoadButton.Location = new System.Drawing.Point(717, 3);
             this.LoadButton.Name = "LoadButton";
-            this.LoadButton.Size = new System.Drawing.Size(50, 23);
-            this.LoadButton.TabIndex = 10;
+            this.LoadButton.Size = new System.Drawing.Size(55, 23);
+            this.LoadButton.TabIndex = 12;
             this.LoadButton.Text = "Load";
             this.LoadButton.UseVisualStyleBackColor = true;
             this.LoadButton.Click += new System.EventHandler(this.LoadButton_Click);
@@ -482,10 +520,10 @@
             // ClearButton
             // 
             this.ClearButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.ClearButton.Location = new System.Drawing.Point(785, 3);
+            this.ClearButton.Location = new System.Drawing.Point(778, 3);
             this.ClearButton.Name = "ClearButton";
-            this.ClearButton.Size = new System.Drawing.Size(50, 23);
-            this.ClearButton.TabIndex = 12;
+            this.ClearButton.Size = new System.Drawing.Size(55, 23);
+            this.ClearButton.TabIndex = 13;
             this.ClearButton.Text = "Clear";
             this.ClearButton.UseVisualStyleBackColor = true;
             this.ClearButton.Click += new System.EventHandler(this.ClearButton_Click);
@@ -493,10 +531,10 @@
             // SelectionButton
             // 
             this.SelectionButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.SelectionButton.Location = new System.Drawing.Point(729, 3);
+            this.SelectionButton.Location = new System.Drawing.Point(595, 3);
             this.SelectionButton.Name = "SelectionButton";
-            this.SelectionButton.Size = new System.Drawing.Size(50, 23);
-            this.SelectionButton.TabIndex = 11;
+            this.SelectionButton.Size = new System.Drawing.Size(55, 23);
+            this.SelectionButton.TabIndex = 10;
             this.SelectionButton.Text = "Select";
             this.SelectionButton.UseVisualStyleBackColor = true;
             this.SelectionButton.Click += new System.EventHandler(this.SelectionButton_Click);
@@ -847,6 +885,7 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Geometric Modeling";
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.MainWindow_KeyDown);
+            this.KeyUp += new System.Windows.Forms.KeyEventHandler(this.MainWindow_KeyUp);
             this.Resize += new System.EventHandler(this.MainWindow_Resize);
             this.ObjectsPanel.ResumeLayout(false);
             this.OptionsPanel.ResumeLayout(false);
@@ -928,6 +967,9 @@
         private System.Windows.Forms.Button BezierSurfaceC0Button;
         private System.Windows.Forms.TextBox SurfaceGridResolutionYBox;
         private System.Windows.Forms.TextBox SurfaceGridResolutionXBox;
+        private System.Windows.Forms.Button CollapseButton;
+        private System.Windows.Forms.Button GregorySurfaceButton;
+        private System.Windows.Forms.Button IntersectionButton;
     }
 }
 

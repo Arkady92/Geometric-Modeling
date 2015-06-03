@@ -356,6 +356,12 @@ namespace Models
             DrawPatches(graphics, currentProjectionMatrix, color, bitmap, true);
         }
 
+        protected override void RecreateStructure(int number = 0)
+        {
+            base.RecreateStructure(number);
+            CreatePatches();
+        }
+
         public List<Point[,]> GetPatches()
         {
             return PatchesPoints;

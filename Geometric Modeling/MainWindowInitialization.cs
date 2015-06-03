@@ -30,6 +30,7 @@ namespace Geometric_Modeling
         private const double ProjectionE = 1;
         private bool _enableAdditiveColorBlending;
         private bool _enableWorldDrawing;
+        private bool _multiselectEnabled;
 
         #endregion
 

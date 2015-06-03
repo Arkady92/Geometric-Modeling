@@ -108,5 +108,33 @@ namespace Models
                     parent.UpdateVertex(ParentsIndexes[parent]);
             }
         }
+
+        public void ChangePoint(Point point)
+        {
+            foreach (var parent in Parents)
+            {
+                parent.ChangeChild(this, point);
+            }
+        }
+
+        public Vector4 SetCenterPosition(Point point)
+        {
+            var position = Vector4.Center(GetCurrentPosition(), point.GetCurrentPosition());
+            TranslateToPosition(position);
+            return position;
+        }
+
+        public void CorrectPosition(Vector4 position)
+        {
+            TranslateToPosition(position);
+            foreach (var parent in Parents)
+                parent.UpdateVertex(ParentsIndexes[parent]);
+        }
+
+        public ParametricGeometricModel GetOnlyParent()
+        {
+            if (Parents.Count != 1) return null;
+            return Parents[0];
+        }
     }
 }
