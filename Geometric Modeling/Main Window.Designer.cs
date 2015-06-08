@@ -140,19 +140,19 @@
             // GregorySurfaceButton
             // 
             this.GregorySurfaceButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.GregorySurfaceButton.Location = new System.Drawing.Point(741, 3);
+            this.GregorySurfaceButton.Location = new System.Drawing.Point(667, 3);
             this.GregorySurfaceButton.Name = "GregorySurfaceButton";
-            this.GregorySurfaceButton.Size = new System.Drawing.Size(94, 23);
+            this.GregorySurfaceButton.Size = new System.Drawing.Size(77, 23);
             this.GregorySurfaceButton.TabIndex = 11;
-            this.GregorySurfaceButton.Text = "Gregory Surface";
+            this.GregorySurfaceButton.Text = "Gap filling";
             this.GregorySurfaceButton.UseVisualStyleBackColor = true;
             this.GregorySurfaceButton.Click += new System.EventHandler(this.GregorySurfaceButton_Click);
             // 
             // IntersectionButton
             // 
-            this.IntersectionButton.Location = new System.Drawing.Point(495, 3);
+            this.IntersectionButton.Location = new System.Drawing.Point(750, 3);
             this.IntersectionButton.Name = "IntersectionButton";
-            this.IntersectionButton.Size = new System.Drawing.Size(76, 23);
+            this.IntersectionButton.Size = new System.Drawing.Size(77, 23);
             this.IntersectionButton.TabIndex = 8;
             this.IntersectionButton.Text = "Intersection";
             this.IntersectionButton.UseVisualStyleBackColor = true;
@@ -160,9 +160,9 @@
             // 
             // BezierSurfaceC2Button
             // 
-            this.BezierSurfaceC2Button.Location = new System.Drawing.Point(659, 3);
+            this.BezierSurfaceC2Button.Location = new System.Drawing.Point(501, 3);
             this.BezierSurfaceC2Button.Name = "BezierSurfaceC2Button";
-            this.BezierSurfaceC2Button.Size = new System.Drawing.Size(76, 23);
+            this.BezierSurfaceC2Button.Size = new System.Drawing.Size(77, 23);
             this.BezierSurfaceC2Button.TabIndex = 10;
             this.BezierSurfaceC2Button.Text = "Surface C2";
             this.BezierSurfaceC2Button.UseVisualStyleBackColor = true;
@@ -170,9 +170,9 @@
             // 
             // BezierSurfaceC0Button
             // 
-            this.BezierSurfaceC0Button.Location = new System.Drawing.Point(577, 3);
+            this.BezierSurfaceC0Button.Location = new System.Drawing.Point(418, 3);
             this.BezierSurfaceC0Button.Name = "BezierSurfaceC0Button";
-            this.BezierSurfaceC0Button.Size = new System.Drawing.Size(76, 23);
+            this.BezierSurfaceC0Button.Size = new System.Drawing.Size(77, 23);
             this.BezierSurfaceC0Button.TabIndex = 9;
             this.BezierSurfaceC0Button.Text = "Surface C0";
             this.BezierSurfaceC0Button.UseVisualStyleBackColor = true;
@@ -180,9 +180,9 @@
             // 
             // InterpolationCurveButton
             // 
-            this.InterpolationCurveButton.Location = new System.Drawing.Point(413, 3);
+            this.InterpolationCurveButton.Location = new System.Drawing.Point(584, 3);
             this.InterpolationCurveButton.Name = "InterpolationCurveButton";
-            this.InterpolationCurveButton.Size = new System.Drawing.Size(76, 23);
+            this.InterpolationCurveButton.Size = new System.Drawing.Size(77, 23);
             this.InterpolationCurveButton.TabIndex = 7;
             this.InterpolationCurveButton.Text = "Interpolation";
             this.InterpolationCurveButton.UseVisualStyleBackColor = true;
@@ -190,9 +190,9 @@
             // 
             // BezierCurveC2Button
             // 
-            this.BezierCurveC2Button.Location = new System.Drawing.Point(331, 3);
+            this.BezierCurveC2Button.Location = new System.Drawing.Point(335, 3);
             this.BezierCurveC2Button.Name = "BezierCurveC2Button";
-            this.BezierCurveC2Button.Size = new System.Drawing.Size(76, 23);
+            this.BezierCurveC2Button.Size = new System.Drawing.Size(77, 23);
             this.BezierCurveC2Button.TabIndex = 6;
             this.BezierCurveC2Button.Text = "Curve C2";
             this.BezierCurveC2Button.UseVisualStyleBackColor = true;
@@ -200,9 +200,9 @@
             // 
             // BezierCurveButton
             // 
-            this.BezierCurveButton.Location = new System.Drawing.Point(249, 3);
+            this.BezierCurveButton.Location = new System.Drawing.Point(252, 3);
             this.BezierCurveButton.Name = "BezierCurveButton";
-            this.BezierCurveButton.Size = new System.Drawing.Size(76, 23);
+            this.BezierCurveButton.Size = new System.Drawing.Size(77, 23);
             this.BezierCurveButton.TabIndex = 5;
             this.BezierCurveButton.Text = "Curve C0";
             this.BezierCurveButton.UseVisualStyleBackColor = true;
@@ -210,9 +210,9 @@
             // 
             // PointButton
             // 
-            this.PointButton.Location = new System.Drawing.Point(167, 3);
+            this.PointButton.Location = new System.Drawing.Point(169, 3);
             this.PointButton.Name = "PointButton";
-            this.PointButton.Size = new System.Drawing.Size(76, 23);
+            this.PointButton.Size = new System.Drawing.Size(77, 23);
             this.PointButton.TabIndex = 4;
             this.PointButton.Text = "Point";
             this.PointButton.UseVisualStyleBackColor = true;
@@ -220,9 +220,9 @@
             // 
             // EllipsoidButton
             // 
-            this.EllipsoidButton.Location = new System.Drawing.Point(85, 3);
+            this.EllipsoidButton.Location = new System.Drawing.Point(86, 3);
             this.EllipsoidButton.Name = "EllipsoidButton";
-            this.EllipsoidButton.Size = new System.Drawing.Size(76, 23);
+            this.EllipsoidButton.Size = new System.Drawing.Size(77, 23);
             this.EllipsoidButton.TabIndex = 3;
             this.EllipsoidButton.Text = "Ellipsoid";
             this.EllipsoidButton.UseVisualStyleBackColor = true;
@@ -232,7 +232,7 @@
             // 
             this.TorusButton.Location = new System.Drawing.Point(3, 3);
             this.TorusButton.Name = "TorusButton";
-            this.TorusButton.Size = new System.Drawing.Size(76, 23);
+            this.TorusButton.Size = new System.Drawing.Size(77, 23);
             this.TorusButton.TabIndex = 2;
             this.TorusButton.Text = "Torus";
             this.TorusButton.UseVisualStyleBackColor = true;

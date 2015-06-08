@@ -14,6 +14,10 @@ namespace Models
         public readonly int PatchesLengthCount;
         public readonly int PatchesBreadthCount;
         public readonly bool IsCylindrical;
+
+        public readonly List<BezierSurface> CollapsedSurfaces;
+        public readonly List<Point> CollapsedPoints;
+
         protected List<Point[,]> PatchesPoints;
 
         protected readonly int GridBreadthCount;
@@ -42,6 +46,8 @@ namespace Models
             CreateEdges();
             CreatePatches();
             CustomName = (_increment++).ToString(CultureInfo.InvariantCulture);
+            CollapsedSurfaces = new List<BezierSurface>();
+            CollapsedPoints = new List<Point>();
         }
 
         public BezierSurface(IEnumerable<Point> points, Vector4 position, double width, double height, int patchesLengthCount,
@@ -56,7 +62,7 @@ namespace Models
             GridBreadthCount = (Type == ModelType.BezierSurface) ? PatchesBreadthCount * Degree : PatchesBreadthCount + Degree - 1;
             GridLengthCylindricalCount = (Type == ModelType.BezierSurface) ? PatchesLengthCount * Degree :
                 PatchesLengthCount + Degree - 3;
-            GridLengthFlatCount = (Type == ModelType.BezierSurface) ? PatchesLengthCount * Degree : PatchesLengthCount + Degree -1;
+            GridLengthFlatCount = (Type == ModelType.BezierSurface) ? PatchesLengthCount * Degree : PatchesLengthCount + Degree - 1;
             var enumerable = points as Point[] ?? points.ToArray();
             for (int i = 0; i < enumerable.Count(); i++)
             {
@@ -70,6 +76,8 @@ namespace Models
             CreatePatches();
             CustomName = (_increment++).ToString(CultureInfo.InvariantCulture);
             ChainEnabled = true;
+            CollapsedSurfaces = new List<BezierSurface>();
+            CollapsedPoints = new List<Point>();
         }
 
         protected virtual void CreatePatches()
@@ -306,6 +314,69 @@ namespace Models
             }
         }
 
+        public Vector4 GetSurfacePoint(double u, double v)
+        {
+            Matrix currentMatrix = OperationsMatrices.Identity();
+            currentMatrix = Parents.Aggregate(currentMatrix, (current, parent) => current * parent.OperationMatrix);
+            currentMatrix = currentMatrix * OperationMatrix;
+            if (PatchesPoints.Count != 1) return null;
+            var points = PatchesPoints[0];
+            var xMatrix = new Matrix(Degree + 1, Degree + 1);
+            var yMatrix = new Matrix(Degree + 1, Degree + 1);
+            var zMatrix = new Matrix(Degree + 1, Degree + 1);
+            for (int i = 0; i < Degree + 1; i++)
+            {
+                for (int j = 0; j < Degree + 1; j++)
+                {
+                    var point = currentMatrix * points[i, j].GetCurrentPositionWithoutMineTransformations(this);
+                    xMatrix[i, j] = point.X;
+                    yMatrix[i, j] = point.Y;
+                    zMatrix[i, j] = point.Z;
+                }
+            }
+            var leftVector = CalculateBezierVector(u);
+            var rightVector = CalculateBezierVector(v);
+            var result = new Vector4(leftVector * xMatrix * rightVector, leftVector * yMatrix * rightVector,
+                leftVector * zMatrix * rightVector);
+            return result;
+        }
+
+        public BorderType FindBorderType()
+        {
+            double u1, v1, u2, v2;
+            if (CollapsedPoints.Count != 2) return BorderType.Undefined;
+            if (!GetPointParameters(CollapsedPoints[0], out u1, out v1)) return BorderType.Undefined;
+            if (!GetPointParameters(CollapsedPoints[1], out u2, out v2)) return BorderType.Undefined;
+            if(!((Math.Abs(u1) < Double.Epsilon || Math.Abs(u1 - 1) < Double.Epsilon) && 
+                (Math.Abs(u2) < Double.Epsilon || Math.Abs(u2 - 1) < Double.Epsilon) &&
+                (Math.Abs(v1) < Double.Epsilon || Math.Abs(v1 - 1) < Double.Epsilon) &&
+                (Math.Abs(v2) < Double.Epsilon || Math.Abs(v2 - 1) < Double.Epsilon))) return BorderType.Undefined;
+            if (Math.Abs(u1) < Double.Epsilon && Math.Abs(u2) < Double.Epsilon) return BorderType.Bottom;
+            if (Math.Abs(v1) < Double.Epsilon && Math.Abs(v2) < Double.Epsilon) return BorderType.Left;
+            if (Math.Abs(u1 - 1) < Double.Epsilon && Math.Abs(u2 - 1) < Double.Epsilon) return BorderType.Top;
+            if (Math.Abs(v1 - 1) < Double.Epsilon && Math.Abs(v2 - 1) < Double.Epsilon) return BorderType.Right;
+            return BorderType.Undefined;
+        }
+
+        public bool GetPointParameters(Point point, out double u, out double v)
+        {
+            u = 0;
+            v = 0;
+            if (PatchesPoints.Count != 1) return false;
+            var points = PatchesPoints[0];
+            for (int i = 0; i < Degree + 1; i++)
+            {
+                for (int j = 0; j < Degree + 1; j++)
+                {
+                    if(points[i,j] != point) continue;
+                    u = i / 3.0;
+                    v = j / 3.0;
+                    return true;
+                }
+            }
+            return false;
+        }
+
         private Vector4 CalculateBezierVector(double t)
         {
             return new Vector4((1 - t) * (1 - t) * (1 - t), 3 * t * (1 - t) * (1 - t), 3 * t * t * (1 - t), t * t * t);
@@ -366,5 +437,23 @@ namespace Models
         {
             return PatchesPoints;
         }
+        public void AddCollapsedSurface(BezierSurface surface)
+        {
+            CollapsedSurfaces.Add(surface);
+        }
+
+        public void AddCollapsedPoints(Point point)
+        {
+            CollapsedPoints.Add(point);
+        }
+    }
+
+    public enum BorderType
+    {
+        Left,
+        Right,
+        Top,
+        Bottom,
+        Undefined
     }
 }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using System.Runtime.Remoting.Messaging;
 using System.Windows.Forms;
 using Mathematics;
 using Models;
@@ -338,7 +339,57 @@ namespace Geometric_Modeling
 
         private void GregorySurfaceButton_Click(object sender, EventArgs e)
         {
-
+            var surfaces = ObjectsList.SelectedItems.OfType<BezierSurface>().ToList();
+            if (surfaces.Count != 3) return;
+            if(!(surfaces[0].CollapsedSurfaces.Contains(surfaces[1]) && surfaces[0].CollapsedSurfaces.Contains(surfaces[2])
+                && surfaces[1].CollapsedSurfaces.Contains(surfaces[2]))) return;
+            var borderPoints = new Point[3, 4];
+            var qpoints = new Vector4[3];
+            const double oneThird = 1.0 / 3.0;
+            const double twoThird = 1.0 / 3.0;
+            for (int i = 0; i < 3; i++)
+            {
+                var type = surfaces[i].FindBorderType();
+                var prevPoint = Vector4.Zero();
+                var currentPoint = Vector4.Zero();
+                switch (type)
+                {
+                    case BorderType.Bottom:
+                        currentPoint = surfaces[i].GetSurfacePoint(0, 0.5);
+                        prevPoint = surfaces[i].GetSurfacePoint(oneThird, 0.5);
+                        break;
+                    case BorderType.Top:
+                        currentPoint = surfaces[i].GetSurfacePoint(1, 0.5);
+                        prevPoint = surfaces[i].GetSurfacePoint(twoThird, 0.5);
+                        break;
+                    case BorderType.Left:
+                        currentPoint = surfaces[i].GetSurfacePoint(0.5, 0);
+                        prevPoint = surfaces[i].GetSurfacePoint(0.5, oneThird);
+                        break;
+                    case BorderType.Right:
+                        currentPoint = surfaces[i].GetSurfacePoint(0.5, 1);
+                        prevPoint = surfaces[i].GetSurfacePoint(0.5, twoThird);
+                        break;
+                }
+                borderPoints[i, 3] = new Point(currentPoint);
+                var nextPoint = currentPoint * 2 - prevPoint;
+                borderPoints[i, 2] = new Point(nextPoint);
+                qpoints[i] = nextPoint*1.5 - currentPoint*0.5;
+            }
+            var finalPoint = (qpoints[0] + qpoints[1] + qpoints[2]) * oneThird;
+            for (int i = 0; i < 3; i++)
+            {
+                borderPoints[i, 0] = new Point(finalPoint);
+                borderPoints[i, 1] = new Point(qpoints[i] * twoThird + finalPoint * oneThird);
+            }
+            for (int i = 0; i < 3; i++)
+            {
+                for (int j = 0; j < 4; j++)
+                {
+                    _models.Add(borderPoints[i,j]);
+                    ObjectsList.Items.Add(borderPoints[i, j]);
+                }
+            }
         }
 
         private List<Point> CollectPoints(out bool chordParametrizationEnabled)
@@ -591,14 +642,20 @@ namespace Geometric_Modeling
         {
             var points = ObjectsList.SelectedItems.OfType<Point>().ToList();
             if (points.Count != 2) return;
-            var parent0 = points[0].GetOnlyParent();
-            var parent1 = points[1].GetOnlyParent();
+            var parent0 = points[0].GetOnlyParent() as BezierSurface;
+            var parent1 = points[1].GetOnlyParent() as BezierSurface;
+            if (parent0 == null || parent1 == null) return;
             if (parent0 == parent1) return;
             if (parent0.Type != parent1.Type) return;
 
+            parent0.AddCollapsedSurface(parent1);
+            parent1.AddCollapsedSurface(parent0);
             var position = points[0].SetCenterPosition(points[1]);
             points[1].ChangePoint(points[0]);
             points[0].CorrectPosition(position);
+            parent0.AddCollapsedPoints(points[0]);
+            parent1.AddCollapsedPoints(points[0]);
+
             ObjectsList.Items[ObjectsList.Items.IndexOf(points[1])] = points[0];
             DrawWorld();
         }
