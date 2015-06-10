@@ -10,6 +10,8 @@
         BezierCurveC2,
         InterpolationCurve,
         BezierSurface,
-        BezierSurfaceC2
+        BezierSurfaceC2,
+        GregorySurface,
+        GapFiller
     }
 }

@@ -17,6 +17,8 @@ namespace Models
 
         public readonly List<BezierSurface> CollapsedSurfaces;
         public readonly List<Point> CollapsedPoints;
+        private GapFiller _gapFiller;
+
 
         protected List<Point[,]> PatchesPoints;
 
@@ -210,6 +212,20 @@ namespace Models
 
         public override void UpdateModel() { }
 
+        public override void UpdateVertex(int number)
+        {
+            base.UpdateVertex(number);
+            if (_gapFiller != null)
+                _gapFiller.FillGap();
+        }
+
+        public override void PropagateTransformation(ParametricGeometricModel geometricModel = null)
+        {
+            base.PropagateTransformation(geometricModel);
+            if (_gapFiller != null)
+                _gapFiller.FillGap();
+        }
+
         protected virtual void DrawPatches(Graphics graphics, Matrix currentProjectionMatrix, Color color, Bitmap bitmap = null, bool blendingEnabled = false)
         {
             Matrix currentMatrix = OperationsMatrices.Identity();
@@ -347,7 +363,7 @@ namespace Models
             if (CollapsedPoints.Count != 2) return BorderType.Undefined;
             if (!GetPointParameters(CollapsedPoints[0], out u1, out v1)) return BorderType.Undefined;
             if (!GetPointParameters(CollapsedPoints[1], out u2, out v2)) return BorderType.Undefined;
-            if(!((Math.Abs(u1) < Double.Epsilon || Math.Abs(u1 - 1) < Double.Epsilon) && 
+            if (!((Math.Abs(u1) < Double.Epsilon || Math.Abs(u1 - 1) < Double.Epsilon) &&
                 (Math.Abs(u2) < Double.Epsilon || Math.Abs(u2 - 1) < Double.Epsilon) &&
                 (Math.Abs(v1) < Double.Epsilon || Math.Abs(v1 - 1) < Double.Epsilon) &&
                 (Math.Abs(v2) < Double.Epsilon || Math.Abs(v2 - 1) < Double.Epsilon))) return BorderType.Undefined;
@@ -368,7 +384,7 @@ namespace Models
             {
                 for (int j = 0; j < Degree + 1; j++)
                 {
-                    if(points[i,j] != point) continue;
+                    if (points[i, j] != point) continue;
                     u = i / 3.0;
                     v = j / 3.0;
                     return true;
@@ -377,7 +393,7 @@ namespace Models
             return false;
         }
 
-        private Vector4 CalculateBezierVector(double t)
+        protected Vector4 CalculateBezierVector(double t)
         {
             return new Vector4((1 - t) * (1 - t) * (1 - t), 3 * t * (1 - t) * (1 - t), 3 * t * t * (1 - t), t * t * t);
         }
@@ -445,6 +461,11 @@ namespace Models
         public void AddCollapsedPoints(Point point)
         {
             CollapsedPoints.Add(point);
+        }
+
+        public void AddGapFiller(GapFiller gapFiller)
+        {
+            _gapFiller = gapFiller;
         }
     }
 

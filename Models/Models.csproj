@@ -50,7 +50,9 @@
     <Compile Include="BezierSurfaceC2.cs" />
     <Compile Include="Cursor.cs" />
     <Compile Include="Ellipsoid.cs" />
+    <Compile Include="GapFiller.cs" />
     <Compile Include="GeometricModel.cs" />
+    <Compile Include="GregorySurface.cs" />
     <Compile Include="ImplicitGeometricModel.cs" />
     <Compile Include="InterpolationCurve.cs" />
     <Compile Include="ModelType.cs" />

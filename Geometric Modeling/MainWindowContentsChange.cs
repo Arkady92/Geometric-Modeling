@@ -295,6 +295,9 @@ namespace Geometric_Modeling
             var sItem = ObjectsList.SelectedItem as BezierSurface;
             if (!_lockModification && sItem != null)
                 sItem.TogglePolygonialChain();
+            var gItem = ObjectsList.SelectedItem as GapFiller;
+            if (!_lockModification && gItem != null)
+                gItem.TogglePolygonialChain();
             DrawWorld();
         }
 

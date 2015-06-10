@@ -85,6 +85,8 @@ namespace Geometric_Modeling
                     {ModelType.BezierSurface, new List<Control>{SurfaceGridResolutionXBox, SurfaceGridResolutionYBox, GridResolutionXLabel, 
                         GridResolutionYLabel, StereoscopyCheckBox, AdditiveColorBlendingCheckBox, PolygonalChainCheckBox}},
                     {ModelType.BezierSurfaceC2, new List<Control>{SurfaceGridResolutionXBox, SurfaceGridResolutionYBox, GridResolutionXLabel, 
+                        GridResolutionYLabel, StereoscopyCheckBox, AdditiveColorBlendingCheckBox, PolygonalChainCheckBox}},
+                    {ModelType.GapFiller, new List<Control>{SurfaceGridResolutionXBox, SurfaceGridResolutionYBox, GridResolutionXLabel, 
                         GridResolutionYLabel, StereoscopyCheckBox, AdditiveColorBlendingCheckBox, PolygonalChainCheckBox}}
             };
             DisableAllSettings();
