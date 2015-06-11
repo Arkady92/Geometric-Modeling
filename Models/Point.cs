@@ -1,4 +1,5 @@
 ﻿using System.Globalization;
+using System.Xml.Serialization;
 using Mathematics;
 
 namespace Models
@@ -135,6 +136,27 @@ namespace Models
         {
             if (Parents.Count != 1) return null;
             return Parents[0];
+        }
+
+        private Point _collaborator;
+
+        public void AddCollaborator(Point point)
+        {
+            _collaborator = point;
+        }
+
+        public override void TranslateToPosition(Vector4 position)
+        {
+            base.TranslateToPosition(position);
+            if (_collaborator != null)
+                _collaborator.TranslateToPosition(position);
+        }
+
+        public override void Translate(double x, double y, double z)
+        {
+            base.Translate(x, y, z);
+            if (_collaborator != null)
+                _collaborator.Translate(x, y, z);
         }
     }
 }

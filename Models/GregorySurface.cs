@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using Mathematics;
@@ -44,22 +45,34 @@ namespace Models
             _parametrizedPoints[3, 0] = Children[9].GetCurrentPosition();
             _parametrizedPoints[2, 0] = Children[10].GetCurrentPosition();
             _parametrizedPoints[1, 0] = Children[11].GetCurrentPosition();
-            _parametrizedPoints[1, 1] = Children[0].GetCurrentPosition();
-            _parametrizedPoints[1, 2] = Children[0].GetCurrentPosition();
-            _parametrizedPoints[2, 1] = Children[0].GetCurrentPosition();
-            _parametrizedPoints[2, 2] = Children[0].GetCurrentPosition();
+            _parametrizedPoints[1, 1] = Children[12].GetCurrentPosition();
+            _parametrizedPoints[1, 2] = Children[14].GetCurrentPosition();
+            _parametrizedPoints[2, 2] = Children[16].GetCurrentPosition();
+            _parametrizedPoints[2, 1] = Children[18].GetCurrentPosition();
         }
 
         private void ParametrizePoints(double u, double v)
         {
-            _parametrizedPoints[1, 1] = (Children[12].GetCurrentPosition() * u + Children[13].GetCurrentPosition() * v) *
-                (1.0 / (u + v));
-            _parametrizedPoints[2, 1] = (Children[14].GetCurrentPosition() * (1 - u) + Children[15].GetCurrentPosition() * v) *
-                (1.0 / (1 - u + v));
-            _parametrizedPoints[2, 2] = (Children[12].GetCurrentPosition() * (1 - u) + Children[13].GetCurrentPosition() * (1 - v)) *
-                (1.0 / (1 - u + 1 - v));
-            _parametrizedPoints[1, 2] = (Children[12].GetCurrentPosition() * u + Children[13].GetCurrentPosition() * (1 - v)) *
-                (1.0 / (u + 1 - v));
+            if (Math.Abs(u + v) < Double.Epsilon)
+                _parametrizedPoints[1, 1] = (Children[12].GetCurrentPosition() + Children[13].GetCurrentPosition()) * 0.5;
+            else
+                _parametrizedPoints[1, 1] = (Children[12].GetCurrentPosition() * u + Children[13].GetCurrentPosition() * v) *
+                    (1.0 / (u + v));
+            if (Math.Abs(1 - u + v) < Double.Epsilon)
+                _parametrizedPoints[1, 2] = (Children[14].GetCurrentPosition() + Children[15].GetCurrentPosition()) * 0.5;
+            else
+                _parametrizedPoints[1, 2] = (Children[14].GetCurrentPosition() * (1 - u) + Children[15].GetCurrentPosition() * v) *
+                    (1.0 / (1 - u + v));
+            if (Math.Abs(1 - u + 1 - v) < Double.Epsilon)
+                _parametrizedPoints[2, 2] = (Children[16].GetCurrentPosition() + Children[17].GetCurrentPosition()) * 0.5;
+            else
+                _parametrizedPoints[2, 2] = (Children[16].GetCurrentPosition() * (1 - u) + Children[17].GetCurrentPosition() * (1 - v)) *
+                    (1.0 / (1 - u + 1 - v));
+            if (Math.Abs(u + 1 - v) < Double.Epsilon)
+                _parametrizedPoints[2, 1] = (Children[18].GetCurrentPosition() + Children[19].GetCurrentPosition()) * 0.5;
+            else
+                _parametrizedPoints[2, 1] = (Children[18].GetCurrentPosition() * u + Children[19].GetCurrentPosition() * (1 - v)) *
+                    (1.0 / (u + 1 - v));
         }
 
         protected override void DrawPatches(Graphics graphics, Matrix currentProjectionMatrix, Color color, Bitmap bitmap = null,

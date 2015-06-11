@@ -344,11 +344,11 @@ namespace Geometric_Modeling
             {
                 var bsurf = new BezierSurface[3];
                 bsurf[0] = new BezierSurface(Vector4.Zero(), 0.4, 0.4, 1, 1, false);
-                bsurf[0].TranslateToPosition(new Vector4(-0.35, 0, 0));
+                bsurf[0].TranslateToPosition(new Vector4(-0.65, -0.05, 0));
                 bsurf[1] = new BezierSurface(Vector4.Zero(), 0.4, 0.4, 1, 1, false);
-                bsurf[1].TranslateToPosition(new Vector4(0.35, 0.35, 0));
+                bsurf[1].TranslateToPosition(new Vector4(0.4, 0.35, 0));
                 bsurf[2] = new BezierSurface(Vector4.Zero(), 0.4, 0.4, 1, 1, false);
-                bsurf[2].TranslateToPosition(new Vector4(0.5, -0.35, 0));
+                bsurf[2].TranslateToPosition(new Vector4(0.6, -0.35, 0));
                 for (int i = 0; i < 3; i++)
                 {
                     bsurf[i].ChainEnabled = PolygonalChainCheckBox.Checked;
