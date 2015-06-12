@@ -361,9 +361,19 @@ namespace Geometric_Modeling
                 DrawWorld();
                 return;
             }
-            if (surfaces.Count != 3) return;
-            if(!(surfaces[0].CollapsedSurfaces.Contains(surfaces[1]) && surfaces[0].CollapsedSurfaces.Contains(surfaces[2])
-                && surfaces[1].CollapsedSurfaces.Contains(surfaces[2]))) return;
+            if (surfaces.Count != 3)
+            {
+                MessageBox.Show(@"Not enough surfaces selected");
+                return;
+            }
+            if (
+                !(surfaces[0].CollapsedSurfaces.Contains(surfaces[1]) &&
+                  surfaces[0].CollapsedSurfaces.Contains(surfaces[2])
+                  && surfaces[1].CollapsedSurfaces.Contains(surfaces[2])))
+            {
+                MessageBox.Show(@"Surfaces are not correctly connected");
+                return;
+            }
             var filler = new GapFiller(surfaces);
             _models.Add(filler);
             ObjectsList.Items.Add(filler);
@@ -619,12 +629,33 @@ namespace Geometric_Modeling
         private void CollapseButton_Click(object sender, EventArgs e)
         {
             var points = ObjectsList.SelectedItems.OfType<Point>().ToList();
-            if (points.Count != 2) return;
+            if (points.Count != 2)
+            {
+                MessageBox.Show(@"Not enough points selected");
+                return;
+            }
             var parent0 = points[0].GetOnlyParent() as BezierSurface;
             var parent1 = points[1].GetOnlyParent() as BezierSurface;
-            if (parent0 == null || parent1 == null) return;
-            if (parent0 == parent1) return;
-            if (parent0.Type != parent1.Type) return;
+            if (parent0 == null || parent1 == null)
+            {
+                MessageBox.Show(@"Points are not a part of the surface or are already collapsed");
+                return;
+            }
+            if (parent0 == parent1)
+            {
+                MessageBox.Show(@"Wrong points selected");
+                return;
+            }
+            if (parent0.Type != parent1.Type)
+            {
+                MessageBox.Show(@"Surfaces are not of the same type");
+                return;
+            }
+            if(!(points[0].IsCornerPointOfParent(parent0) &&  points[1].IsCornerPointOfParent(parent1)))
+            {
+                MessageBox.Show(@"Wrong points selected");
+                return;
+            }
 
             parent0.AddCollapsedSurface(parent1);
             parent1.AddCollapsedSurface(parent0);
