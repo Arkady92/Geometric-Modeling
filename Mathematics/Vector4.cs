@@ -33,7 +33,7 @@ namespace Mathematics
         public void NormalizeSecond()
         {
             var norm = Math.Sqrt(X * X + Y * Y + Z * Z);
-            if(Math.Abs(norm) < Double.Epsilon) return;
+            if (Math.Abs(norm) < Double.Epsilon) return;
             X /= norm;
             Z /= norm;
             Y /= norm;
@@ -71,7 +71,7 @@ namespace Mathematics
 
         public static Vector4 Zero()
         {
-            return new Vector4(0,0,0);
+            return new Vector4(0, 0, 0);
         }
 
         public static Vector4 Center(Vector4 vector1, Vector4 vector2)
@@ -86,24 +86,24 @@ namespace Mathematics
 
         public static double Distance3(Vector4 vector1, Vector4 vector2)
         {
-            return Math.Sqrt((vector1.X - vector2.X)*(vector1.X - vector2.X) + 
-                (vector1.Y - vector2.Y)*(vector1.Y - vector2.Y) +
-                (vector1.Z - vector2.Z)*(vector1.Z - vector2.Z));
+            return Math.Sqrt((vector1.X - vector2.X) * (vector1.X - vector2.X) +
+                (vector1.Y - vector2.Y) * (vector1.Y - vector2.Y) +
+                (vector1.Z - vector2.Z) * (vector1.Z - vector2.Z));
         }
 
         public static double Distance2(double x1, double y1, double x2, double y2)
         {
-            return Math.Sqrt((x1 - x2)*(x1 - x2) + (y1 - y2)*(y1 - y2));
+            return Math.Sqrt((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2));
         }
 
         public static Vector4 operator +(Vector4 vector1, Vector4 vector2)
         {
-            return new Vector4(vector1.X + vector2.X, vector1.Y + vector2.Y, vector1.Z + vector2.Z);
+            return new Vector4(vector1.X + vector2.X, vector1.Y + vector2.Y, vector1.Z + vector2.Z, vector1.W + vector2.W);
         }
 
         public static Vector4 operator -(Vector4 vector1, Vector4 vector2)
         {
-            return new Vector4(vector1.X - vector2.X, vector1.Y - vector2.Y, vector1.Z - vector2.Z);
+            return new Vector4(vector1.X - vector2.X, vector1.Y - vector2.Y, vector1.Z - vector2.Z, vector1.W - vector2.W);
         }
 
         public static Vector4 operator *(Matrix matrix, Vector4 vector)
@@ -164,7 +164,7 @@ namespace Mathematics
         public void NormalizeFirst()
         {
             var sum = Math.Abs(X) + Math.Abs(Y) + Math.Abs(Z);
-            if(Math.Abs(sum) < Double.Epsilon) return;
+            if (Math.Abs(sum) < Double.Epsilon) return;
             X /= sum;
             Z /= sum;
             Y /= sum;
@@ -173,6 +173,15 @@ namespace Mathematics
         public Vector4 Clone()
         {
             return new Vector4(X, Y, Z, W);
+        }
+
+        public void NormalizeForIntersection()
+        {
+            var sum = X + Y + Z;
+            var factor = Parameters.IntersectionAccuracy / sum;
+            X *= factor;
+            Y *= factor;
+            Z *= factor;
         }
     }
 }

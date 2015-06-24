@@ -353,7 +353,34 @@ namespace Models
             var leftVector = CalculateBezierVector(u);
             var rightVector = CalculateBezierVector(v);
             var result = new Vector4(leftVector * xMatrix * rightVector, leftVector * yMatrix * rightVector,
-                leftVector * zMatrix * rightVector);
+                leftVector * zMatrix * rightVector, 0);
+            return result;
+        }
+
+        public Vector4 GetSurfacePoint(double u, double v, int patch)
+        {
+            Matrix currentMatrix = OperationsMatrices.Identity();
+            currentMatrix = Parents.Aggregate(currentMatrix, (current, parent) => current * parent.OperationMatrix);
+            currentMatrix = currentMatrix * OperationMatrix;
+            if (PatchesPoints.Count < patch) return null;
+            var points = PatchesPoints[patch];
+            var xMatrix = new Matrix(Degree + 1, Degree + 1);
+            var yMatrix = new Matrix(Degree + 1, Degree + 1);
+            var zMatrix = new Matrix(Degree + 1, Degree + 1);
+            for (int i = 0; i < Degree + 1; i++)
+            {
+                for (int j = 0; j < Degree + 1; j++)
+                {
+                    var point = currentMatrix * points[i, j].GetCurrentPositionWithoutMineTransformations(this);
+                    xMatrix[i, j] = point.X;
+                    yMatrix[i, j] = point.Y;
+                    zMatrix[i, j] = point.Z;
+                }
+            }
+            var leftVector = CalculateBezierVector(u);
+            var rightVector = CalculateBezierVector(v);
+            var result = new Vector4(leftVector * xMatrix * rightVector, leftVector * yMatrix * rightVector,
+                leftVector * zMatrix * rightVector, 0);
             return result;
         }
 

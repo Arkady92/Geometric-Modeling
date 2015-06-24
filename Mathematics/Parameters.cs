@@ -18,5 +18,6 @@ namespace Mathematics
         public static double MouseInaccuracy = 5;
         public static double CursorMoveValue = 0.01;
         public const string DefaultFilePath = "Scene.mg1";
+        public static double IntersectionAccuracy = 0.01;
     }
 }

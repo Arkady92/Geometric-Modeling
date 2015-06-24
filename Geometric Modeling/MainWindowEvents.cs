@@ -13,6 +13,9 @@ namespace Geometric_Modeling
     public partial class MainWindow
     {
         private bool _lockModification;
+        private bool _intersectionEnabled;
+        private Intersector _intersector;
+        private bool _intersectionSelectEnabled;
         #region Mouse events
 
         private void WorldPanel_MouseDown(object sender, MouseEventArgs e)
@@ -25,6 +28,24 @@ namespace Geometric_Modeling
             if (_currentOperation != Operation.Selection)
             {
                 _operationInProgress = true;
+                return;
+            }
+            var size = Math.Max(Parameters.WorldPanelWidth, Parameters.WorldPanelHeight) / 2;
+            if (_intersectionEnabled && _intersectionSelectEnabled)
+            {
+                var intersectionResult = _intersector.PerformIntersection(
+                    (_mousePositionX - Parameters.WorldPanelWidth / 2.0) / size,
+                    -(_mousePositionY - Parameters.WorldPanelHeight / 2.0) / size);
+                if (intersectionResult == null)
+                {
+                    MessageBox.Show(@"Intersection not detected");
+                    return;
+                }
+                _models.Add(intersectionResult);
+                ObjectsList.Items.Add(intersectionResult);
+                _parametrizationWindow.DrawUVParametrization(intersectionResult.GetUVPoints());
+                _parametrizationWindow.DrawSTParametrization(intersectionResult.GetSTPoints());
+                DrawWorld();
                 return;
             }
             foreach (var geometricModel in _hiddenModels)
@@ -305,7 +326,8 @@ namespace Geometric_Modeling
             var result = form.ShowDialog();
             if (result != DialogResult.OK) return;
             var geometricObject = new BezierSurface(Vector4.Zero(), form.SurfaceWidth, form.SurfaceHeight,
-                form.SurfacePatchesLengthCount, form.SurfacePatchesBreadthCount, form.IsSurfaceCylindrical);
+                form.SurfacePatchesLengthCount, form.SurfacePatchesBreadthCount, form.IsSurfaceCylindrical)
+                {Color = _colors[_colorIndex++ % _colors.Count]};
             geometricObject.TranslateToPosition(Models.Cursor.GetCurrentPosition());
             geometricObject.ChainEnabled = PolygonalChainCheckBox.Checked;
             foreach (var child in geometricObject.GetChildren())
@@ -321,7 +343,8 @@ namespace Geometric_Modeling
             var result = form.ShowDialog();
             if (result != DialogResult.OK) return;
             var geometricObject = new BezierSurfaceC2(Vector4.Zero(), form.SurfaceWidth, form.SurfaceHeight,
-                form.SurfacePatchesLengthCount, form.SurfacePatchesBreadthCount, form.IsSurfaceCylindrical);
+                form.SurfacePatchesLengthCount, form.SurfacePatchesBreadthCount, form.IsSurfaceCylindrical) 
+                { Color = _colors[_colorIndex++ % _colors.Count] };
             geometricObject.TranslateToPosition(Models.Cursor.GetCurrentPosition());
             geometricObject.ChainEnabled = PolygonalChainCheckBox.Checked;
             foreach (var child in geometricObject.GetChildren())
@@ -334,7 +357,25 @@ namespace Geometric_Modeling
 
         private void IntersectionButton_Click(object sender, EventArgs e)
         {
+            if (_intersectionEnabled)
+            {
+                _intersectionEnabled = false;
+                if (!_parametrizationWindow.IsDisposed)
+                    _parametrizationWindow.Dispose();
+                return;
+            }
+            var surfaces = ObjectsList.SelectedItems.OfType<BezierSurface>().ToList();
+            if (surfaces.Count != 2)
+            {
+                MessageBox.Show(@"Wrong surfaces count");
+                return;
+            }
+            _intersector = new Intersector(surfaces[0], surfaces[1]);
+            _intersectionEnabled = true;
 
+            if (_parametrizationWindow.IsDisposed)
+                _parametrizationWindow = new ParametrizationWindow();
+            _parametrizationWindow.Show();
         }
 
         private void GregorySurfaceButton_Click(object sender, EventArgs e)
@@ -651,7 +692,7 @@ namespace Geometric_Modeling
                 MessageBox.Show(@"Surfaces are not of the same type");
                 return;
             }
-            if(!(points[0].IsCornerPointOfParent(parent0) &&  points[1].IsCornerPointOfParent(parent1)))
+            if (!(points[0].IsCornerPointOfParent(parent0) && points[1].IsCornerPointOfParent(parent1)))
             {
                 MessageBox.Show(@"Wrong points selected");
                 return;
@@ -780,6 +821,9 @@ namespace Geometric_Modeling
                 case Keys.ControlKey:
                     _multiselectEnabled = true;
                     break;
+                case Keys.ShiftKey:
+                    _intersectionSelectEnabled = true;
+                    break;
                 default:
                     return;
             }
@@ -794,6 +838,9 @@ namespace Geometric_Modeling
             {
                 case Keys.ControlKey:
                     _multiselectEnabled = false;
+                    break;
+                case Keys.ShiftKey:
+                    _intersectionSelectEnabled = false;
                     break;
                 default:
                     return;

@@ -89,6 +89,21 @@ namespace Geometric_Modeling
                 textBox.Text = Parameters.Illuminance.ToString(CultureInfo.InvariantCulture);
         }
 
+        private void IntersectionAccuracyTextBox_TextChanged(object sender, System.EventArgs e)
+        {
+            if (!_enableWorldDrawing) return;
+            var textBox = sender as TextBox;
+            double result;
+            if (textBox == null) return;
+            if (double.TryParse(textBox.Text, NumberStyles.Any, CultureInfo.InvariantCulture, out result) && result >= 0 && result <= 10)
+            {
+                Parameters.IntersectionAccuracy = result;
+                DrawWorld();
+            }
+            else if (textBox.Text != string.Empty && textBox.Text[0] != '.' && textBox.Text[textBox.TextLength - 1] != '.')
+                textBox.Text = Parameters.IntersectionAccuracy.ToString(CultureInfo.InvariantCulture);
+        }
+
         private void XAxisFactorBox_TextChanged(object sender, EventArgs e)
         {
             if (!_enableWorldDrawing) return;

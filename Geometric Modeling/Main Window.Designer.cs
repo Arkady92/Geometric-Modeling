@@ -95,6 +95,8 @@
             this.CursorScreenYLabel = new System.Windows.Forms.Label();
             this.CursorScreenYBox = new System.Windows.Forms.TextBox();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.IntersectionAccuracyLabel = new System.Windows.Forms.Label();
+            this.IntersectionAccuracyTextBox = new System.Windows.Forms.TextBox();
             this.ObjectsPanel.SuspendLayout();
             this.OptionsPanel.SuspendLayout();
             this.OperationsPanel.SuspendLayout();
@@ -242,6 +244,8 @@
             // 
             this.OptionsPanel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.OptionsPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.OptionsPanel.Controls.Add(this.IntersectionAccuracyLabel);
+            this.OptionsPanel.Controls.Add(this.IntersectionAccuracyTextBox);
             this.OptionsPanel.Controls.Add(this.SurfaceGridResolutionYBox);
             this.OptionsPanel.Controls.Add(this.SurfaceGridResolutionXBox);
             this.OptionsPanel.Controls.Add(this.ChordParametrizationRadioButton);
@@ -861,6 +865,26 @@
             this.panel1.Size = new System.Drawing.Size(674, 29);
             this.panel1.TabIndex = 22;
             // 
+            // IntersectionAccuracyLabel
+            // 
+            this.IntersectionAccuracyLabel.AutoSize = true;
+            this.IntersectionAccuracyLabel.Location = new System.Drawing.Point(7, 62);
+            this.IntersectionAccuracyLabel.Name = "IntersectionAccuracyLabel";
+            this.IntersectionAccuracyLabel.Size = new System.Drawing.Size(75, 13);
+            this.IntersectionAccuracyLabel.TabIndex = 15;
+            this.IntersectionAccuracyLabel.Text = "Trim Accuracy";
+            this.IntersectionAccuracyLabel.Visible = false;
+            // 
+            // IntersectionAccuracyTextBox
+            // 
+            this.IntersectionAccuracyTextBox.Location = new System.Drawing.Point(99, 59);
+            this.IntersectionAccuracyTextBox.Name = "IntersectionAccuracyTextBox";
+            this.IntersectionAccuracyTextBox.Size = new System.Drawing.Size(46, 20);
+            this.IntersectionAccuracyTextBox.TabIndex = 14;
+            this.IntersectionAccuracyTextBox.Tag = "";
+            this.IntersectionAccuracyTextBox.Visible = false;
+            this.IntersectionAccuracyTextBox.TextChanged += new System.EventHandler(this.IntersectionAccuracyTextBox_TextChanged);
+            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -970,6 +994,8 @@
         private System.Windows.Forms.Button CollapseButton;
         private System.Windows.Forms.Button GregorySurfaceButton;
         private System.Windows.Forms.Button IntersectionButton;
+        private System.Windows.Forms.Label IntersectionAccuracyLabel;
+        private System.Windows.Forms.TextBox IntersectionAccuracyTextBox;
     }
 }
 

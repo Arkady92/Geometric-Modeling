@@ -32,6 +32,10 @@ namespace Geometric_Modeling
         private bool _enableWorldDrawing;
         private bool _multiselectEnabled;
 
+        private ParametrizationWindow _parametrizationWindow;
+        private List<Color> _colors;
+        private int _colorIndex;
+
         #endregion
 
         #region Initialization
@@ -45,6 +49,13 @@ namespace Geometric_Modeling
 
         private void InitializeMembers()
         {
+            _colors = new List<Color>
+            {
+                Color.OrangeRed,
+                Color.BlueViolet,
+                Color.DarkGreen,
+            };
+            _parametrizationWindow = new ParametrizationWindow();
             UpdateTextBoxes();
             Parameters.WorldPanelWidth = WorldPanel.Width;
             Parameters.WorldPanelHeight = WorldPanel.Height;
@@ -83,11 +94,12 @@ namespace Geometric_Modeling
                     {ModelType.InterpolationCurve, new List<Control>{StereoscopyCheckBox, AdditiveColorBlendingCheckBox, 
                         NormalParametrizationRadioButton, ChordParametrizationRadioButton}},
                     {ModelType.BezierSurface, new List<Control>{SurfaceGridResolutionXBox, SurfaceGridResolutionYBox, GridResolutionXLabel, 
-                        GridResolutionYLabel, StereoscopyCheckBox, AdditiveColorBlendingCheckBox, PolygonalChainCheckBox}},
+                        GridResolutionYLabel, IntersectionAccuracyTextBox, IntersectionAccuracyLabel, StereoscopyCheckBox, AdditiveColorBlendingCheckBox, PolygonalChainCheckBox}},
                     {ModelType.BezierSurfaceC2, new List<Control>{SurfaceGridResolutionXBox, SurfaceGridResolutionYBox, GridResolutionXLabel, 
-                        GridResolutionYLabel, StereoscopyCheckBox, AdditiveColorBlendingCheckBox, PolygonalChainCheckBox}},
+                        GridResolutionYLabel, IntersectionAccuracyTextBox, IntersectionAccuracyLabel, StereoscopyCheckBox, AdditiveColorBlendingCheckBox, PolygonalChainCheckBox}},
                     {ModelType.GapFiller, new List<Control>{SurfaceGridResolutionXBox, SurfaceGridResolutionYBox, GridResolutionXLabel, 
-                        GridResolutionYLabel, StereoscopyCheckBox, AdditiveColorBlendingCheckBox, PolygonalChainCheckBox}}
+                        GridResolutionYLabel, StereoscopyCheckBox, AdditiveColorBlendingCheckBox, PolygonalChainCheckBox}},
+                        {ModelType.IntersectionCurve, new List<Control>{StereoscopyCheckBox, AdditiveColorBlendingCheckBox}}
             };
             DisableAllSettings();
 
@@ -103,6 +115,7 @@ namespace Geometric_Modeling
         private void UpdateTextBoxes()
         {
             _enableWorldDrawing = false;
+            IntersectionAccuracyTextBox.Text = Parameters.IntersectionAccuracy.ToString(CultureInfo.InvariantCulture);
             GridResolutionXBox.Text = Parameters.GridResolutionX.ToString(CultureInfo.InvariantCulture);
             GridResolutionYBox.Text = Parameters.GridResolutionY.ToString(CultureInfo.InvariantCulture);
             SurfaceGridResolutionXBox.Text = Parameters.SurfaceGridResolutionX.ToString(CultureInfo.InvariantCulture);

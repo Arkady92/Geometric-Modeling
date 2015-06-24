@@ -12,6 +12,7 @@
         BezierSurface,
         BezierSurfaceC2,
         GregorySurface,
-        GapFiller
+        GapFiller,
+        IntersectionCurve
     }
 }

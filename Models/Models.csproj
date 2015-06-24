@@ -55,6 +55,8 @@
     <Compile Include="GregorySurface.cs" />
     <Compile Include="ImplicitGeometricModel.cs" />
     <Compile Include="InterpolationCurve.cs" />
+    <Compile Include="IntersectionCurve.cs" />
+    <Compile Include="Intersector.cs" />
     <Compile Include="ModelType.cs" />
     <Compile Include="ParametricGeometricModel.cs" />
     <Compile Include="Point.cs" />
