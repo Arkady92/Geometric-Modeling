@@ -330,34 +330,100 @@ namespace Models
             }
         }
 
-        public Vector4 GetSurfacePoint(double u, double v)
+        //public virtual Vector4 GetSurfaceNormal(double u, double v)
+        //{
+        //    int i = 0, j = 0;
+        //    var uu = u * PatchesLengthCount;
+        //    var vv = v * PatchesBreadthCount;
+        //    if (u == 1)
+        //        i = PatchesLengthCount - 1;
+        //    else
+        //        i = (int)uu;
+        //    if (v == 1)
+        //        i = PatchesBreadthCount - 1;
+        //    else
+        //        j = (int)vv;
+
+        //    var pu = uu - i;
+        //    var pv = vv - j;
+        //    var patchNumber = j * PatchesBreadthCount + i;
+
+        //    return GetSurfaceNormal(pv, pu, patchNumber);
+        //}
+
+        public virtual Vector4 GetSurfacePoint(double u, double v)
         {
-            Matrix currentMatrix = OperationsMatrices.Identity();
-            currentMatrix = Parents.Aggregate(currentMatrix, (current, parent) => current * parent.OperationMatrix);
-            currentMatrix = currentMatrix * OperationMatrix;
-            if (PatchesPoints.Count != 1) return null;
-            var points = PatchesPoints[0];
-            var xMatrix = new Matrix(Degree + 1, Degree + 1);
-            var yMatrix = new Matrix(Degree + 1, Degree + 1);
-            var zMatrix = new Matrix(Degree + 1, Degree + 1);
-            for (int i = 0; i < Degree + 1; i++)
-            {
-                for (int j = 0; j < Degree + 1; j++)
-                {
-                    var point = currentMatrix * points[i, j].GetCurrentPositionWithoutMineTransformations(this);
-                    xMatrix[i, j] = point.X;
-                    yMatrix[i, j] = point.Y;
-                    zMatrix[i, j] = point.Z;
-                }
-            }
-            var leftVector = CalculateBezierVector(u);
-            var rightVector = CalculateBezierVector(v);
-            var result = new Vector4(leftVector * xMatrix * rightVector, leftVector * yMatrix * rightVector,
-                leftVector * zMatrix * rightVector, 0);
-            return result;
+            if (u < 0)
+                u = 1 - u;
+            if (u > 1)
+                u = u - 1;
+            if (v < 0)
+                v = 1 - v;
+            if (v > 1)
+                v = v - 1;
+            int i = 0, j = 0;
+            var uu = u * PatchesLengthCount;
+            var vv = v * PatchesBreadthCount;
+            if(u == 1)
+                i = PatchesLengthCount - 1;
+            else
+                i = (int)uu;
+            if (v == 1)
+                i = PatchesBreadthCount - 1;
+            else 
+                j = (int)vv;
+
+            var pu = uu - i;
+            var pv = vv - j;
+            var patchNumber = j * PatchesBreadthCount + i;
+            return GetSurfacePoint(pv, pu, patchNumber);
         }
 
-        public Vector4 GetSurfacePoint(double u, double v, int patch)
+        public virtual Vector4 GetSurfaceNormal(double u, double v)
+        {
+            const double h = 0.001;
+
+            //Matrix currentMatrix = OperationsMatrices.Identity();
+            //currentMatrix = Parents.Aggregate(currentMatrix, (current, parent) => current * parent.OperationMatrix);
+            //currentMatrix = currentMatrix * OperationMatrix;
+            //var points = PatchesPoints[patch];
+            //var xMatrix = new Matrix(Degree + 1, Degree + 1);
+            //var yMatrix = new Matrix(Degree + 1, Degree + 1);
+            //var zMatrix = new Matrix(Degree + 1, Degree + 1);
+            //for (int i = 0; i < Degree + 1; i++)
+            //{
+            //    for (int j = 0; j < Degree + 1; j++)
+            //    {
+            //        var point = currentMatrix * points[i, j].GetCurrentPositionWithoutMineTransformations(this);
+            //        xMatrix[i, j] = point.X;
+            //        yMatrix[i, j] = point.Y;
+            //        zMatrix[i, j] = point.Z;
+            //    }
+            //}
+            //var uVector = CalculateBezierVector(u);
+            //var vVector = CalculateBezierVector(v);
+            //var uPrevVector = CalculateBezierVector(u - h);
+            //var uNextVector = CalculateBezierVector(u + h);
+            //var vPrevVector = CalculateBezierVector(v - h);
+            //var vNextVector = CalculateBezierVector(v + h);
+
+            //var uNext = new Vector4(uNextVector * xMatrix * vVector, uNextVector * yMatrix * vVector, uNextVector * zMatrix * vVector, 0);
+            //var uPrev = new Vector4(uPrevVector * xMatrix * vVector, uPrevVector * yMatrix * vVector, uPrevVector * zMatrix * vVector, 0);
+            //var vNext = new Vector4(uVector * xMatrix * vNextVector, uVector * yMatrix * vNextVector, uVector * zMatrix * vNextVector, 0);
+            //var vPrev = new Vector4(uVector * xMatrix * vPrevVector, uVector * yMatrix * vPrevVector, uVector * zMatrix * vPrevVector, 0);
+
+            //var factor = 1 / (2 * h);
+            //var uTangent = (uNext - uPrev) * factor;
+            //var vTangent = (vNext - vPrev) * factor;
+
+            var factor = 1 / (2 * h);
+            var uTangent = (GetSurfacePoint(u + h, v) - GetSurfacePoint(u - h, v)) * factor;
+            var vTangent = (GetSurfacePoint(u, v + h) - GetSurfacePoint(u, v - h)) * factor;
+
+            return Vector4.Cross(vTangent, uTangent);
+        }
+
+        public virtual Vector4 GetSurfacePoint(double u, double v, int patch)
         {
             Matrix currentMatrix = OperationsMatrices.Identity();
             currentMatrix = Parents.Aggregate(currentMatrix, (current, parent) => current * parent.OperationMatrix);

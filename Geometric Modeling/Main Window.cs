@@ -214,6 +214,50 @@ namespace Geometric_Modeling
             stringBuilder.AppendLine();
         }
 
+        private void LoadDefaultScene()
+        {
+            var path = "C:/Users/Arkady/Dropbox/Studies/Geometric Modeling/Project/FinalNFinal.mg1";
+            var streamReader = new StreamReader(path);
+            string line;
+            while ((line = streamReader.ReadLine()) != null)
+            {
+                switch (line)
+                {
+                    case "Torus":
+                        LoadTorus(streamReader);
+                        break;
+                    case "Point":
+                        LoadPoint(streamReader);
+                        break;
+                    case "Ellipsoid":
+                        LoadElipsoid(streamReader);
+                        break;
+                    case "BezierCurveC0":
+                        LoadCurve(streamReader, ModelType.BezierCurve);
+                        break;
+                    case "BezierCurveC2":
+                        LoadCurve(streamReader, ModelType.BezierCurveC2);
+                        break;
+                    case "InterpolationCurve":
+                        LoadCurve(streamReader, ModelType.InterpolationCurve);
+                        break;
+                    case "BezierSurfaceC0":
+                        LoadSurface(streamReader, ModelType.BezierSurface);
+                        break;
+                    case "BezierSurfaceC2":
+                        LoadSurface(streamReader, ModelType.BezierSurfaceC2);
+                        break;
+                    case "Selected":
+                        SelectObjects(streamReader);
+                        break;
+
+                }
+            }
+            streamReader.Close();
+            UpdateTextBoxes();
+            DrawWorld();
+        }
+
         private void LoadScene()
         {
             ClearButton_Click(null, null);

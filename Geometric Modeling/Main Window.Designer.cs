@@ -30,6 +30,10 @@
         {
             this.ObjectsList = new System.Windows.Forms.ListBox();
             this.ObjectsPanel = new System.Windows.Forms.Panel();
+            this.AccurateButton = new System.Windows.Forms.Button();
+            this.FlatButton = new System.Windows.Forms.Button();
+            this.EnvelopeButton = new System.Windows.Forms.Button();
+            this.RoughButton = new System.Windows.Forms.Button();
             this.GregorySurfaceButton = new System.Windows.Forms.Button();
             this.IntersectionButton = new System.Windows.Forms.Button();
             this.BezierSurfaceC2Button = new System.Windows.Forms.Button();
@@ -41,6 +45,8 @@
             this.EllipsoidButton = new System.Windows.Forms.Button();
             this.TorusButton = new System.Windows.Forms.Button();
             this.OptionsPanel = new System.Windows.Forms.Panel();
+            this.IntersectionAccuracyLabel = new System.Windows.Forms.Label();
+            this.IntersectionAccuracyTextBox = new System.Windows.Forms.TextBox();
             this.SurfaceGridResolutionYBox = new System.Windows.Forms.TextBox();
             this.SurfaceGridResolutionXBox = new System.Windows.Forms.TextBox();
             this.ChordParametrizationRadioButton = new System.Windows.Forms.RadioButton();
@@ -95,8 +101,7 @@
             this.CursorScreenYLabel = new System.Windows.Forms.Label();
             this.CursorScreenYBox = new System.Windows.Forms.TextBox();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.IntersectionAccuracyLabel = new System.Windows.Forms.Label();
-            this.IntersectionAccuracyTextBox = new System.Windows.Forms.TextBox();
+            this.label1 = new System.Windows.Forms.Label();
             this.ObjectsPanel.SuspendLayout();
             this.OptionsPanel.SuspendLayout();
             this.OperationsPanel.SuspendLayout();
@@ -124,6 +129,10 @@
             this.ObjectsPanel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.ObjectsPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.ObjectsPanel.Controls.Add(this.AccurateButton);
+            this.ObjectsPanel.Controls.Add(this.FlatButton);
+            this.ObjectsPanel.Controls.Add(this.EnvelopeButton);
+            this.ObjectsPanel.Controls.Add(this.RoughButton);
             this.ObjectsPanel.Controls.Add(this.GregorySurfaceButton);
             this.ObjectsPanel.Controls.Add(this.IntersectionButton);
             this.ObjectsPanel.Controls.Add(this.BezierSurfaceC2Button);
@@ -139,6 +148,46 @@
             this.ObjectsPanel.Size = new System.Drawing.Size(840, 31);
             this.ObjectsPanel.TabIndex = 1;
             // 
+            // AccurateButton
+            // 
+            this.AccurateButton.Location = new System.Drawing.Point(252, 3);
+            this.AccurateButton.Name = "AccurateButton";
+            this.AccurateButton.Size = new System.Drawing.Size(77, 23);
+            this.AccurateButton.TabIndex = 25;
+            this.AccurateButton.Text = "Accurate";
+            this.AccurateButton.UseVisualStyleBackColor = true;
+            this.AccurateButton.Click += new System.EventHandler(this.AccurateButton_Click);
+            // 
+            // FlatButton
+            // 
+            this.FlatButton.Location = new System.Drawing.Point(169, 3);
+            this.FlatButton.Name = "FlatButton";
+            this.FlatButton.Size = new System.Drawing.Size(77, 23);
+            this.FlatButton.TabIndex = 14;
+            this.FlatButton.Text = "Flat";
+            this.FlatButton.UseVisualStyleBackColor = true;
+            this.FlatButton.Click += new System.EventHandler(this.FlatButton_Click);
+            // 
+            // EnvelopeButton
+            // 
+            this.EnvelopeButton.Location = new System.Drawing.Point(86, 3);
+            this.EnvelopeButton.Name = "EnvelopeButton";
+            this.EnvelopeButton.Size = new System.Drawing.Size(77, 23);
+            this.EnvelopeButton.TabIndex = 14;
+            this.EnvelopeButton.Text = "Envelope";
+            this.EnvelopeButton.UseVisualStyleBackColor = true;
+            this.EnvelopeButton.Click += new System.EventHandler(this.EnvelopeButton_Click);
+            // 
+            // RoughButton
+            // 
+            this.RoughButton.Location = new System.Drawing.Point(3, 3);
+            this.RoughButton.Name = "RoughButton";
+            this.RoughButton.Size = new System.Drawing.Size(77, 23);
+            this.RoughButton.TabIndex = 24;
+            this.RoughButton.Text = "Rough";
+            this.RoughButton.UseVisualStyleBackColor = true;
+            this.RoughButton.Click += new System.EventHandler(this.RoughButton_Click);
+            // 
             // GregorySurfaceButton
             // 
             this.GregorySurfaceButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
@@ -148,6 +197,7 @@
             this.GregorySurfaceButton.TabIndex = 11;
             this.GregorySurfaceButton.Text = "Gap filling";
             this.GregorySurfaceButton.UseVisualStyleBackColor = true;
+            this.GregorySurfaceButton.Visible = false;
             this.GregorySurfaceButton.Click += new System.EventHandler(this.GregorySurfaceButton_Click);
             // 
             // IntersectionButton
@@ -158,6 +208,7 @@
             this.IntersectionButton.TabIndex = 8;
             this.IntersectionButton.Text = "Intersection";
             this.IntersectionButton.UseVisualStyleBackColor = true;
+            this.IntersectionButton.Visible = false;
             this.IntersectionButton.Click += new System.EventHandler(this.IntersectionButton_Click);
             // 
             // BezierSurfaceC2Button
@@ -168,6 +219,7 @@
             this.BezierSurfaceC2Button.TabIndex = 10;
             this.BezierSurfaceC2Button.Text = "Surface C2";
             this.BezierSurfaceC2Button.UseVisualStyleBackColor = true;
+            this.BezierSurfaceC2Button.Visible = false;
             this.BezierSurfaceC2Button.Click += new System.EventHandler(this.BezierSurfaceC2Button_Click);
             // 
             // BezierSurfaceC0Button
@@ -178,6 +230,7 @@
             this.BezierSurfaceC0Button.TabIndex = 9;
             this.BezierSurfaceC0Button.Text = "Surface C0";
             this.BezierSurfaceC0Button.UseVisualStyleBackColor = true;
+            this.BezierSurfaceC0Button.Visible = false;
             this.BezierSurfaceC0Button.Click += new System.EventHandler(this.BezierSurfaceC0Button_Click);
             // 
             // InterpolationCurveButton
@@ -188,6 +241,7 @@
             this.InterpolationCurveButton.TabIndex = 7;
             this.InterpolationCurveButton.Text = "Interpolation";
             this.InterpolationCurveButton.UseVisualStyleBackColor = true;
+            this.InterpolationCurveButton.Visible = false;
             this.InterpolationCurveButton.Click += new System.EventHandler(this.InterpolationCurveButton_Click);
             // 
             // BezierCurveC2Button
@@ -198,6 +252,7 @@
             this.BezierCurveC2Button.TabIndex = 6;
             this.BezierCurveC2Button.Text = "Curve C2";
             this.BezierCurveC2Button.UseVisualStyleBackColor = true;
+            this.BezierCurveC2Button.Visible = false;
             this.BezierCurveC2Button.Click += new System.EventHandler(this.BezierCurveC2Button_Click);
             // 
             // BezierCurveButton
@@ -208,6 +263,7 @@
             this.BezierCurveButton.TabIndex = 5;
             this.BezierCurveButton.Text = "Curve C0";
             this.BezierCurveButton.UseVisualStyleBackColor = true;
+            this.BezierCurveButton.Visible = false;
             this.BezierCurveButton.Click += new System.EventHandler(this.BezierCurveButton_Click);
             // 
             // PointButton
@@ -218,6 +274,7 @@
             this.PointButton.TabIndex = 4;
             this.PointButton.Text = "Point";
             this.PointButton.UseVisualStyleBackColor = true;
+            this.PointButton.Visible = false;
             this.PointButton.Click += new System.EventHandler(this.PointButton_Click);
             // 
             // EllipsoidButton
@@ -228,6 +285,7 @@
             this.EllipsoidButton.TabIndex = 3;
             this.EllipsoidButton.Text = "Ellipsoid";
             this.EllipsoidButton.UseVisualStyleBackColor = true;
+            this.EllipsoidButton.Visible = false;
             this.EllipsoidButton.Click += new System.EventHandler(this.EllipsoidButton_Click);
             // 
             // TorusButton
@@ -238,6 +296,7 @@
             this.TorusButton.TabIndex = 2;
             this.TorusButton.Text = "Torus";
             this.TorusButton.UseVisualStyleBackColor = true;
+            this.TorusButton.Visible = false;
             this.TorusButton.Click += new System.EventHandler(this.TorusButton_Click);
             // 
             // OptionsPanel
@@ -268,6 +327,26 @@
             this.OptionsPanel.Name = "OptionsPanel";
             this.OptionsPanel.Size = new System.Drawing.Size(150, 139);
             this.OptionsPanel.TabIndex = 2;
+            // 
+            // IntersectionAccuracyLabel
+            // 
+            this.IntersectionAccuracyLabel.AutoSize = true;
+            this.IntersectionAccuracyLabel.Location = new System.Drawing.Point(7, 62);
+            this.IntersectionAccuracyLabel.Name = "IntersectionAccuracyLabel";
+            this.IntersectionAccuracyLabel.Size = new System.Drawing.Size(75, 13);
+            this.IntersectionAccuracyLabel.TabIndex = 15;
+            this.IntersectionAccuracyLabel.Text = "Trim Accuracy";
+            this.IntersectionAccuracyLabel.Visible = false;
+            // 
+            // IntersectionAccuracyTextBox
+            // 
+            this.IntersectionAccuracyTextBox.Location = new System.Drawing.Point(99, 59);
+            this.IntersectionAccuracyTextBox.Name = "IntersectionAccuracyTextBox";
+            this.IntersectionAccuracyTextBox.Size = new System.Drawing.Size(46, 20);
+            this.IntersectionAccuracyTextBox.TabIndex = 14;
+            this.IntersectionAccuracyTextBox.Tag = "";
+            this.IntersectionAccuracyTextBox.Visible = false;
+            this.IntersectionAccuracyTextBox.TextChanged += new System.EventHandler(this.IntersectionAccuracyTextBox_TextChanged);
             // 
             // SurfaceGridResolutionYBox
             // 
@@ -497,6 +576,7 @@
             this.CollapseButton.TabIndex = 9;
             this.CollapseButton.Text = "Collapse";
             this.CollapseButton.UseVisualStyleBackColor = true;
+            this.CollapseButton.Visible = false;
             this.CollapseButton.Click += new System.EventHandler(this.CollapseButton_Click);
             // 
             // SaveButton
@@ -541,6 +621,7 @@
             this.SelectionButton.TabIndex = 10;
             this.SelectionButton.Text = "Select";
             this.SelectionButton.UseVisualStyleBackColor = true;
+            this.SelectionButton.Visible = false;
             this.SelectionButton.Click += new System.EventHandler(this.SelectionButton_Click);
             // 
             // ScaleButton
@@ -612,6 +693,7 @@
             this.ObjectsLabel.Size = new System.Drawing.Size(43, 13);
             this.ObjectsLabel.TabIndex = 5;
             this.ObjectsLabel.Text = "Objects";
+            this.ObjectsLabel.Visible = false;
             // 
             // OperationsLabel
             // 
@@ -865,31 +947,22 @@
             this.panel1.Size = new System.Drawing.Size(674, 29);
             this.panel1.TabIndex = 22;
             // 
-            // IntersectionAccuracyLabel
+            // label1
             // 
-            this.IntersectionAccuracyLabel.AutoSize = true;
-            this.IntersectionAccuracyLabel.Location = new System.Drawing.Point(7, 62);
-            this.IntersectionAccuracyLabel.Name = "IntersectionAccuracyLabel";
-            this.IntersectionAccuracyLabel.Size = new System.Drawing.Size(75, 13);
-            this.IntersectionAccuracyLabel.TabIndex = 15;
-            this.IntersectionAccuracyLabel.Text = "Trim Accuracy";
-            this.IntersectionAccuracyLabel.Visible = false;
-            // 
-            // IntersectionAccuracyTextBox
-            // 
-            this.IntersectionAccuracyTextBox.Location = new System.Drawing.Point(99, 59);
-            this.IntersectionAccuracyTextBox.Name = "IntersectionAccuracyTextBox";
-            this.IntersectionAccuracyTextBox.Size = new System.Drawing.Size(46, 20);
-            this.IntersectionAccuracyTextBox.TabIndex = 14;
-            this.IntersectionAccuracyTextBox.Tag = "";
-            this.IntersectionAccuracyTextBox.Visible = false;
-            this.IntersectionAccuracyTextBox.TextChanged += new System.EventHandler(this.IntersectionAccuracyTextBox_TextChanged);
+            this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)));
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(421, 0);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(34, 13);
+            this.label1.TabIndex = 23;
+            this.label1.Text = "Paths";
             // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(864, 622);
+            this.Controls.Add(this.label1);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.EffectsLabel);
             this.Controls.Add(this.EffectsPanel);
@@ -996,6 +1069,11 @@
         private System.Windows.Forms.Button IntersectionButton;
         private System.Windows.Forms.Label IntersectionAccuracyLabel;
         private System.Windows.Forms.TextBox IntersectionAccuracyTextBox;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Button EnvelopeButton;
+        private System.Windows.Forms.Button RoughButton;
+        private System.Windows.Forms.Button FlatButton;
+        private System.Windows.Forms.Button AccurateButton;
     }
 }
 

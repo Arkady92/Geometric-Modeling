@@ -189,6 +189,39 @@ namespace Geometric_Modeling
         #endregion
 
         #region Buttons click events
+
+        private void RoughButton_Click(object sender, System.EventArgs e)
+        {
+            if (pathCreator == null) pathCreator = new PathCreator(_models.OfType<BezierSurface>().ToList(), _models);
+            pathCreator.GenerateRoughPathes();
+            DrawWorld();
+            MessageBox.Show(@"File generated.");
+        }
+
+        private void EnvelopeButton_Click(object sender, System.EventArgs e)
+        {
+            if (pathCreator == null) pathCreator = new PathCreator(_models.OfType<BezierSurface>().ToList(), _models);
+            pathCreator.GenerateEnvelopePathes();
+            DrawWorld();
+            MessageBox.Show(@"File generated.");
+        }
+
+        private void FlatButton_Click(object sender, System.EventArgs e)
+        {
+            if (pathCreator == null) pathCreator = new PathCreator(_models.OfType<BezierSurface>().ToList(), _models);
+            pathCreator.GenerateFlatPathes();
+            DrawWorld();
+            MessageBox.Show(@"File generated.");
+        }
+
+        private void AccurateButton_Click(object sender, System.EventArgs e)
+        {
+            if (pathCreator == null) pathCreator = new PathCreator(_models.OfType<BezierSurface>().ToList(), _models);
+            pathCreator.GenerateAccuratePathes();
+            DrawWorld();
+            MessageBox.Show(@"File generated.");
+        }
+
         private void TorusButton_Click(object sender, EventArgs e)
         {
             var geometricObject = new Torus(Models.Cursor.GetCurrentPosition());

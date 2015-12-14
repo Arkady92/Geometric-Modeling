@@ -142,7 +142,7 @@ namespace Models
                         var point = Vector4.Zero();
                         for (int i = 0; i < Degree + 1; i++)
                             for (int j = 0; j < Degree + 1; j++)
-                                point = point + currentPoints[i, j]*vSplineValues[i]*uSplineValues[j];
+                                point = point + currentPoints[i, j] * vSplineValues[i] * uSplineValues[j];
                         point = currentProjectionMatrix * point;
                         if (first)
                         {
@@ -171,6 +171,91 @@ namespace Models
                     }
                 }
             }
+        }
+
+        public override Vector4 GetSurfacePoint(double u, double v, int patch)
+        {
+            Matrix currentMatrix = OperationsMatrices.Identity();
+            currentMatrix = Parents.Aggregate(currentMatrix, (current, parent) => current * parent.OperationMatrix);
+            currentMatrix = currentMatrix * OperationMatrix;
+
+            var knots = Splines.GetKnotsDoubledEnds(Degree + 5);
+            const double knotsDivision = 1.0 / (Degree + 2);
+            var points = PatchesPoints[patch];
+            var currentPoints = new Vector4[Degree + 1, Degree + 1];
+            for (int i = 0; i < Degree + 1; i++)
+                for (int j = 0; j < Degree + 1; j++)
+                    currentPoints[i, j] = currentMatrix * points[i, j].GetCurrentPositionWithoutMineTransformations(this);
+
+            u = 2 * knotsDivision + u * knotsDivision;
+            v = 2 * knotsDivision + v * knotsDivision;
+
+            var uSplineValues = new double[Degree + 1];
+            for (int i = 0; i < Degree + 1; i++)
+                uSplineValues[i] = Splines.CalculateNSplineValues(knots, i + 1, Degree, u);
+
+            var vSplineValues = new double[Degree + 1];
+            for (int i = 0; i < Degree + 1; i++)
+                vSplineValues[i] = Splines.CalculateNSplineValues(knots, i + 1, Degree, v);
+
+            var result = Vector4.Zero();
+            for (int i = 0; i < Degree + 1; i++)
+                for (int j = 0; j < Degree + 1; j++)
+                    result = result + currentPoints[i, j] * vSplineValues[i] * uSplineValues[j];
+            return result;
+        }
+
+        public Vector4 GetSurfaceNormal(double u, double v, int patch)
+        {
+            const double h = 0.001;
+
+            var factor = 1 / (2 * h);
+            var uTangent = (GetSurfacePoint(u + h, v, patch) - GetSurfacePoint(u - h, v, patch)) * factor;
+            var vTangent = (GetSurfacePoint(u, v + h, patch) - GetSurfacePoint(u, v - h, patch)) * factor;
+
+            return Vector4.Cross(vTangent, uTangent);
+        }
+
+        public override Vector4 GetSurfaceNormal(double u, double v)
+        {
+            int i = 0, j = 0;
+            var uu = u * PatchesBreadthCount;
+            var vv = v * PatchesLengthCount;
+            if (u == 1)
+                i = PatchesBreadthCount - 1;
+            else
+                i = (int)uu;
+            if (v == 1)
+                i = PatchesLengthCount - 1;
+            else
+                j = (int)vv;
+
+            var pu = uu - i;
+            var pv = vv - j;
+            var patchNumber = i * PatchesLengthCount + j;
+
+            return GetSurfaceNormal(pv, pu, patchNumber);
+        }
+
+        public override Vector4 GetSurfacePoint(double u, double v)
+        {
+            int i = 0, j = 0;
+            var uu = u * PatchesBreadthCount;
+            var vv = v * PatchesLengthCount;
+            if (u == 1)
+                i = PatchesBreadthCount - 1;
+            else
+                i = (int)uu;
+            if (v == 1)
+                i = PatchesLengthCount - 1;
+            else
+                j = (int)vv;
+
+            var pu = uu - i;
+            var pv = vv - j;
+            var patchNumber = i * PatchesLengthCount + j;
+
+            return GetSurfacePoint(pv, pu, patchNumber);
         }
     }
 }

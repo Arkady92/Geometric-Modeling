@@ -35,6 +35,7 @@ namespace Geometric_Modeling
         private ParametrizationWindow _parametrizationWindow;
         private List<Color> _colors;
         private int _colorIndex;
+        private PathCreator pathCreator;
 
         #endregion
 
@@ -45,6 +46,7 @@ namespace Geometric_Modeling
             SetStyle(ControlStyles.AllPaintingInWmPaint | ControlStyles.UserPaint | ControlStyles.DoubleBuffer, true);
             SetDoubleBuffered(WorldPanel);
             InitializeMembers();
+            LoadDefaultScene();
         }
 
         private void InitializeMembers()

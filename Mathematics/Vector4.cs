@@ -183,5 +183,17 @@ namespace Mathematics
             Y *= factor;
             Z *= factor;
         }
+
+        public static Vector4 Cross(Vector4 v1, Vector4 v2)
+        {
+            double x, y, z;
+            x = v1.Y * v2.Z - v2.Y * v1.Z;
+            y = (v1.X * v2.Z - v2.X * v1.Z) * -1;
+            z = v1.X * v2.Y - v2.X * v1.Y;
+
+            var result = new Vector4(x, y, z);
+            result.NormalizeSecond();
+            return result;
+        }
     }
 }
