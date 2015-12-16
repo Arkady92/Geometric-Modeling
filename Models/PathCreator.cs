@@ -25,7 +25,7 @@ namespace Models
         private int sphereSmallMillerRadius = 4;
         private int flatMillerRadius = 6;
         private int baseSize = 21;
-        private int firstCutSize = 40;
+        private int firstCutSize = 36;
         private List<GeometricModel> models;
 
         public PathCreator() { }
@@ -51,7 +51,7 @@ namespace Models
                 {
                     for (int j = 0; j < mapSize; j++)
                     {
-                        heightMap[i, j] = double.Parse(reader.ReadLine(), CultureInfo.InvariantCulture) - 0.21;
+                        heightMap[i, j] = double.Parse(reader.ReadLine(), CultureInfo.InvariantCulture);// -0.21;
                     }
                 }
             }
@@ -140,7 +140,7 @@ namespace Models
                 {
                     for (int j = 0; j < mapSize; j++)
                     {
-                        var result = (heightMap[i, j] + 0.2 > 0.5) ? 0.5 : heightMap[i, j] + 0.21;
+                        var result = (heightMap[i, j]);// + 0.21 > 0.5) ? 0.5 : heightMap[i, j] + 0.21;
                         outputFile.WriteLine(result.ToString(System.Globalization.CultureInfo.InvariantCulture));
                     }
                 }
@@ -151,7 +151,7 @@ namespace Models
         {
             using (StreamWriter outputFile = new StreamWriter("../../../../PUSN/3CProcessingSimulation/3CProcessingSimulation/resources/paths/Rough.k16"))
             {
-                Vector4 savePlace = new Vector4(-75.000, -100.000, 40.000);
+                Vector4 savePlace = new Vector4(-75.000, -90.00, firstCutSize);
                 int counter = 3;
                 int halfBorderSize = 75 + sphereMillerRadius;
                 int halfSize = 75;
@@ -168,7 +168,7 @@ namespace Models
                         counter++, i - halfSize, halfBorderSize, firstCutSize));
 
                     outputFile.WriteLine(String.Format(CultureInfo.InvariantCulture, "N{0}G01X{1}Y{2}Z{3}",
-                        counter++, i - halfSize, halfBorderSize, baseSize));
+                        counter++, i - halfSize, halfBorderSize, baseSize + materialReserveSize));
                     double lastMaxZ = 0;
                     int lastMaxZIndex = 0;
                     for (int j = mapSize - 1; j >= 0; j--)
@@ -191,15 +191,15 @@ namespace Models
                         if (j + 1 != lastMaxZIndex)
                             outputFile.WriteLine(String.Format(CultureInfo.InvariantCulture, "N{0}G01X{1}Y{2}Z{3}",
                                 counter++, i - halfSize, j - halfSize + 1,
-                                lastMaxZ * 100 + baseSize + ((lastMaxZ <= 0) ? 0 : materialReserveSize)));
+                                lastMaxZ * halfSize + baseSize + materialReserveSize));
                         outputFile.WriteLine(String.Format(CultureInfo.InvariantCulture, "N{0}G01X{1}Y{2}Z{3}",
                             counter++, i - halfSize, j - halfSize,
-                            maxZ * 100 + baseSize + ((lastMaxZ <= 0.0) ? 0 : materialReserveSize)));
+                            maxZ * halfSize + baseSize + materialReserveSize));
                         lastMaxZ = maxZ;
                         lastMaxZIndex = j;
                     }
                     outputFile.WriteLine(String.Format(CultureInfo.InvariantCulture, "N{0}G01X{1}Y{2}Z{3}",
-                        counter++, i - halfSize, -halfBorderSize, baseSize));
+                        counter++, i - halfSize, -halfBorderSize, baseSize + materialReserveSize));
                 }
                 outputFile.WriteLine(String.Format(CultureInfo.InvariantCulture, "N{0}G01X{1}Y{2}Z{3}",
                     counter++, savePlace.X, savePlace.Y, savePlace.Z));
@@ -213,7 +213,7 @@ namespace Models
                 int counter = 3;
                 int halfBorderSize = 75 + sphereMillerRadius;
                 int halfSize = 75;
-                Vector4 savePlace = new Vector4(-75.000, -100.000, 40.000);
+                Vector4 savePlace = new Vector4(-75.000, -90.00, firstCutSize);
 
                 double step = 0.01;
                 double borderValue = 0.1;
@@ -440,6 +440,7 @@ namespace Models
                     surfacePointLL.Z = 0;
                     var surfaceNormalLL = activeSurface.GetSurfaceNormal(uC, vL);
                     var millerPositionLL = surfacePointLL + surfaceNormalLL * radius * 1.8;
+                    millerPositionLL.X -= 0.02;
                     models.Add(new Point(millerPositionLL));
 
                     backHandEnvelopePoints.Add(millerPositionLL);
@@ -541,11 +542,11 @@ namespace Models
                 outputFile.WriteLine(String.Format(CultureInfo.InvariantCulture, "N{0}G01X{1}Y{2}Z{3}",
                    counter++, savePlace.X, savePlace.Y, savePlace.Z));
                 outputFile.WriteLine(String.Format(CultureInfo.InvariantCulture, "N{0}G01X{1}Y{2}Z{3}",
-                    counter++, 80, -100, savePlace.Z));
+                    counter++, 90, -90, savePlace.Z));
                 outputFile.WriteLine(String.Format(CultureInfo.InvariantCulture, "N{0}G01X{1}Y{2}Z{3}",
-                    counter++, 80, 30, savePlace.Z));
+                    counter++, 90, 20, savePlace.Z));
                 outputFile.WriteLine(String.Format(CultureInfo.InvariantCulture, "N{0}G01X{1}Y{2}Z{3}",
-                    counter++, 80, 30, baseSize));
+                    counter++, 90, 20, baseSize));
 
                 for (int i = 0; i < fullEnvelope.Count; i++)
                 {
@@ -572,7 +573,7 @@ namespace Models
         {
             using (StreamWriter outputFile = new StreamWriter("../../../../PUSN/3CProcessingSimulation/3CProcessingSimulation/resources/paths/Flat.f12"))
             {
-                Vector4 savePlace = new Vector4(-75.000, -100.000, 40.000);
+                Vector4 savePlace = new Vector4(-75.000, -90.00, firstCutSize);
                 int counter = 3;
                 int halfBorderSize = 75 + sphereMillerRadius;
                 int halfSize = 75;
@@ -671,7 +672,7 @@ namespace Models
 
             using (StreamWriter outputFile = new StreamWriter("../../../../PUSN/3CProcessingSimulation/3CProcessingSimulation/resources/paths/Accurate.k08"))
             {
-                Vector4 savePlace = new Vector4(-75.000, -100.000, 40.000);
+                Vector4 savePlace = new Vector4(-75.000, -90.00, firstCutSize);
                 int counter = 3;
                 double stepU = 0.009;
                 double stepV = 0.012;
@@ -679,22 +680,29 @@ namespace Models
                 var radius = (sphereSmallMillerRadius / (double)halfSize);
                 var distanceFactor = Math.Sqrt(2) * 0.8;
                 var radiusFactor = 1.2;
+                var saveDistance = 0.05;
 
                 // CORE
                 outputFile.WriteLine(String.Format(CultureInfo.InvariantCulture, "N{0}G01X{1}Y{2}Z{3}",
                     counter++, savePlace.X, savePlace.Y, savePlace.Z));
                 outputFile.WriteLine(String.Format(CultureInfo.InvariantCulture, "N{0}G01X{1}Y{2}Z{3}",
-                    counter++, 80, -100, savePlace.Z));
+                    counter++, 90, -90, savePlace.Z));
                 outputFile.WriteLine(String.Format(CultureInfo.InvariantCulture, "N{0}G01X{1}Y{2}Z{3}",
-                    counter++, 80, 80, savePlace.Z));
+                    counter++, 90, 14, savePlace.Z));
 
+                var corePathesPoints = new List<Vector4>();
                 var activeSurface = surfaces[0];
                 bool forward = true;
                 Vector4 lastMillerPosition = Vector4.Zero();
+                bool first = true;
                 for (double u = 0; u <= 0.975; u += stepU)
                 {
                     for (double v = 0.875; v <= 1.375; v += stepV)
                     {
+                        if (u > 0.64 && u < 0.72)
+                            continue;
+                        if (u > 0.87 && u < 0.94)
+                            continue;
                         var vv = forward ? v : 1.375 - v + 0.875;
                         vv = (vv > 1) ? vv - 1 : vv;
                         var surfacePoint = activeSurface.GetSurfacePoint(u, vv);
@@ -703,7 +711,7 @@ namespace Models
                         var surfaceNormal = activeSurface.GetSurfaceNormal(u, vv);
                         var millerPosition = surfacePoint + surfaceNormal * radius;
                         var millerRealPosition = millerPosition * halfSize;
-                        millerRealPosition.Z = millerRealPosition.Z - sphereSmallMillerRadius + baseSize;
+                        millerRealPosition.Z = millerRealPosition.Z - sphereSmallMillerRadius + baseSize + saveDistance;
                         if (millerRealPosition.Z < baseSize)
                             continue;
                         bool conflict = false;
@@ -731,33 +739,46 @@ namespace Models
                         }
                         if (conflict)
                             continue;
-                        models.Add(new Point(millerPosition));
+                        //models.Add(new Point(millerPosition));
+                        corePathesPoints.Add(millerPosition);
                         lastMillerPosition = millerRealPosition;
+                        if (first)
+                        {
+                            first = false;
+                            outputFile.WriteLine(String.Format(CultureInfo.InvariantCulture, "N{0}G01X{1}Y{2}Z{3}",
+                                counter++, millerRealPosition.X, millerRealPosition.Y, savePlace.Z));
+                        }
                         outputFile.WriteLine(String.Format(CultureInfo.InvariantCulture, "N{0}G01X{1}Y{2}Z{3}",
                             counter++, millerRealPosition.X, millerRealPosition.Y, millerRealPosition.Z));
                     }
                     forward = !forward;
                 }
+                models.Add(new IntersectionCurve(corePathesPoints, null, null, Vector4.Zero()) { Color = System.Drawing.Color.Red });
+
 
                 outputFile.WriteLine(String.Format(CultureInfo.InvariantCulture, "N{0}G01X{1}Y{2}Z{3}",
                     counter++, lastMillerPosition.X, lastMillerPosition.Y, savePlace.Z));
-                outputFile.WriteLine(String.Format(CultureInfo.InvariantCulture, "N{0}G01X{1}Y{2}Z{3}",
-                    counter++, savePlace.X, savePlace.Y, savePlace.Z));
+                //outputFile.WriteLine(String.Format(CultureInfo.InvariantCulture, "N{0}G01X{1}Y{2}Z{3}",
+                //    counter++, savePlace.X, savePlace.Y, savePlace.Z));
 
                 distanceFactor = Math.Sqrt(2) * 0.9;
                 radiusFactor = 1.1;
                 // FRONT HAND
                 outputFile.WriteLine(String.Format(CultureInfo.InvariantCulture, "N{0}G01X{1}Y{2}Z{3}",
-                    counter++, 0.0, savePlace.Y, savePlace.Z));
+                    counter++, 13.00, savePlace.Y, savePlace.Z));
 
-                stepU = 0.015;
-                stepV = 0.025;
+                stepU = 0.0225;
+                stepV = 0.015;
                 activeSurface = surfaces[3];
                 forward = true;
+                var frontHandPathesPoints = new List<Vector4>();
+                first = true;
                 for (double u = 0; u <= 1; u += stepU)
                 {
                     for (double v = 0.75; v <= 1.25; v += stepV)
                     {
+                        if (u > 0.70 && u < 0.76)
+                            continue;
                         var vv = forward ? v : 1.25 - v + 0.75;
                         vv = (vv > 1) ? vv - 1 : vv;
                         var surfacePoint = activeSurface.GetSurfacePoint(u, vv);
@@ -766,7 +787,7 @@ namespace Models
                         var surfaceNormal = activeSurface.GetSurfaceNormal(u, vv);
                         var millerPosition = surfacePoint + surfaceNormal * radius;
                         var millerRealPosition = millerPosition * halfSize;
-                        millerRealPosition.Z = millerRealPosition.Z - sphereSmallMillerRadius + baseSize;
+                        millerRealPosition.Z = millerRealPosition.Z - sphereSmallMillerRadius + baseSize + saveDistance;
                         if (millerRealPosition.Z < baseSize)
                             continue;
                         bool conflict = false;
@@ -782,18 +803,27 @@ namespace Models
                         }
                         if (conflict)
                             continue;
-                        models.Add(new Point(millerPosition));
+                        //models.Add(new Point(millerPosition));
+                        frontHandPathesPoints.Add(millerPosition);
                         lastMillerPosition = millerRealPosition;
+                        if (first)
+                        {
+                            first = false;
+                            outputFile.WriteLine(String.Format(CultureInfo.InvariantCulture, "N{0}G01X{1}Y{2}Z{3}",
+                                counter++, millerRealPosition.X, millerRealPosition.Y, savePlace.Z));
+                        }
                         outputFile.WriteLine(String.Format(CultureInfo.InvariantCulture, "N{0}G01X{1}Y{2}Z{3}",
                             counter++, millerRealPosition.X, millerRealPosition.Y, millerRealPosition.Z));
                     }
                     forward = !forward;
                 }
+                models.Add(new IntersectionCurve(frontHandPathesPoints, null, null, Vector4.Zero()) { Color = System.Drawing.Color.Red });
+
 
                 outputFile.WriteLine(String.Format(CultureInfo.InvariantCulture, "N{0}G01X{1}Y{2}Z{3}",
                     counter++, lastMillerPosition.X, lastMillerPosition.Y, savePlace.Z));
-                outputFile.WriteLine(String.Format(CultureInfo.InvariantCulture, "N{0}G01X{1}Y{2}Z{3}",
-                    counter++, savePlace.X, savePlace.Y, savePlace.Z));
+                //outputFile.WriteLine(String.Format(CultureInfo.InvariantCulture, "N{0}G01X{1}Y{2}Z{3}",
+                //    counter++, savePlace.X, savePlace.Y, savePlace.Z));
 
                 // BACK HAND
                 outputFile.WriteLine(String.Format(CultureInfo.InvariantCulture, "N{0}G01X{1}Y{2}Z{3}",
@@ -801,6 +831,8 @@ namespace Models
 
                 activeSurface = surfaces[2];
                 forward = true;
+                first = true;
+                var backHandPathesPoints = new List<Vector4>();
                 for (double u = 0; u <= 1; u += stepU)
                 {
                     for (double v = 0.75; v <= 1.25; v += stepV)
@@ -829,26 +861,36 @@ namespace Models
                         }
                         if (conflict)
                             continue;
-                        models.Add(new Point(millerPosition));
+                        //models.Add(new Point(millerPosition));
+                        backHandPathesPoints.Add(millerPosition);
                         lastMillerPosition = millerRealPosition;
+                        if (first)
+                        {
+                            first = false;
+                            outputFile.WriteLine(String.Format(CultureInfo.InvariantCulture, "N{0}G01X{1}Y{2}Z{3}",
+                                counter++, millerRealPosition.X, millerRealPosition.Y, savePlace.Z));
+                        }
                         outputFile.WriteLine(String.Format(CultureInfo.InvariantCulture, "N{0}G01X{1}Y{2}Z{3}",
                             counter++, millerRealPosition.X, millerRealPosition.Y, millerRealPosition.Z));
                     }
                     forward = !forward;
                 }
+                models.Add(new IntersectionCurve(backHandPathesPoints, null, null, Vector4.Zero()) { Color = System.Drawing.Color.Red });
+
 
                 outputFile.WriteLine(String.Format(CultureInfo.InvariantCulture, "N{0}G01X{1}Y{2}Z{3}",
                     counter++, lastMillerPosition.X, lastMillerPosition.Y, savePlace.Z));
-                outputFile.WriteLine(String.Format(CultureInfo.InvariantCulture, "N{0}G01X{1}Y{2}Z{3}",
-                    counter++, savePlace.X, savePlace.Y, savePlace.Z));
+                //outputFile.WriteLine(String.Format(CultureInfo.InvariantCulture, "N{0}G01X{1}Y{2}Z{3}",
+                //    counter++, savePlace.X, savePlace.Y, savePlace.Z));
 
                 // DRILL
 
-                stepU = 0.05;
-                stepV = 0.04;
+                stepU = 0.04;
+                stepV = 0.02;
                 activeSurface = surfaces[1];
                 forward = true;
-                bool first = true;
+                first = true;
+                var drillPathesPoints = new List<Vector4>();
                 for (double v = 0.2; v <= 1; v += stepV)
                 {
                     for (double u = 0.249; u <= 0.498; u += stepU)
@@ -860,10 +902,11 @@ namespace Models
                         var surfaceNormal = activeSurface.GetSurfaceNormal(uu, v);
                         var millerPosition = surfacePoint + surfaceNormal * radius;
                         var millerRealPosition = millerPosition * halfSize;
-                        millerRealPosition.Z = millerRealPosition.Z - sphereSmallMillerRadius + baseSize;
+                        millerRealPosition.Z = millerRealPosition.Z - sphereSmallMillerRadius + baseSize + saveDistance;
                         if (millerRealPosition.Z < baseSize)
                             continue;
-                        models.Add(new Point(millerPosition));
+                        //models.Add(new Point(millerPosition));
+                        drillPathesPoints.Add(millerPosition);
                         lastMillerPosition = millerRealPosition;
                         if (first)
                         {
@@ -893,10 +936,11 @@ namespace Models
                         var surfaceNormal = activeSurface.GetSurfaceNormal(uu, v);
                         var millerPosition = surfacePoint + surfaceNormal * radius;
                         var millerRealPosition = millerPosition * halfSize;
-                        millerRealPosition.Z = millerRealPosition.Z - sphereSmallMillerRadius + baseSize;
+                        millerRealPosition.Z = millerRealPosition.Z - sphereSmallMillerRadius + baseSize + saveDistance;
                         if (millerRealPosition.Z < baseSize)
                             continue;
-                        models.Add(new Point(millerPosition));
+                        //models.Add(new Point(millerPosition));
+                        drillPathesPoints.Add(millerPosition);
                         lastMillerPosition = millerRealPosition;
                         if (first)
                         {
@@ -909,11 +953,216 @@ namespace Models
                     }
                     forward = !forward;
                 }
+                models.Add(new IntersectionCurve(drillPathesPoints, null, null, Vector4.Zero()) { Color = System.Drawing.Color.Red });
+
+
                 outputFile.WriteLine(String.Format(CultureInfo.InvariantCulture, "N{0}G01X{1}Y{2}Z{3}",
                     counter++, lastMillerPosition.X, lastMillerPosition.Y, savePlace.Z));
 
                 outputFile.WriteLine(String.Format(CultureInfo.InvariantCulture, "N{0}G01X{1}Y{2}Z{3}",
                 counter++, savePlace.X, savePlace.Y, savePlace.Z));
+            }
+        }
+
+        public void GenerateSignaturePathes()
+        {
+            using (StreamWriter outputFile = new StreamWriter("../../../../PUSN/3CProcessingSimulation/3CProcessingSimulation/resources/paths/Signature.k01"))
+            {
+                Vector4 savePlace = new Vector4(-75.000, -90.00, firstCutSize);
+                int counter = 3;
+                double height = baseSize - 0.95;
+
+                outputFile.WriteLine(String.Format(CultureInfo.InvariantCulture, "N{0}G01X{1}Y{2}Z{3}",
+                    counter++, savePlace.X, savePlace.Y, savePlace.Z));
+
+                const int letterSize = 8;
+                const int firstLineY = -50;
+                const int secondLineY = -65;
+                const int lineX = -65;
+
+                GenerateLetter('J', outputFile, lineX + 9 * 0, firstLineY, letterSize, height, savePlace.Z, ref counter);
+                GenerateLetter('A', outputFile, lineX + 9 * 1, firstLineY, letterSize, height, savePlace.Z, ref counter);
+                GenerateLetter('K', outputFile, lineX + 9 * 2, firstLineY, letterSize, height, savePlace.Z, ref counter);
+                GenerateLetter('U', outputFile, lineX + 9 * 3, firstLineY, letterSize, height, savePlace.Z, ref counter);
+                GenerateLetter('B', outputFile, lineX + 9 * 4, firstLineY, letterSize, height, savePlace.Z, ref counter);
+
+                GenerateLetter('A', outputFile, lineX + 9 * 0, secondLineY, letterSize, height, savePlace.Z, ref counter);
+                GenerateLetter('B', outputFile, lineX + 9 * 1, secondLineY, letterSize, height, savePlace.Z, ref counter);
+                GenerateLetter('E', outputFile, lineX + 9 * 2, secondLineY, letterSize, height, savePlace.Z, ref counter);
+                GenerateLetter('L', outputFile, lineX + 9 * 3, secondLineY, letterSize, height, savePlace.Z, ref counter);
+                GenerateLetter('S', outputFile, lineX + 9 * 4, secondLineY, letterSize, height, savePlace.Z, ref counter);
+                GenerateLetter('K', outputFile, lineX + 9 * 5, secondLineY, letterSize, height, savePlace.Z, ref counter);
+                GenerateLetter('I', outputFile, lineX + 9 * 6, secondLineY, letterSize, height, savePlace.Z, ref counter);
+
+
+                outputFile.WriteLine(String.Format(CultureInfo.InvariantCulture, "N{0}G01X{1}Y{2}Z{3}",
+                    counter++, savePlace.X, savePlace.Y, savePlace.Z));
+
+            }
+        }
+
+        private void GenerateLetter(char letter, StreamWriter outputFile, double coordX, double coordY, double size, double height, double safeHeight, ref int counter)
+        {
+            switch (letter)
+            {
+                case 'J':
+                    outputFile.WriteLine(String.Format(CultureInfo.InvariantCulture, "N{0}G01X{1}Y{2}Z{3}",
+                        counter++, coordX, coordY + size, safeHeight));
+                    outputFile.WriteLine(String.Format(CultureInfo.InvariantCulture, "N{0}G01X{1}Y{2}Z{3}",
+                        counter++, coordX, coordY + size, height));
+                    outputFile.WriteLine(String.Format(CultureInfo.InvariantCulture, "N{0}G01X{1}Y{2}Z{3}",
+                        counter++, coordX + size / 2, coordY + size, height));
+                    outputFile.WriteLine(String.Format(CultureInfo.InvariantCulture, "N{0}G01X{1}Y{2}Z{3}",
+                        counter++, coordX + size / 2, coordY, height));
+                    outputFile.WriteLine(String.Format(CultureInfo.InvariantCulture, "N{0}G01X{1}Y{2}Z{3}",
+                        counter++, coordX, coordY, height));
+                    outputFile.WriteLine(String.Format(CultureInfo.InvariantCulture, "N{0}G01X{1}Y{2}Z{3}",
+                        counter++, coordX, coordY + size / 3, height));
+                    outputFile.WriteLine(String.Format(CultureInfo.InvariantCulture, "N{0}G01X{1}Y{2}Z{3}",
+                        counter++, coordX, coordY + size / 3, safeHeight));
+                    break;
+                case 'A':
+                    outputFile.WriteLine(String.Format(CultureInfo.InvariantCulture, "N{0}G01X{1}Y{2}Z{3}",
+                        counter++, coordX, coordY, safeHeight));
+                    outputFile.WriteLine(String.Format(CultureInfo.InvariantCulture, "N{0}G01X{1}Y{2}Z{3}",
+                        counter++, coordX, coordY, height));
+                    outputFile.WriteLine(String.Format(CultureInfo.InvariantCulture, "N{0}G01X{1}Y{2}Z{3}",
+                        counter++, coordX, coordY + size, height));
+                    outputFile.WriteLine(String.Format(CultureInfo.InvariantCulture, "N{0}G01X{1}Y{2}Z{3}",
+                        counter++, coordX + size / 2, coordY + size, height));
+                    outputFile.WriteLine(String.Format(CultureInfo.InvariantCulture, "N{0}G01X{1}Y{2}Z{3}",
+                        counter++, coordX + size / 2, coordY, height));
+                    outputFile.WriteLine(String.Format(CultureInfo.InvariantCulture, "N{0}G01X{1}Y{2}Z{3}",
+                        counter++, coordX + size / 2, coordY + size / 2, height));
+                    outputFile.WriteLine(String.Format(CultureInfo.InvariantCulture, "N{0}G01X{1}Y{2}Z{3}",
+                        counter++, coordX, coordY + size / 2, height));
+                    outputFile.WriteLine(String.Format(CultureInfo.InvariantCulture, "N{0}G01X{1}Y{2}Z{3}",
+                        counter++, coordX, coordY + size / 2, safeHeight));
+                    break;
+                case 'K':
+                    outputFile.WriteLine(String.Format(CultureInfo.InvariantCulture, "N{0}G01X{1}Y{2}Z{3}",
+                        counter++, coordX, coordY, safeHeight));
+                    outputFile.WriteLine(String.Format(CultureInfo.InvariantCulture, "N{0}G01X{1}Y{2}Z{3}",
+                        counter++, coordX, coordY, height));
+                    outputFile.WriteLine(String.Format(CultureInfo.InvariantCulture, "N{0}G01X{1}Y{2}Z{3}",
+                        counter++, coordX, coordY + size, height));
+                    outputFile.WriteLine(String.Format(CultureInfo.InvariantCulture, "N{0}G01X{1}Y{2}Z{3}",
+                        counter++, coordX, coordY + size / 2, height));
+                    outputFile.WriteLine(String.Format(CultureInfo.InvariantCulture, "N{0}G01X{1}Y{2}Z{3}",
+                        counter++, coordX + size / 2, coordY + size, height));
+                    outputFile.WriteLine(String.Format(CultureInfo.InvariantCulture, "N{0}G01X{1}Y{2}Z{3}",
+                        counter++, coordX, coordY + size / 2, height));
+                    outputFile.WriteLine(String.Format(CultureInfo.InvariantCulture, "N{0}G01X{1}Y{2}Z{3}",
+                        counter++, coordX + size / 2, coordY, height));
+                    outputFile.WriteLine(String.Format(CultureInfo.InvariantCulture, "N{0}G01X{1}Y{2}Z{3}",
+                        counter++, coordX + size / 2, coordY, safeHeight));
+                    break;
+                case 'U':
+                    outputFile.WriteLine(String.Format(CultureInfo.InvariantCulture, "N{0}G01X{1}Y{2}Z{3}",
+                        counter++, coordX, coordY + size, safeHeight));
+                    outputFile.WriteLine(String.Format(CultureInfo.InvariantCulture, "N{0}G01X{1}Y{2}Z{3}",
+                        counter++, coordX, coordY + size, height));
+                    outputFile.WriteLine(String.Format(CultureInfo.InvariantCulture, "N{0}G01X{1}Y{2}Z{3}",
+                        counter++, coordX, coordY, height));
+                    outputFile.WriteLine(String.Format(CultureInfo.InvariantCulture, "N{0}G01X{1}Y{2}Z{3}",
+                        counter++, coordX + size / 2, coordY, height));
+                    outputFile.WriteLine(String.Format(CultureInfo.InvariantCulture, "N{0}G01X{1}Y{2}Z{3}",
+                        counter++, coordX + size / 2, coordY + size, height));
+                    outputFile.WriteLine(String.Format(CultureInfo.InvariantCulture, "N{0}G01X{1}Y{2}Z{3}",
+                        counter++, coordX + size / 2, coordY + size, safeHeight));
+                    break;
+                case 'B':
+                    outputFile.WriteLine(String.Format(CultureInfo.InvariantCulture, "N{0}G01X{1}Y{2}Z{3}",
+                        counter++, coordX, coordY, safeHeight));
+                    outputFile.WriteLine(String.Format(CultureInfo.InvariantCulture, "N{0}G01X{1}Y{2}Z{3}",
+                        counter++, coordX, coordY, height));
+                    outputFile.WriteLine(String.Format(CultureInfo.InvariantCulture, "N{0}G01X{1}Y{2}Z{3}",
+                        counter++, coordX, coordY + size, height));
+                    outputFile.WriteLine(String.Format(CultureInfo.InvariantCulture, "N{0}G01X{1}Y{2}Z{3}",
+                        counter++, coordX + size / 4, coordY + size, height));
+                    outputFile.WriteLine(String.Format(CultureInfo.InvariantCulture, "N{0}G01X{1}Y{2}Z{3}",
+                        counter++, coordX + size / 2, coordY + size * 3 / 4, height));
+                    outputFile.WriteLine(String.Format(CultureInfo.InvariantCulture, "N{0}G01X{1}Y{2}Z{3}",
+                        counter++, coordX + size / 4, coordY + size / 2, height));
+                    outputFile.WriteLine(String.Format(CultureInfo.InvariantCulture, "N{0}G01X{1}Y{2}Z{3}",
+                        counter++, coordX + size / 2, coordY + size / 4, height));
+                    outputFile.WriteLine(String.Format(CultureInfo.InvariantCulture, "N{0}G01X{1}Y{2}Z{3}",
+                        counter++, coordX + size / 4, coordY, height));
+                    outputFile.WriteLine(String.Format(CultureInfo.InvariantCulture, "N{0}G01X{1}Y{2}Z{3}",
+                        counter++, coordX, coordY, height));
+                    outputFile.WriteLine(String.Format(CultureInfo.InvariantCulture, "N{0}G01X{1}Y{2}Z{3}",
+                        counter++, coordX, coordY, safeHeight));
+                    break;
+                case 'E':
+                    outputFile.WriteLine(String.Format(CultureInfo.InvariantCulture, "N{0}G01X{1}Y{2}Z{3}",
+                        counter++, coordX + size / 2, coordY, safeHeight));
+                    outputFile.WriteLine(String.Format(CultureInfo.InvariantCulture, "N{0}G01X{1}Y{2}Z{3}",
+                        counter++, coordX + size / 2, coordY, height));
+                    outputFile.WriteLine(String.Format(CultureInfo.InvariantCulture, "N{0}G01X{1}Y{2}Z{3}",
+                        counter++, coordX, coordY, height));
+                    outputFile.WriteLine(String.Format(CultureInfo.InvariantCulture, "N{0}G01X{1}Y{2}Z{3}",
+                        counter++, coordX, coordY + size / 2, height));
+                    outputFile.WriteLine(String.Format(CultureInfo.InvariantCulture, "N{0}G01X{1}Y{2}Z{3}",
+                        counter++, coordX + size / 2, coordY + size / 2, height));
+                    outputFile.WriteLine(String.Format(CultureInfo.InvariantCulture, "N{0}G01X{1}Y{2}Z{3}",
+                        counter++, coordX, coordY + size / 2, height));
+                    outputFile.WriteLine(String.Format(CultureInfo.InvariantCulture, "N{0}G01X{1}Y{2}Z{3}",
+                        counter++, coordX, coordY + size, height));
+                    outputFile.WriteLine(String.Format(CultureInfo.InvariantCulture, "N{0}G01X{1}Y{2}Z{3}",
+                        counter++, coordX + size / 2, coordY + size, height));
+                    outputFile.WriteLine(String.Format(CultureInfo.InvariantCulture, "N{0}G01X{1}Y{2}Z{3}",
+                        counter++, coordX + size / 2, coordY + size, safeHeight));
+                    break;
+                case 'L':
+                    outputFile.WriteLine(String.Format(CultureInfo.InvariantCulture, "N{0}G01X{1}Y{2}Z{3}",
+                        counter++, coordX + size / 2, coordY, safeHeight));
+                    outputFile.WriteLine(String.Format(CultureInfo.InvariantCulture, "N{0}G01X{1}Y{2}Z{3}",
+                        counter++, coordX + size / 2, coordY, height));
+                    outputFile.WriteLine(String.Format(CultureInfo.InvariantCulture, "N{0}G01X{1}Y{2}Z{3}",
+                        counter++, coordX, coordY, height));
+                    outputFile.WriteLine(String.Format(CultureInfo.InvariantCulture, "N{0}G01X{1}Y{2}Z{3}",
+                        counter++, coordX, coordY + size, height));
+                    outputFile.WriteLine(String.Format(CultureInfo.InvariantCulture, "N{0}G01X{1}Y{2}Z{3}",
+                        counter++, coordX, coordY + size, safeHeight));
+                    break;
+                case 'S':
+                    outputFile.WriteLine(String.Format(CultureInfo.InvariantCulture, "N{0}G01X{1}Y{2}Z{3}",
+                        counter++, coordX, coordY, safeHeight));
+                    outputFile.WriteLine(String.Format(CultureInfo.InvariantCulture, "N{0}G01X{1}Y{2}Z{3}",
+                        counter++, coordX, coordY, height));
+                    outputFile.WriteLine(String.Format(CultureInfo.InvariantCulture, "N{0}G01X{1}Y{2}Z{3}",
+                        counter++, coordX + size / 2, coordY, height));
+                    outputFile.WriteLine(String.Format(CultureInfo.InvariantCulture, "N{0}G01X{1}Y{2}Z{3}",
+                        counter++, coordX + size / 2, coordY + size / 2, height));
+                    outputFile.WriteLine(String.Format(CultureInfo.InvariantCulture, "N{0}G01X{1}Y{2}Z{3}",
+                        counter++, coordX, coordY + size / 2, height));
+                    outputFile.WriteLine(String.Format(CultureInfo.InvariantCulture, "N{0}G01X{1}Y{2}Z{3}",
+                        counter++, coordX, coordY + size, height));
+                    outputFile.WriteLine(String.Format(CultureInfo.InvariantCulture, "N{0}G01X{1}Y{2}Z{3}",
+                        counter++, coordX + size / 2, coordY + size, height));
+                    outputFile.WriteLine(String.Format(CultureInfo.InvariantCulture, "N{0}G01X{1}Y{2}Z{3}",
+                        counter++, coordX + size / 2, coordY + size, safeHeight));
+                    break;
+                case 'I':
+                    outputFile.WriteLine(String.Format(CultureInfo.InvariantCulture, "N{0}G01X{1}Y{2}Z{3}",
+                        counter++, coordX, coordY, safeHeight));
+                    outputFile.WriteLine(String.Format(CultureInfo.InvariantCulture, "N{0}G01X{1}Y{2}Z{3}",
+                        counter++, coordX, coordY, height));
+                    outputFile.WriteLine(String.Format(CultureInfo.InvariantCulture, "N{0}G01X{1}Y{2}Z{3}",
+                        counter++, coordX + size / 2, coordY, height));
+                    outputFile.WriteLine(String.Format(CultureInfo.InvariantCulture, "N{0}G01X{1}Y{2}Z{3}",
+                        counter++, coordX + size / 4, coordY, height));
+                    outputFile.WriteLine(String.Format(CultureInfo.InvariantCulture, "N{0}G01X{1}Y{2}Z{3}",
+                        counter++, coordX + size / 4, coordY + size, height));
+                    outputFile.WriteLine(String.Format(CultureInfo.InvariantCulture, "N{0}G01X{1}Y{2}Z{3}",
+                        counter++, coordX, coordY + size, height));
+                    outputFile.WriteLine(String.Format(CultureInfo.InvariantCulture, "N{0}G01X{1}Y{2}Z{3}",
+                        counter++, coordX + size / 2, coordY + size, height));
+                    outputFile.WriteLine(String.Format(CultureInfo.InvariantCulture, "N{0}G01X{1}Y{2}Z{3}",
+                        counter++, coordX + size / 2, coordY + size, safeHeight));
+                    break;
+                default:
+                    break;
             }
         }
     }

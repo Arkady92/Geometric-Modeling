@@ -102,6 +102,7 @@
             this.CursorScreenYBox = new System.Windows.Forms.TextBox();
             this.panel1 = new System.Windows.Forms.Panel();
             this.label1 = new System.Windows.Forms.Label();
+            this.button1 = new System.Windows.Forms.Button();
             this.ObjectsPanel.SuspendLayout();
             this.OptionsPanel.SuspendLayout();
             this.OperationsPanel.SuspendLayout();
@@ -129,6 +130,7 @@
             this.ObjectsPanel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.ObjectsPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.ObjectsPanel.Controls.Add(this.button1);
             this.ObjectsPanel.Controls.Add(this.AccurateButton);
             this.ObjectsPanel.Controls.Add(this.FlatButton);
             this.ObjectsPanel.Controls.Add(this.EnvelopeButton);
@@ -957,6 +959,16 @@
             this.label1.TabIndex = 23;
             this.label1.Text = "Paths";
             // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(335, 3);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(77, 23);
+            this.button1.TabIndex = 26;
+            this.button1.Text = "Signature";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
+            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1074,6 +1086,7 @@
         private System.Windows.Forms.Button RoughButton;
         private System.Windows.Forms.Button FlatButton;
         private System.Windows.Forms.Button AccurateButton;
+        private System.Windows.Forms.Button button1;
     }
 }
 

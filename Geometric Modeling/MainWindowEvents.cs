@@ -221,6 +221,13 @@ namespace Geometric_Modeling
             DrawWorld();
             MessageBox.Show(@"File generated.");
         }
+        private void button1_Click(object sender, System.EventArgs e)
+        {
+            if (pathCreator == null) pathCreator = new PathCreator(_models.OfType<BezierSurface>().ToList(), _models);
+            pathCreator.GenerateSignaturePathes();
+            DrawWorld();
+            MessageBox.Show(@"File generated.");
+        }
 
         private void TorusButton_Click(object sender, EventArgs e)
         {
