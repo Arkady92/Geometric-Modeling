@@ -5,6 +5,7 @@ using System.Globalization;
 using System.Windows.Forms;
 using Mathematics;
 using Models;
+using System.Linq;
 
 namespace Geometric_Modeling
 {
@@ -46,6 +47,37 @@ namespace Geometric_Modeling
             SetStyle(ControlStyles.AllPaintingInWmPaint | ControlStyles.UserPaint | ControlStyles.DoubleBuffer, true);
             SetDoubleBuffered(WorldPanel);
             InitializeMembers();
+            DialogResult dialogResult = MessageBox.Show("Load PUSN functionalities?", "Load Functionalities", MessageBoxButtons.YesNo);
+            if (dialogResult == DialogResult.Yes)
+            {
+                LoadPUSNScene();
+            }
+            else if (dialogResult == DialogResult.No)
+            {
+                LoadMGScene();
+            }
+        }
+
+        private void LoadMGScene()
+        {
+            var enumerator = ObjectsPanel.Controls.GetEnumerator();
+            while (enumerator.MoveNext())
+            {
+                var button = enumerator.Current as Control;
+                if (button.Tag.ToString() == "MG")
+                    button.Visible = true;
+            }
+        }
+
+        private void LoadPUSNScene()
+        {
+            var enumerator = ObjectsPanel.Controls.GetEnumerator();
+            while(enumerator.MoveNext())
+            {
+                var button = enumerator.Current as Control;
+                if (button.Tag.ToString() == "PUSN")
+                    button.Visible = true;
+            }
             LoadDefaultScene();
         }
 

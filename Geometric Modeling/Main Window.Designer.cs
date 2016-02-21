@@ -30,6 +30,7 @@
         {
             this.ObjectsList = new System.Windows.Forms.ListBox();
             this.ObjectsPanel = new System.Windows.Forms.Panel();
+            this.SignatureButton = new System.Windows.Forms.Button();
             this.AccurateButton = new System.Windows.Forms.Button();
             this.FlatButton = new System.Windows.Forms.Button();
             this.EnvelopeButton = new System.Windows.Forms.Button();
@@ -101,8 +102,7 @@
             this.CursorScreenYLabel = new System.Windows.Forms.Label();
             this.CursorScreenYBox = new System.Windows.Forms.TextBox();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.label1 = new System.Windows.Forms.Label();
-            this.button1 = new System.Windows.Forms.Button();
+            this.PathsLabel = new System.Windows.Forms.Label();
             this.ObjectsPanel.SuspendLayout();
             this.OptionsPanel.SuspendLayout();
             this.OperationsPanel.SuspendLayout();
@@ -130,7 +130,7 @@
             this.ObjectsPanel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.ObjectsPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.ObjectsPanel.Controls.Add(this.button1);
+            this.ObjectsPanel.Controls.Add(this.SignatureButton);
             this.ObjectsPanel.Controls.Add(this.AccurateButton);
             this.ObjectsPanel.Controls.Add(this.FlatButton);
             this.ObjectsPanel.Controls.Add(this.EnvelopeButton);
@@ -150,14 +150,28 @@
             this.ObjectsPanel.Size = new System.Drawing.Size(840, 31);
             this.ObjectsPanel.TabIndex = 1;
             // 
+            // SignatureButton
+            // 
+            this.SignatureButton.Location = new System.Drawing.Point(335, 3);
+            this.SignatureButton.Name = "SignatureButton";
+            this.SignatureButton.Size = new System.Drawing.Size(77, 23);
+            this.SignatureButton.TabIndex = 26;
+            this.SignatureButton.Tag = "PUSN";
+            this.SignatureButton.Text = "Signature";
+            this.SignatureButton.UseVisualStyleBackColor = true;
+            this.SignatureButton.Visible = false;
+            this.SignatureButton.Click += new System.EventHandler(this.button1_Click);
+            // 
             // AccurateButton
             // 
             this.AccurateButton.Location = new System.Drawing.Point(252, 3);
             this.AccurateButton.Name = "AccurateButton";
             this.AccurateButton.Size = new System.Drawing.Size(77, 23);
             this.AccurateButton.TabIndex = 25;
+            this.AccurateButton.Tag = "PUSN";
             this.AccurateButton.Text = "Accurate";
             this.AccurateButton.UseVisualStyleBackColor = true;
+            this.AccurateButton.Visible = false;
             this.AccurateButton.Click += new System.EventHandler(this.AccurateButton_Click);
             // 
             // FlatButton
@@ -166,8 +180,10 @@
             this.FlatButton.Name = "FlatButton";
             this.FlatButton.Size = new System.Drawing.Size(77, 23);
             this.FlatButton.TabIndex = 14;
+            this.FlatButton.Tag = "PUSN";
             this.FlatButton.Text = "Flat";
             this.FlatButton.UseVisualStyleBackColor = true;
+            this.FlatButton.Visible = false;
             this.FlatButton.Click += new System.EventHandler(this.FlatButton_Click);
             // 
             // EnvelopeButton
@@ -176,8 +192,10 @@
             this.EnvelopeButton.Name = "EnvelopeButton";
             this.EnvelopeButton.Size = new System.Drawing.Size(77, 23);
             this.EnvelopeButton.TabIndex = 14;
+            this.EnvelopeButton.Tag = "PUSN";
             this.EnvelopeButton.Text = "Envelope";
             this.EnvelopeButton.UseVisualStyleBackColor = true;
+            this.EnvelopeButton.Visible = false;
             this.EnvelopeButton.Click += new System.EventHandler(this.EnvelopeButton_Click);
             // 
             // RoughButton
@@ -186,8 +204,10 @@
             this.RoughButton.Name = "RoughButton";
             this.RoughButton.Size = new System.Drawing.Size(77, 23);
             this.RoughButton.TabIndex = 24;
+            this.RoughButton.Tag = "PUSN";
             this.RoughButton.Text = "Rough";
             this.RoughButton.UseVisualStyleBackColor = true;
+            this.RoughButton.Visible = false;
             this.RoughButton.Click += new System.EventHandler(this.RoughButton_Click);
             // 
             // GregorySurfaceButton
@@ -197,6 +217,7 @@
             this.GregorySurfaceButton.Name = "GregorySurfaceButton";
             this.GregorySurfaceButton.Size = new System.Drawing.Size(77, 23);
             this.GregorySurfaceButton.TabIndex = 11;
+            this.GregorySurfaceButton.Tag = "MG";
             this.GregorySurfaceButton.Text = "Gap filling";
             this.GregorySurfaceButton.UseVisualStyleBackColor = true;
             this.GregorySurfaceButton.Visible = false;
@@ -208,6 +229,7 @@
             this.IntersectionButton.Name = "IntersectionButton";
             this.IntersectionButton.Size = new System.Drawing.Size(77, 23);
             this.IntersectionButton.TabIndex = 8;
+            this.IntersectionButton.Tag = "MG";
             this.IntersectionButton.Text = "Intersection";
             this.IntersectionButton.UseVisualStyleBackColor = true;
             this.IntersectionButton.Visible = false;
@@ -219,6 +241,7 @@
             this.BezierSurfaceC2Button.Name = "BezierSurfaceC2Button";
             this.BezierSurfaceC2Button.Size = new System.Drawing.Size(77, 23);
             this.BezierSurfaceC2Button.TabIndex = 10;
+            this.BezierSurfaceC2Button.Tag = "MG";
             this.BezierSurfaceC2Button.Text = "Surface C2";
             this.BezierSurfaceC2Button.UseVisualStyleBackColor = true;
             this.BezierSurfaceC2Button.Visible = false;
@@ -230,6 +253,7 @@
             this.BezierSurfaceC0Button.Name = "BezierSurfaceC0Button";
             this.BezierSurfaceC0Button.Size = new System.Drawing.Size(77, 23);
             this.BezierSurfaceC0Button.TabIndex = 9;
+            this.BezierSurfaceC0Button.Tag = "MG";
             this.BezierSurfaceC0Button.Text = "Surface C0";
             this.BezierSurfaceC0Button.UseVisualStyleBackColor = true;
             this.BezierSurfaceC0Button.Visible = false;
@@ -241,6 +265,7 @@
             this.InterpolationCurveButton.Name = "InterpolationCurveButton";
             this.InterpolationCurveButton.Size = new System.Drawing.Size(77, 23);
             this.InterpolationCurveButton.TabIndex = 7;
+            this.InterpolationCurveButton.Tag = "MG";
             this.InterpolationCurveButton.Text = "Interpolation";
             this.InterpolationCurveButton.UseVisualStyleBackColor = true;
             this.InterpolationCurveButton.Visible = false;
@@ -252,6 +277,7 @@
             this.BezierCurveC2Button.Name = "BezierCurveC2Button";
             this.BezierCurveC2Button.Size = new System.Drawing.Size(77, 23);
             this.BezierCurveC2Button.TabIndex = 6;
+            this.BezierCurveC2Button.Tag = "MG";
             this.BezierCurveC2Button.Text = "Curve C2";
             this.BezierCurveC2Button.UseVisualStyleBackColor = true;
             this.BezierCurveC2Button.Visible = false;
@@ -263,6 +289,7 @@
             this.BezierCurveButton.Name = "BezierCurveButton";
             this.BezierCurveButton.Size = new System.Drawing.Size(77, 23);
             this.BezierCurveButton.TabIndex = 5;
+            this.BezierCurveButton.Tag = "MG";
             this.BezierCurveButton.Text = "Curve C0";
             this.BezierCurveButton.UseVisualStyleBackColor = true;
             this.BezierCurveButton.Visible = false;
@@ -274,6 +301,7 @@
             this.PointButton.Name = "PointButton";
             this.PointButton.Size = new System.Drawing.Size(77, 23);
             this.PointButton.TabIndex = 4;
+            this.PointButton.Tag = "MG";
             this.PointButton.Text = "Point";
             this.PointButton.UseVisualStyleBackColor = true;
             this.PointButton.Visible = false;
@@ -285,6 +313,7 @@
             this.EllipsoidButton.Name = "EllipsoidButton";
             this.EllipsoidButton.Size = new System.Drawing.Size(77, 23);
             this.EllipsoidButton.TabIndex = 3;
+            this.EllipsoidButton.Tag = "MG";
             this.EllipsoidButton.Text = "Ellipsoid";
             this.EllipsoidButton.UseVisualStyleBackColor = true;
             this.EllipsoidButton.Visible = false;
@@ -296,6 +325,7 @@
             this.TorusButton.Name = "TorusButton";
             this.TorusButton.Size = new System.Drawing.Size(77, 23);
             this.TorusButton.TabIndex = 2;
+            this.TorusButton.Tag = "MG";
             this.TorusButton.Text = "Torus";
             this.TorusButton.UseVisualStyleBackColor = true;
             this.TorusButton.Visible = false;
@@ -576,6 +606,7 @@
             this.CollapseButton.Name = "CollapseButton";
             this.CollapseButton.Size = new System.Drawing.Size(55, 23);
             this.CollapseButton.TabIndex = 9;
+            this.CollapseButton.Tag = "MG";
             this.CollapseButton.Text = "Collapse";
             this.CollapseButton.UseVisualStyleBackColor = true;
             this.CollapseButton.Visible = false;
@@ -621,6 +652,7 @@
             this.SelectionButton.Name = "SelectionButton";
             this.SelectionButton.Size = new System.Drawing.Size(55, 23);
             this.SelectionButton.TabIndex = 10;
+            this.SelectionButton.Tag = "MG";
             this.SelectionButton.Text = "Select";
             this.SelectionButton.UseVisualStyleBackColor = true;
             this.SelectionButton.Visible = false;
@@ -949,32 +981,23 @@
             this.panel1.Size = new System.Drawing.Size(674, 29);
             this.panel1.TabIndex = 22;
             // 
-            // label1
+            // PathsLabel
             // 
-            this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)));
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(421, 0);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(34, 13);
-            this.label1.TabIndex = 23;
-            this.label1.Text = "Paths";
-            // 
-            // button1
-            // 
-            this.button1.Location = new System.Drawing.Point(335, 3);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(77, 23);
-            this.button1.TabIndex = 26;
-            this.button1.Text = "Signature";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
+            this.PathsLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)));
+            this.PathsLabel.AutoSize = true;
+            this.PathsLabel.Location = new System.Drawing.Point(421, 0);
+            this.PathsLabel.Name = "PathsLabel";
+            this.PathsLabel.Size = new System.Drawing.Size(34, 13);
+            this.PathsLabel.TabIndex = 23;
+            this.PathsLabel.Text = "Paths";
+            this.PathsLabel.Visible = false;
             // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(864, 622);
-            this.Controls.Add(this.label1);
+            this.Controls.Add(this.PathsLabel);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.EffectsLabel);
             this.Controls.Add(this.EffectsPanel);
@@ -1081,12 +1104,12 @@
         private System.Windows.Forms.Button IntersectionButton;
         private System.Windows.Forms.Label IntersectionAccuracyLabel;
         private System.Windows.Forms.TextBox IntersectionAccuracyTextBox;
-        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label PathsLabel;
         private System.Windows.Forms.Button EnvelopeButton;
         private System.Windows.Forms.Button RoughButton;
         private System.Windows.Forms.Button FlatButton;
         private System.Windows.Forms.Button AccurateButton;
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button SignatureButton;
     }
 }
 

@@ -216,7 +216,7 @@ namespace Geometric_Modeling
 
         private void LoadDefaultScene()
         {
-            var path = "C:/Users/Arkady/Dropbox/Studies/Geometric Modeling/Project/FinalNFinal.mg1";
+            var path = "../../../DrillModel/Drill.mg1";
             var streamReader = new StreamReader(path);
             string line;
             while ((line = streamReader.ReadLine()) != null)
